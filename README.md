@@ -1,50 +1,80 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# **Bat Templates**
 
-Currently, two official plugins are available:
+An open-source platform providing professional **batch file templates** for structured folder setups and **project templates** tailored to different use cases and tiers.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### **Overview**
 
-## Expanding the ESLint configuration
+**Bat Templates** is designed to help developers quickly set up well-structured folder systems and project structures. The platform offers two main categories:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. **Folder Structure Templates**  
+   Batch files for various folder structures tailored to frameworks like React, Node.js, and more.
 
-- Configure the top-level `parserOptions` property like this:
+2. **Project Templates**  
+   Templates for common project types like portfolios, blogs, e-commerce sites, dashboards, etc., built to streamline project initialization with ready-to-use configurations.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### **Features**
+
+- **Folder Structure Templates**:  
+  Templates for organizing folder structures based on project types (Frontend, Backend, Full Stack).
+  
+- **Project Templates**:  
+  Ready-to-use templates for building specific types of applications (e.g., portfolios, e-commerce platforms, blogs).
+
+- **Open Source**:  
+  All templates are open source, encouraging contributions from the community to expand and improve the available templates.
+
+- **Customization**:  
+  Templates can be cloned or downloaded to fit specific use cases and can be extended as needed.
+
+- **Contribute**:  
+  Users can contribute to the repository by submitting new templates or improving existing ones.
+
+---
+
+## **Installation**
+
+### Clone the repository
+
+```bash
+git clone https://github.com/your-username/bat-templates.git
+cd bat-templates
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Install dependencies
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
 ```
+
+### Run the project
+
+```bash
+npm start
+```
+
+---
+
+## **Contributing**
+
+We welcome contributions to **Bat Templates**! Here's how you can help:
+
+1. Fork the repository.
+2. Create a new branch for your changes (`git checkout -b feature-branch`).
+3. Make your changes.
+4. Commit and push your changes.
+5. Submit a pull request.
+
+---
+
+## **License**
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## **Contact**
+
+For any questions or feedback, feel free to open an issue or reach out via our [GitHub Discussions](https://github.com/your-username/bat-templates/discussions).
+
+---
