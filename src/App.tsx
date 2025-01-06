@@ -1,11 +1,22 @@
-import React from 'react'
+import Loader from './components/loaders/Loader'
 
 const App = () => {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <div className="flex justify-center items-center h-screen bg-primaryBg">
+      <Loader />
+    </div>
   )
 }
 
 export default App
+
+
+{/*
+
+<Button
+  label="Explore Folders"
+  onClick={() => console.log('Button clicked')}
+  className="cursor-pointer font-semibold bg-primary hover:bg-primaryHover ml-5" 
+/>
+
+*/}
