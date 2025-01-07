@@ -1,6 +1,6 @@
 import React from 'react';
 import Lottie from 'react-lottie';
-import loaderAnimation from '../../assets/animations/loaderAnimation.json'; // Update the path to your Lottie JSON file
+import loaderAnimation from '../../assets/animations/loaderAnimation.json';
 
 const Loader: React.FC = () => {
   const defaultOptions = {
