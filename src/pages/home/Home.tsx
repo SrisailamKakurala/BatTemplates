@@ -1,4 +1,3 @@
-import React from 'react'
 import Logo from '@/components/logo/Logo'
 import Button from '@/components/buttons/Button'
 import { useNavigate } from 'react-router-dom'
