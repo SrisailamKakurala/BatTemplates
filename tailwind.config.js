@@ -16,7 +16,11 @@ export default {
         secondaryButton: '#1F2937',
         secondaryButtonHover: '#374151',
         whiteText: '#E9E9E9',
-      }
+      },
+      fontFamily: {
+        roboto: ['Roboto', 'serif'],
+        lilitaOne: ['Lilita One', 'serif'],
+      },
     },
   },
   plugins: [],

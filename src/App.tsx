@@ -8,16 +8,20 @@ import Bookmarks from "@/pages/bookmarks/Bookmarks";
 import Profile from "@/pages/profile/Profile";
 import Contributors from "@/pages/contributors/Contributors";
 import SignIn from "./pages/auth/signin";
+import Register from "./pages/auth/register";
 
 
 
 const App: React.FC = () => {
   return (
     <Router>
-      <div className="flex h-screen bg-primaryBg">
+      <div className="flex h-screen bg-primaryBg font-[roboto] relative">
         <Sidebar />
 
-        <SignIn />
+        <Routes>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/register" element={<Register />} />
+        </Routes>
 
         <div className="flex-1 p-4">
           <Routes>

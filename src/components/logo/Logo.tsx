@@ -3,7 +3,7 @@ import logo from '@/assets/images/logo.png'
 import { NavLink } from "react-router-dom";
 
 type ImageProps = {
-    classNames: string
+    classNames?: string
 }
 
 const Logo: React.FC<ImageProps> = ({ classNames }) => {
