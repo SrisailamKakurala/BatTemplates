@@ -9,19 +9,23 @@ import Profile from "@/pages/profile/Profile";
 import Contributors from "@/pages/contributors/Contributors";
 import SignIn from "./pages/auth/signin";
 import Register from "./pages/auth/register";
-
-
+import useModalStore from "@/store/modalStore"; // Import the modal store
 
 const App: React.FC = () => {
+  const { activeModal } = useModalStore(); // Access modal state
+
   return (
     <Router>
       <div className="flex h-screen bg-primaryBg font-[roboto] relative">
         <Sidebar />
 
-        <Routes>
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/register" element={<Register />} />
-        </Routes>
+        {/* Conditionally render modals */}
+        {activeModal === "signin" && (
+          <SignIn />
+        )}
+        {activeModal === "register" && (
+          <Register />
+        )}
 
         <div className="flex-1 p-4">
           <Routes>

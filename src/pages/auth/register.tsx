@@ -25,7 +25,7 @@ const Register = () => {
   return (
     <div 
       onClick={handleBackgroundClick} 
-      className="h-screen w-full bg-black bg-opacity-50 absolute flex justify-center items-center" 
+      className="h-screen w-full bg-black bg-opacity-50 absolute flex justify-center items-center z-50" 
       style={{ display: hideForm ? 'none' : 'flex' }}
     >
       <div 
