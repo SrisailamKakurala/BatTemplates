@@ -26,13 +26,21 @@ const SignIn = () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      signIn({ id: user.uid, name: user.displayName || "Unknown" });
-      console.log("User signed in: ", user);
-      if(user) {
-        // After signing in, update the authentication state
-        useAuthStore.setState({ isAuthenticated: true });
-        setHideForm(true);
-      }
+      
+      // Extracting necessary fields
+      const userData = {
+        id: user.uid,
+        name: user.displayName,
+        email: user.email!,
+        photoURL: user.photoURL,
+        emailVerified: user.emailVerified,
+        accessToken: await user.getIdToken(),
+      };
+
+      signIn(userData);
+      console.log("User signed in: ", userData);
+      setHideForm(true);
+
     } catch (error) {
       console.error("Google Sign-In Error: ", error);
     }

@@ -8,10 +8,29 @@ import Profile from "@/pages/profile/Profile";
 import Contributors from "@/pages/contributors/Contributors";
 import SignIn from "./pages/auth/signin";
 import Register from "./pages/auth/register";
-import useModalStore from "@/store/modalStore"; // Import the modal store
+import Loader from "@/components/loaders/Loader";
+import useModalStore from "@/store/modalStore";
+import { useEffect, useState } from "react";
 
 const App: React.FC = () => {
-  const { activeModal } = useModalStore(); // Access modal state
+  const { activeModal } = useModalStore();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-primaryBg">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <Router>
@@ -19,12 +38,8 @@ const App: React.FC = () => {
         <Sidebar />
 
         {/* Conditionally render modals */}
-        {activeModal === "signin" && (
-          <SignIn />
-        )}
-        {activeModal === "register" && (
-          <Register />
-        )}
+        {activeModal === "signin" && <SignIn />}
+        {activeModal === "register" && <Register />}
 
         <div className="flex-1 p-4">
           <Routes>
