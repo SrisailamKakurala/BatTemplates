@@ -1,4 +1,5 @@
-import {create} from "zustand";
+// store/authStore.ts
+import { create } from "zustand";
 
 interface AuthState {
   isAuthenticated: boolean;

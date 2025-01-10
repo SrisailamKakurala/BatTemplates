@@ -3,8 +3,15 @@ import Input from '@/components/inputs/Input';
 import Button from '@/components/buttons/Button';
 import { FcGoogle } from 'react-icons/fc';
 import { useState } from 'react';
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "@/firebase/firebase.config";
+
+// store
+import useAuthStore from "@/store/authStore";
 
 const Register = () => {
+
+  const { signIn } = useAuthStore();
 
   const [hideForm, setHideForm] = useState<Boolean>(false);
 
@@ -13,6 +20,17 @@ const Register = () => {
   const onSubmit = async (data: any) => {
     console.log(data);
   }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      signIn({ id: user.uid, name: user.displayName || "Unknown" });
+      console.log("User signed in: ", user);
+    } catch (error) {
+      console.error("Google Sign-In Error: ", error);
+    }
+  };
 
   const handleBackgroundClick = () => {
     setHideForm(true);
@@ -38,7 +56,7 @@ const Register = () => {
         <Button
           icon={<FcGoogle size={20} />}
           label="Continue with Google"
-          onClick={() => console.log('Button clicked')}
+          onClick={handleGoogleSignIn}
           className="cursor-pointer bg-whiteText text-primaryBg text-sm font-semibold w-full mb-4"
         />
 

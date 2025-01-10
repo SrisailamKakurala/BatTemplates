@@ -3,8 +3,15 @@ import Input from '@/components/inputs/Input';
 import Button from '@/components/buttons/Button';
 import { FcGoogle } from 'react-icons/fc'; // Google icon
 import { useState } from 'react';
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "@/firebase/firebase.config";
+
+// store
+import useAuthStore from "@/store/authStore";
 
 const SignIn = () => {
+
+  const { signIn } = useAuthStore();
 
   const [hideForm, setHideForm] = useState<Boolean>(false);
 
@@ -15,10 +22,21 @@ const SignIn = () => {
     // Custom authentication logic goes here
   }
 
-  const handleGoogleSignIn = () => {
-    // Handle Google Sign-In logic here
-    console.log('Google Sign-In');
-  }
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      signIn({ id: user.uid, name: user.displayName || "Unknown" });
+      console.log("User signed in: ", user);
+      if(user) {
+        // After signing in, update the authentication state
+        useAuthStore.setState({ isAuthenticated: true });
+        setHideForm(true);
+      }
+    } catch (error) {
+      console.error("Google Sign-In Error: ", error);
+    }
+  };
 
   const handleBackgroundClick = () => {
     setHideForm(true); // Hide the form when clicking the background
@@ -29,13 +47,13 @@ const SignIn = () => {
   };
 
   return (
-    <div 
-      onClick={handleBackgroundClick} 
-      className="h-screen w-full bg-black bg-opacity-50 absolute flex justify-center items-center z-50" 
+    <div
+      onClick={handleBackgroundClick}
+      className="h-screen w-full bg-black bg-opacity-50 absolute flex justify-center items-center z-50"
       style={{ display: hideForm ? 'none' : 'flex' }}
     >
-      <div 
-        onClick={handleFormClick} 
+      <div
+        onClick={handleFormClick}
         className="bg-primaryBg px-8 py-5 rounded-md shadow-lg lg:w-1/3 md:w-1/2 w-[80%] flex flex-col items-center"
       >
         <h2 className="text-lg font-bold text-primary mb-1">Sign In</h2>
