@@ -8,10 +8,28 @@ import Profile from "@/pages/profile/Profile";
 import Contributors from "@/pages/contributors/Contributors";
 import SignIn from "./pages/auth/signin";
 import Register from "./pages/auth/register";
+import Loader from "@/components/loaders/Loader";
+import { useEffect } from "react";
+
+// store
 import useModalStore from "@/store/modalStore";
+import useUtilsStore from "@/store/utilsStore";
+
+// middleware
+import authMiddleware from "@/middlewares/authMiddleware";
 
 const App: React.FC = () => {
+
+  const loading = useUtilsStore((state) => state.loading);
   const { activeModal } = useModalStore();
+
+  useEffect(() => {
+    authMiddleware();
+  }, []);
+
+  if(loading) {
+    return <Loader />
+  }
 
   return (
     <Router>

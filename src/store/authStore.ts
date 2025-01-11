@@ -1,4 +1,3 @@
-// store/authStore.ts
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
 
@@ -29,6 +28,13 @@ const useAuthStore = create<AuthState>()(
       {
         name: "auth-storage", // LocalStorage key
         partialize: (state) => ({ isAuthenticated: state.isAuthenticated, user: state.user }), // Persist only necessary fields
+        onRehydrateStorage: () => (state) => {
+          // Check if the accessToken exists in cookies during hydration
+          const hasAccessToken = document.cookie.includes("accessToken=");
+          if (!hasAccessToken) {
+            state?.signOut(); // Reset state if no accessToken is present
+          }
+        },
       }
     )
   )
