@@ -1,32 +1,33 @@
-import { useForm } from 'react-hook-form';
-import Input from '@/components/inputs/Input';
-import Button from '@/components/buttons/Button';
-import { FcGoogle } from 'react-icons/fc'; // Google icon
-import { useState } from 'react';
+import { useForm } from "react-hook-form";
+import Input from "@/components/inputs/Input";
+import Button from "@/components/buttons/Button";
+import { FcGoogle } from "react-icons/fc"; // Google icon
+import { useState } from "react";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/firebase/firebase.config";
 
 // store
 import useAuthStore from "@/store/authStore";
+import useModalStore from "@/store/modalStore";
 
 const SignIn = () => {
-
   const { signIn } = useAuthStore();
+  const { openModal, activeModal, closeModal } = useModalStore();
 
-  const [hideForm, setHideForm] = useState<Boolean>(false);
+  const [hideForm, setHideForm] = useState<boolean>(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async (data: any) => {
     console.log(data);
     // Custom authentication logic goes here
-  }
+  };
 
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-  
+
       // Extracting necessary fields
       const userData = {
         id: user.uid,
@@ -35,12 +36,11 @@ const SignIn = () => {
         photoURL: user.photoURL,
         emailVerified: user.emailVerified,
       };
-  
+
       const accessToken = await user.getIdToken();
-  
+
       document.cookie = `accessToken=${accessToken}; path=/; max-age=3600; samesite=strict`;
 
-  
       signIn({ ...userData });
       console.log("User signed in: ", userData);
       setHideForm(true);
@@ -50,12 +50,16 @@ const SignIn = () => {
   };
 
   const handleBackgroundClick = () => {
+    closeModal();
     setHideForm(true); // Hide the form when clicking the background
   };
 
   const handleFormClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent the click from propagating to the background
   };
+
+  // Render modal only if `activeModal` is "signin"
+  if (activeModal !== 'signin') return null;
 
   return (
     <div
@@ -91,14 +95,14 @@ const SignIn = () => {
             type="email"
             placeholder="Email"
             error={errors.email?.type === 'required'}
-            className='w-full h-12 px-3 py-2 text-md'
+            className='w-full h-12 px-3 py-2'
           />
           <Input
             {...register('password', { required: true })}
             type="password"
             placeholder="Password"
             error={errors.password?.type === 'required'}
-            className='w-full h-12 px-3 py-2 text-md'
+            className='w-full h-12 px-3 py-2'
           />
           <Button
             // type="submit"
@@ -107,7 +111,7 @@ const SignIn = () => {
           />
         </form>
 
-        <p className="text-gray-400 font-normal text-xs mt-2">Don't have an account? <a href="#" className="text-red-500 underline">Sign up</a></p>
+        <p className="flex text-gray-400 font-normal text-sm mt-3">Don't have an account? <p onClick={() => openModal('register')} className="text-red-500 underline ml-2 cursor-pointer">Sign up</p></p>
       </div>
     </div>
   );

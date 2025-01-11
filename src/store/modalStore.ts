@@ -1,4 +1,4 @@
-import {create} from "zustand";
+import { create } from "zustand";
 
 interface ModalState {
   activeModal: "signin" | "register" | "none";
@@ -8,8 +8,13 @@ interface ModalState {
 
 const useModalStore = create<ModalState>((set) => ({
   activeModal: "none", // No modal is visible initially
-  openModal: (modalType) => set({ activeModal: modalType }), // Show the specific modal
-  closeModal: () => set({ activeModal: "none" }), // Close the modal
+  openModal: (modalType) =>
+    set((state) => {
+      // Prevent opening the same modal if already open
+      if (state.activeModal === modalType) return {};
+      return { activeModal: modalType };
+    }),
+  closeModal: () => set({ activeModal: "none" }),
 }));
 
 export default useModalStore;
