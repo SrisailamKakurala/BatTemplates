@@ -25,7 +25,7 @@ const Register = () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-
+  
       // Extracting necessary fields
       const userData = {
         id: user.uid,
@@ -33,16 +33,21 @@ const Register = () => {
         email: user.email!,
         photoURL: user.photoURL,
         emailVerified: user.emailVerified,
-        accessToken: await user.getIdToken(),
       };
+  
+      const accessToken = await user.getIdToken();
+  
+      document.cookie = `accessToken=${accessToken}; path=/; max-age=3600; samesite=strict`;
 
-      signIn(userData);
+  
+      signIn({ ...userData });
       console.log("User signed in: ", userData);
       setHideForm(true);
     } catch (error) {
       console.error("Google Sign-In Error: ", error);
     }
   };
+  
 
   const handleBackgroundClick = () => {
     setHideForm(true);

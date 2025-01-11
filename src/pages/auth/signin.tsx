@@ -26,7 +26,7 @@ const SignIn = () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      
+  
       // Extracting necessary fields
       const userData = {
         id: user.uid,
@@ -34,13 +34,16 @@ const SignIn = () => {
         email: user.email!,
         photoURL: user.photoURL,
         emailVerified: user.emailVerified,
-        accessToken: await user.getIdToken(),
       };
+  
+      const accessToken = await user.getIdToken();
+  
+      document.cookie = `accessToken=${accessToken}; path=/; max-age=3600; samesite=strict`;
 
-      signIn(userData);
+  
+      signIn({ ...userData });
       console.log("User signed in: ", userData);
       setHideForm(true);
-
     } catch (error) {
       console.error("Google Sign-In Error: ", error);
     }
@@ -64,18 +67,18 @@ const SignIn = () => {
         onClick={handleFormClick}
         className="bg-primaryBg px-8 py-5 rounded-md shadow-lg lg:w-1/3 md:w-1/2 w-[80%] flex flex-col items-center"
       >
-        <h2 className="text-lg font-bold text-primary mb-1">Sign In</h2>
-        <p className="text-gray-400 font-normal text-sm mb-4">Welcome back! Please sign in to your account</p>
+        <h2 className="text-2xl font-bold text-primary mb-1">Sign In</h2>
+        <p className="text-gray-400 font-normal text-md mb-4">Welcome back! Please sign in to your account</p>
 
         {/* Google Sign-In Button */}
         <Button
-          icon={<FcGoogle size={20} />}
+          icon={<FcGoogle size={30} />}
           label="Continue with Google"
           onClick={handleGoogleSignIn}
-          className="cursor-pointer bg-whiteText text-primaryBg text-sm font-semibold w-full mb-4"
+          className="cursor-pointer bg-whiteText text-primaryBg text-xl font-semibold w-full mb-4"
         />
 
-        <div className="flex items-center w-full mb-2">
+        <div className="flex items-center w-full mb-4">
           <div className="flex-grow h-[0.5px] bg-slate-500"></div>
           <p className="text-gray-400 mx-2">or</p>
           <div className="flex-grow h-[0.5px] bg-slate-500"></div>
@@ -88,19 +91,19 @@ const SignIn = () => {
             type="email"
             placeholder="Email"
             error={errors.email?.type === 'required'}
-            className='w-full px-3 py-2 text-xs'
+            className='w-full h-12 px-3 py-2 text-md'
           />
           <Input
             {...register('password', { required: true })}
             type="password"
             placeholder="Password"
             error={errors.password?.type === 'required'}
-            className='w-full px-3 py-2 text-xs'
+            className='w-full h-12 px-3 py-2 text-md'
           />
           <Button
             // type="submit"
             label="Sign In"
-            className="bg-primary hover:bg-primaryHover text-whiteText focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out w-full mt-4"
+            className="bg-primary hover:bg-primaryHover text-whiteText focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out w-full mt-6"
           />
         </form>
 

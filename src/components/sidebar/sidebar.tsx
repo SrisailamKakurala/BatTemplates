@@ -19,6 +19,7 @@ const Sidebar: React.FC = () => {
 
   const handleLogout = async () => {
     try {
+      document.cookie = "accessToken=; max-age=0; path=/; samesite=strict"; // Remove cookie
       await signOut();
       console.log("User signed out successfully.");
     } catch (error) {
@@ -30,10 +31,10 @@ const Sidebar: React.FC = () => {
   return (
     <div className="flex flex-col w-[20%] h-screen bg-primaryBg border-white border-opacity-5 border-r-[0.5px] p-4">
       {/* Logo */}
-      <Logo classNames="h-10 w-auto" />
+      <Logo classNames="h-15 w-auto mx-auto" />
 
       {/* Navigation */}
-      <div className="mt-6 space-y-2 flex-1">
+      <div className="mt-12 space-y-2 flex-1">
         <NavItem icon={home} label="Home" to="/" classNames="" />
         <NavItem icon={folders} label="Folders" to="/folders" classNames="opacity-90 " />
         <NavItem icon={templates} label="Templates" to="/templates" classNames="opacity-90 " />

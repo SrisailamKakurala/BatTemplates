@@ -13,7 +13,7 @@ const Home: React.FC = () => {
     <div className="flex flex-col justify-center items-center w-full h-full">
       {/* SignIn and Register buttons - Only visible if not authenticated */}
       {!isAuthenticated && (
-        <div className="flex space-x-2 absolute top-4 right-4">
+        <div className="flex space-x-3 absolute top-4 right-4">
           <Button
             label='Sign In'
             onClick={() => openModal("signin")} // Open SignIn modal

@@ -8,7 +8,6 @@ interface User {
   email: string;
   photoURL: string | null;
   emailVerified: boolean;
-  accessToken: string;
 }
 
 interface AuthState {
