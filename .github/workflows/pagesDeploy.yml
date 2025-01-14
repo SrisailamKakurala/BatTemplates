@@ -47,5 +47,4 @@ jobs:
 
       # Step 7: Output the URL of the deployed site
       - name: Published link
-        run: echo "Published site: https://$GITHUB_ACTOR.github.io/${{ github.repository }}"
-
+        run: echo \"Published site: 'https://$GITHUB_ACTOR.github.io/${{ github.repository }}'\"
