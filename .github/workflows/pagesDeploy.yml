@@ -1,0 +1,51 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Replace with your default branch name (if different)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Adjust to the Node.js version you're using
+
+      # Step 3: Cache Node.js dependencies
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      # Step 4: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 5: Build the Vite app
+      - name: Build the Vite app
+        run: npm run build
+
+      # Step 6: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages  # This is the branch where your app will be deployed
+          folder: dist       # Vite outputs to the 'dist' folder by default
+          token: ${{ secrets.GITHUB_TOKEN }}  # Token to authenticate the deployment
+
+      # Step 7: Output the URL of the deployed site
+      - name: Published link
+        run: echo "Published site: https://$GITHUB_ACTOR.github.io/${{ github.repository }}"
+
