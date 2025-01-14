@@ -1,51 +1,30 @@
 import { useForm } from "react-hook-form";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/buttons/Button";
-import { FcGoogle } from "react-icons/fc"; // Google icon
 import { useState } from "react";
-import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "@/firebase/firebase.config";
+import useGoogleAuth from "@/hooks/useGoogleAuth";
+import useEmailAuth from "@/hooks/useEmailAuth";
+import { FcGoogle } from "react-icons/fc";
 
 // store
-import useAuthStore from "@/store/authStore";
 import useModalStore from "@/store/modalStore";
 
 const SignIn = () => {
-  const { signIn } = useAuthStore();
   const { openModal, activeModal, closeModal } = useModalStore();
+  const { handleGoogleSignIn } = useGoogleAuth(); // Google SignIn hook
+  const { loginWithEmail } = useEmailAuth(); // Email Auth hook
 
   const [hideForm, setHideForm] = useState<boolean>(false);
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
   const onSubmit = async (data: any) => {
-    console.log(data);
-    // Custom authentication logic goes here
-  };
-
-  const handleGoogleSignIn = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-
-      // Extracting necessary fields
-      const userData = {
-        id: user.uid,
-        name: user.displayName,
-        email: user.email!,
-        photoURL: user.photoURL,
-        emailVerified: user.emailVerified,
-      };
-
-      const accessToken = await user.getIdToken();
-
-      document.cookie = `accessToken=${accessToken}; path=/; max-age=3600; samesite=strict`;
-
-      signIn({ ...userData });
-      console.log("User signed in: ", userData);
-      setHideForm(true);
+      await loginWithEmail(data.email, data.password);
+      reset();
+      closeModal();
     } catch (error) {
-      console.error("Google Sign-In Error: ", error);
+      console.error("Email Sign-In Error: ", error);
     }
   };
 
@@ -105,13 +84,15 @@ const SignIn = () => {
             className='w-full h-12 px-3 py-2'
           />
           <Button
-            // type="submit"
             label="Sign In"
             className="bg-primary hover:bg-primaryHover text-whiteText focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out w-full mt-6"
           />
         </form>
 
-        <p className="flex text-gray-400 font-normal text-sm mt-3">Don't have an account? <p onClick={() => openModal('register')} className="text-red-500 underline ml-2 cursor-pointer">Sign up</p></p>
+        <p className="flex text-gray-400 font-normal text-sm mt-3">
+          Don't have an account? 
+          <span onClick={() => openModal('register')} className="text-red-500 underline ml-2 cursor-pointer">Sign up</span>
+        </p>
       </div>
     </div>
   );
