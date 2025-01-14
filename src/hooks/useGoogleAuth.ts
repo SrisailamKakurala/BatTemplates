@@ -1,6 +1,6 @@
-// useGoogleAuth.js
-import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "@/firebase/firebase.config";
+// useGoogleAuth.ts
+import { signInWithGoogle } from "@/firebase/services/googleAuth.service"; // Import the service
+import { auth } from "@/firebase/firebase.config";  // Import auth
 import useAuthStore from "@/store/authStore";
 import useModalStore from "@/store/modalStore";
 
@@ -10,22 +10,22 @@ const useGoogleAuth = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
+      const userData = await signInWithGoogle(); // Call the service function
+      const { id, name, email, photoURL, emailVerified } = userData; // Destructure user data
 
-      const userData = {
-        id: user.uid,
-        name: user.displayName || '',
-        email: user.email || '',
-        photoURL: user.photoURL || '',
-        emailVerified: user.emailVerified,
+      const user = {
+        id,
+        name,
+        email,
+        photoURL,  // Include the photoURL
+        emailVerified,  // Include the emailVerified status
       };
 
-      const accessToken = await user.getIdToken();
+      const accessToken = await auth.currentUser?.getIdToken(); // Get access token
       document.cookie = `accessToken=${accessToken}; path=/; max-age=3600; samesite=strict`;
 
-      signIn({ ...userData });
-      console.log("Google Sign-In successful: ", userData);
+      signIn({ ...user });
+      console.log("Google Sign-In successful: ", user);
       closeModal(); // Close the modal after successful sign-in
     } catch (error) {
       console.error("Google Sign-In Error: ", error);
