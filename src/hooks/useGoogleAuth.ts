@@ -1,32 +1,60 @@
-// useGoogleAuth.ts
-import { signInWithGoogle } from "@/firebase/services/googleAuth.service"; // Import the service
-import { auth } from "@/firebase/firebase.config";  // Import auth
+import { signInWithGoogle } from "@/firebase/services/authServices/googleAuth.service";
+import { createUserInFirestore, getUserFromFirestore } from "@/firebase/services/userServices/user.service";
+import { auth } from "@/firebase/firebase.config";
 import useAuthStore from "@/store/authStore";
 import useModalStore from "@/store/modalStore";
+import useUserStore, { User } from "@/store/userStore"; // Import the user store and type
 
 const useGoogleAuth = () => {
   const { signIn } = useAuthStore();
   const { closeModal } = useModalStore();
+  const { setUser } = useUserStore(); // Get the setUser function from the store
 
   const handleGoogleSignIn = async () => {
     try {
-      const userData = await signInWithGoogle(); // Call the service function
-      const { id, name, email, photoURL, emailVerified } = userData; // Destructure user data
+      // Sign in with Google and get basic user info
+      const userData = await signInWithGoogle();
+      const { id, name, email, photoURL } = userData;
 
-      const user = {
+      // Creating a new user in Firestore if not exists
+      const user: User = {
         id,
         name,
         email,
-        photoURL,  // Include the photoURL
-        emailVerified,  // Include the emailVerified status
+        photoURL,
+        roles: ["user"],
+        location: "", // Default empty
+        personalLinks: [], // Default empty
+        noOfContributions: 0, // Default zero
+        contributions: [], // Default empty array
+        followersCount: 0, // Default zero
+        followingCount: 0, // Default zero
+        bookmarks: [], // Default empty array
       };
 
-      const accessToken = await auth.currentUser?.getIdToken(); // Get access token
+      await createUserInFirestore(user);
+
+      // Fetching the full user data (including dynamic fields)
+      const fullUserData = await getUserFromFirestore(id);
+
+      if (fullUserData) {
+        // Ensure the fullUserData is typed as User
+        const typedUser = fullUserData as User;
+
+        // Set user in the store
+        setUser(typedUser);
+
+        // Sign-in action
+        signIn({ ...typedUser });
+        console.log("Google Sign-In successful: ", typedUser);
+      }
+
+      // Store access token in cookies
+      const accessToken = await auth.currentUser?.getIdToken();
       document.cookie = `accessToken=${accessToken}; path=/; max-age=3600; samesite=strict`;
 
-      signIn({ ...user });
-      console.log("Google Sign-In successful: ", user);
-      closeModal(); // Close the modal after successful sign-in
+      // Close the modal after successful sign-in
+      closeModal();
     } catch (error) {
       console.error("Google Sign-In Error: ", error);
     }
