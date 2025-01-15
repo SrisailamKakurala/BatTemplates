@@ -8,7 +8,7 @@ import useUserStore, { User } from "@/store/userStore"; // Import the user store
 const useGoogleAuth = () => {
   const { signIn } = useAuthStore();
   const { closeModal } = useModalStore();
-  const { setUser } = useUserStore(); // Get the setUser function from the store
+  const { setUser } = useUserStore();
 
   const handleGoogleSignIn = async () => {
     try {
@@ -23,7 +23,7 @@ const useGoogleAuth = () => {
         email,
         photoURL,
         roles: ["user"],
-        location: "", // Default empty
+        location: "🌍 planet earth", // Default empty
         personalLinks: [], // Default empty
         noOfContributions: 0, // Default zero
         contributions: [], // Default empty array

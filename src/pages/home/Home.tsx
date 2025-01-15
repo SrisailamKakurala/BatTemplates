@@ -33,20 +33,18 @@ const Home: React.FC = () => {
       <Logo classNames='h-20 w-auto' />
 
       {/* Buttons - Only visible if authenticated */}
-      {isAuthenticated && (
-        <div className="flex space-x-2 mt-2">
-          <Button
-            label='Explore Templates'
-            onClick={() => navigate('/templates')}
-            className='bg-secondaryButton hover:bg-secondaryButtonHover text-whiteText font-semibold text-opacity-90 duration-200'
-          />
-          <Button
-            label='Explore Structures'
-            onClick={() => navigate('/folders')}
-            className='bg-primary hover:bg-primaryHover text-whiteText font-semibold text-opacity-90 duration-200'
-          />
-        </div>
-      )}
+      <div className="flex space-x-2 mt-2">
+        <Button
+          label='Explore Templates'
+          onClick={() => navigate('/templates')}
+          className='bg-secondaryButton hover:bg-secondaryButtonHover text-whiteText font-semibold text-opacity-90 duration-200'
+        />
+        <Button
+          label='Explore Structures'
+          onClick={() => navigate('/folders')}
+          className='bg-primary hover:bg-primaryHover text-whiteText font-semibold text-opacity-90 duration-200'
+        />
+      </div>
     </div>
   );
 };

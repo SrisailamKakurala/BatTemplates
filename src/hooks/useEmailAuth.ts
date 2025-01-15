@@ -18,7 +18,7 @@ const useEmailAuth = () => {
         email: user.email || '',
         photoURL: user.photoURL || '', // Default empty string if not available
         roles: ["user"], // Default roles for new users
-        location: "", // Default empty string
+        location: "🌍 planet earth", // Default empty string
         personalLinks: [], // Default empty array
         noOfContributions: 0, // Default zero
         contributions: [], // Default empty array
@@ -56,7 +56,7 @@ const useEmailAuth = () => {
           email: user.email || '',
           photoURL: user.photoURL || '',
           roles: ["user"],
-          location: "",
+          location: "🌍 planet earth",
           personalLinks: [],
           noOfContributions: 0,
           contributions: [],

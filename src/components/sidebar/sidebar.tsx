@@ -21,9 +21,12 @@ const Sidebar: React.FC = () => {
   const handleLogout = async () => {
     try {
       const auth = getAuth();
-      await firebaseSignOut(auth); // Sign out from Firebase
-      document.cookie = "accessToken=; max-age=0; path=/; samesite=strict"; // Remove cookie
-      useAuthStore.getState().signOut(); // Clear zustand auth state
+      await firebaseSignOut(auth);
+      document.cookie = "accessToken=; max-age=0; path=/; samesite=strict";
+      useAuthStore.getState().signOut();
+      localStorage.removeItem("auth-storage");
+      localStorage.removeItem("user");
+      window.location.reload();
       console.log("User signed out successfully.");
     } catch (error) {
       console.error("Sign-Out failed.", error);

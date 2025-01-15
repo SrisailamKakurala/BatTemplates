@@ -40,7 +40,7 @@ const authMiddleware = async () => {
   const setLoading = useUtilsStore.getState().setLoading;
   setLoading(true); // Start loading
 
-  let userFromStorage = getUserFromLocalStorage(); // Try to get user data from localStorage
+  let userFromStorage = getUserFromLocalStorage();
 
   if (userFromStorage) {
     // User data exists in localStorage, update Zustand store with that data
