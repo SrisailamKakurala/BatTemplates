@@ -4,11 +4,13 @@ import { auth } from "@/firebase/firebase.config";
 import useAuthStore from "@/store/authStore";
 import useModalStore from "@/store/modalStore";
 import useUserStore, { User } from "@/store/userStore"; // Import the user store and type
+import { useToast } from "@/hooks/ui/useToast"; // Import the useToast hook
 
 const useGoogleAuth = () => {
   const { signIn } = useAuthStore();
   const { closeModal } = useModalStore();
-  const { setUser } = useUserStore();
+  const { setUser } = useUserStore(); // Destructure the setUser method
+  const { addToast } = useToast(); // Destructure addToast to show toasts
 
   const handleGoogleSignIn = async () => {
     try {
@@ -42,11 +44,14 @@ const useGoogleAuth = () => {
         const typedUser = fullUserData as User;
 
         // Set user in the store
-        setUser(typedUser);
+        setUser(typedUser); // Update the user state in the store
 
         // Sign-in action
         signIn({ ...typedUser });
         console.log("Google Sign-In successful: ", typedUser);
+
+        // Show success toast
+        addToast("Google Sign-In successful!", "success");
       }
 
       // Store access token in cookies
@@ -57,6 +62,9 @@ const useGoogleAuth = () => {
       closeModal();
     } catch (error) {
       console.error("Google Sign-In Error: ", error);
+      
+      // Show error toast
+      addToast("Error during Google Sign-In. Please try again.", "error");
     }
   };
 

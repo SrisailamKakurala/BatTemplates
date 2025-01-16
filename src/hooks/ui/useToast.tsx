@@ -32,11 +32,11 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     <ToastContext.Provider value={{ addToast }}>
       {children}
       {createPortal(
-        <div className="fixed top-4 right-4 space-y-1 z-50">
+        <div className="fixed bottom-4 right-4 space-y-1 z-50">
           {toasts.map((toast) => (
             <div
               key={toast.id}
-              className={`flex items-center py-1 px-4 rounded-sm shadow-lg text-whiteText transform transition-all ${
+              className={`flex items-center py-3 px-4 rounded-sm shadow-lg text-whiteText transform transition-all ${
                 toast.type === 'success'
                   ? 'bg-green-500'
                   : toast.type === 'error'
@@ -46,7 +46,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                   : 'bg-yellow-500'
               }`}
             >
-              <span className="flex-grow text-sm">{toast.message}</span>
+              <span className="flex-grow text-lg">{toast.message}</span>
             </div>
           ))}
         </div>,
