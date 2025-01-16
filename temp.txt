@@ -1,0 +1,53 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Layouts
+import UserLayout from "@/layouts/UserLayout";
+import AdminLayout from "@/layouts/AdminLayout";
+
+// Store and Middleware
+import useModalStore from "@/store/modalStore";
+import useUtilsStore from "@/store/utilsStore";
+import { useEffect } from "react";
+import authMiddleware from "@/middlewares/authMiddleware";
+import Loader from "@/components/loaders/Loader";
+import SignIn from "@/pages/userPages/auth/signin";
+import Register from "@/pages/userPages/auth/register";
+import Home from "./pages/userPages/home/Home";
+
+
+const App: React.FC = () => {
+  const loading = useUtilsStore((state) => state.loading);
+  const { activeModal } = useModalStore();
+
+  useEffect(() => {
+    authMiddleware();
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  return (
+    <Router>
+      <div className="flex h-screen bg-primaryBg font-[roboto] relative">
+        {/* Conditionally render modals */}
+        {activeModal === "signin" && <SignIn />}
+        {activeModal === "register" && <Register />}
+
+        {/* Routes */}
+        <Routes>
+          {/* Default redirect to Home */}
+          <Route path="/" element={<Home />} />
+
+          {/* User Routes */}
+          <Route path="/*" element={<UserLayout />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin/*" element={<AdminLayout />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+};
+
+export default App;
