@@ -105,11 +105,6 @@ const AdminLogin: React.FC = () => {
             className="bg-primary hover:bg-primaryHover text-whiteText focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out w-full"
           />
         </form>
-
-        <p className="flex text-gray-400 font-normal text-sm mt-3">
-          Don't have an account? 
-          <span className="text-red-500 underline ml-2 cursor-pointer">Sign up</span>
-        </p>
       </div>
     </div>
   );

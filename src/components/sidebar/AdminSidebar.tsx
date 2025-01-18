@@ -3,11 +3,13 @@ import NavItem from "@/components/navitem/NavItem";
 import Logo from "../logo/Logo";
 import {
   FiHome,
-  FiFolder,
-  FiBookmark,
-  FiUser,
+  FiUsers,
   FiRefreshCw,
+  FiFlag,
+  FiBarChart2,
   FiAward,
+  FiSettings,
+  FiClipboard,
   FiLogOut,
 } from "react-icons/fi";
 import { getAuth, signOut as firebaseSignOut } from "firebase/auth";
@@ -15,7 +17,7 @@ import { getAuth, signOut as firebaseSignOut } from "firebase/auth";
 // Zustand auth store
 import useAuthStore from "@/store/authStore";
 
-const Sidebar: React.FC = () => {
+const AdminSidebar: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
 
   const handleLogout = async () => {
@@ -27,7 +29,7 @@ const Sidebar: React.FC = () => {
       localStorage.removeItem("auth-storage");
       localStorage.removeItem("user");
       window.location.reload();
-      console.log("User signed out successfully.");
+      console.log("Admin signed out successfully.");
     } catch (error) {
       console.error("Sign-Out failed.", error);
     }
@@ -36,18 +38,20 @@ const Sidebar: React.FC = () => {
   return (
     <div className="flex flex-col w-[20%] h-screen bg-primaryBg text-primary border-r border-gray-700 shadow-lg px-4">
       {/* Logo */}
-      <div className="flex items-center justify-center py-6 border-b border-gray-700">
-        <Logo classNames="h-12 w-auto mx-auto" to="/"/>
+      <div className="flex items-center justify-center py-4 border-b border-gray-700">
+        <Logo classNames="h-12 w-auto mx-auto" to="/admin/dashboard"/>
       </div>
 
       {/* Navigation */}
-      <div className="mt-8 flex-1 space-y-2">
-        <NavItem icon={<FiHome className="text-2xl " />} label="Home" to="/" classNames="opacity-90" />
-        <NavItem icon={<FiFolder className="text-2xl " />} label="Folders" to="/folders" classNames="opacity-90" />
-        <NavItem icon={<FiRefreshCw className="text-2xl " />} label="Templates" to="/templates" classNames="opacity-90" />
-        <NavItem icon={<FiBookmark className="text-2xl " />} label="Bookmarks" to="/bookmarks" classNames="opacity-90" />
-        <NavItem icon={<FiUser className="text-2xl " />} label="Profile" to="/profile" classNames="opacity-90" />
-        <NavItem icon={<FiAward className="text-2xl " />} label="Contributors" to="/contributors" classNames="opacity-90" />
+      <div className="mt-6 flex-1 space-y-0.5">
+        <NavItem icon={<FiHome className="text-2xl" />} label="Dashboard" to="/admin/dashboard" />
+        <NavItem icon={<FiUsers className="text-2xl" />} label="Users" to="/admin/users" />
+        <NavItem icon={<FiRefreshCw className="text-2xl" />} label="Templates" to="/admin/templates" />
+        <NavItem icon={<FiFlag className="text-2xl" />} label="Flagged" to="/admin/flagged" />
+        <NavItem icon={<FiBarChart2 className="text-2xl" />} label="Analytics" to="/admin/analytics" />
+        <NavItem icon={<FiAward className="text-2xl" />} label="Contributors" to="/admin/contributors" />
+        <NavItem icon={<FiSettings className="text-2xl" />} label="Settings" to="/admin/settings" />
+        <NavItem icon={<FiClipboard className="text-2xl" />} label="Logs" to="/admin/logs" />
       </div>
 
       {/* Logout - Conditional Rendering */}
@@ -55,7 +59,7 @@ const Sidebar: React.FC = () => {
         <div className="mt-auto mb-2 border-t border-gray-700 py-1">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-start px-4 py-3 text-lg font-semibold hover:bg-primary rounded-xl hover:text-white transition-all duration-200"
+            className="w-full flex items-center justify-start px-4 py-2 text-lg font-semibold hover:bg-primary rounded-xl hover:text-white transition-all duration-200"
           >
             <FiLogOut className="mr-3 text-2xl font-extrabold" />
             Logout
@@ -66,4 +70,4 @@ const Sidebar: React.FC = () => {
   );
 };
 
-export default Sidebar;
+export default AdminSidebar;

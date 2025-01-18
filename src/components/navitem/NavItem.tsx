@@ -1,11 +1,11 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 
 type NavItemProps = {
-  icon: string;
+  icon: ReactNode; // Accepts JSX for icons
   label: string;
   to: string;
-  classNames?: string
+  classNames?: string;
 };
 
 const NavItem: React.FC<NavItemProps> = ({ icon, label, to, classNames }) => {
@@ -15,10 +15,10 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, to, classNames }) => {
       className={({ isActive }) =>
         `flex items-center gap-3 p-2 rounded-lg text-primary font-semibold text-xl hover:bg-white hover:bg-opacity-[0.03] ${
           isActive ? "bg-white bg-opacity-5 font-bold" : ""
-        }`
+        } ${classNames}`
       }
     >
-      <img src={icon} alt={label} className={`h-10 w-10 filter contrast-100 sepia-100 hue-rotate-360 saturate-150 ${classNames}`} />
+      <span className="h-10 w-10 flex items-center justify-center ">{icon}</span> {/* Icon rendered here */}
       <span>{label}</span>
     </NavLink>
   );

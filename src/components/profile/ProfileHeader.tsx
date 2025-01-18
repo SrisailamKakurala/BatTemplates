@@ -1,5 +1,5 @@
 import React from "react";
-import { FaUserCircle } from "react-icons/fa"; // Importing an icon from react-icons
+import { FaUserCircle, FaEnvelope, FaMapMarkerAlt, FaCalendarAlt } from "react-icons/fa"; // Importing the necessary icons
 
 interface ProfileHeaderProps {
   user: {
@@ -28,18 +28,27 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
       </div>
       <div className="mt-4 sm:mt-0 space-y-2">
         <h2 className="text-4xl font-bold text-primary">{user.name || "Unknown User"}</h2>
-        <p className="text-lg text-gray-400">{user.email || "Email unavailable"}</p>
-        <p className="text-lg text-gray-400">{user.location || "Location not provided"}</p>
-        <p className="text-sm text-gray-400">
-          <span className="font-semibold text-primary">Joined on:</span>{" "}
-          {user.joinedAt?.seconds
-            ? new Date(user.joinedAt.seconds * 1000).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })
-            : "Date not available"}
-        </p>
+        <div className="flex items-center space-x-2">
+          <FaEnvelope size={13} className="text-gray-400" />
+          <p className="text-lg text-gray-400">{user.email || "Email unavailable"}</p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <FaMapMarkerAlt size={13} className="text-gray-400" />
+          <p className="text-lg text-gray-400">{user.location || "Location not provided"}</p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <FaCalendarAlt size={13} className="text-gray-400" />
+          <p className="text-sm text-gray-400">
+            <span className="font-semibold text-primary">Joined on:</span>{" "}
+            {user.joinedAt?.seconds
+              ? new Date(user.joinedAt.seconds * 1000).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              : "Date not available"}
+          </p>
+        </div>
       </div>
     </div>
   );

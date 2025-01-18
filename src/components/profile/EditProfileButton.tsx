@@ -4,7 +4,7 @@ import { FiEdit } from "react-icons/fi";
 const EditProfileButton: React.FC = () => {
   return (
     <div className="absolute top-6 right-6">
-      <button className="flex items-center space-x-2 text-primary hover:text-primaryHover font-semibold bg-gray-400 py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all">
+      <button className="flex items-center space-x-2 text-whiteText duration-200 hover:bg-primaryHover font-semibold bg-primary py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all">
         <FiEdit className="text-xl" />
         <span>Edit Profile</span>
       </button>

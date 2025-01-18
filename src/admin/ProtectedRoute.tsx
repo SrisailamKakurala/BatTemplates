@@ -1,9 +1,14 @@
+import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute: React.FC<{ allowedRoles: string[] }> = ({ allowedRoles }) => {
+interface ProtectedRouteProps {
+  allowedRoles: string[];
+  children?: React.ReactNode; // Allow children to be passed
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles, children }) => {
   const authStorage = localStorage.getItem("auth-storage");
 
-  // If authStorage is null or malformed, redirect to login
   if (!authStorage) {
     return <Navigate to="/admin" />;
   }
@@ -12,13 +17,12 @@ const ProtectedRoute: React.FC<{ allowedRoles: string[] }> = ({ allowedRoles }) 
   const isAuthenticated = authData?.state?.isAuthenticated ?? false;
   const userRoles = authData?.state?.user?.roles ?? [];
 
-  // If user is not authenticated or doesn't have the required role, redirect to login
   if (!isAuthenticated || !allowedRoles.some(role => userRoles.includes(role))) {
     return <Navigate to="/admin" />;
   }
 
-  // If the user is authenticated and has the required role, render the child routes
-  return <Outlet />;
+  // Render children or Outlet if the user has the required roles
+  return <>{children || <Outlet />}</>;
 };
 
 export default ProtectedRoute;
