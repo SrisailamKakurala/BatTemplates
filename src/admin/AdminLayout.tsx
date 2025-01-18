@@ -18,11 +18,11 @@ const AdminLayout: React.FC = () => {
       <Route
         element={
           <ProtectedRoute allowedRoles={["admin", "member"]}>
-            <div className="flex bg-primaryBg">
+            <div className="flex bg-primaryBg h-screen">
               {/* Admin Sidebar */}
               <AdminSidebar />
               {/* Main Content Area */}
-              <div className="flex-1">
+              <div className="flex-1 scroll-hide">
                 <Outlet />
               </div>
             </div>

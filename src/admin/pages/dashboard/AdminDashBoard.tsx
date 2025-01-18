@@ -24,6 +24,7 @@ const AdminDashboard: React.FC = () => {
           data = await (await fetchPendingTemplates()).concat(await fetchHistoryTemplates());
           setTemplates(data);
         }
+        console.log("Data:", data);
 
         // Filter data based on search term
         if (searchTerm) {
