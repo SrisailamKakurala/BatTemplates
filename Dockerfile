@@ -1,25 +1,32 @@
-# Step 1: Use an official Node.js image as the base
-FROM node:18-alpine AS build
+# Build stage
+FROM node:20-alpine as build
 
-# Step 2: Set working directory
+# Set working directory
 WORKDIR /app
 
-# Step 3: Install dependencies
+# Copy package files
 COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
-# Step 4: Copy source code
+# Copy project files
 COPY . .
 
-# Step 5: Build the application
+# Build the app
 RUN npm run build
 
-# Step 6: Use Nginx for serving
+# Production stage
 FROM nginx:alpine
+
+# Copy built assets from build stage
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Step 7: Expose port
+# Copy nginx config if you have custom configuration
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 80
 EXPOSE 80
 
-# Step 8: Start the server
+# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
