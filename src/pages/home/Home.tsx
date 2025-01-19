@@ -17,12 +17,12 @@ const Home: React.FC = () => {
           <Button
             label='Sign In'
             onClick={() => openModal("signin")} // Open SignIn modal
-            className='bg-secondaryButton hover:bg-secondaryButtonHover text-whiteText font-semibold text-opacity-90 duration-200'
+            className='bg-secondaryButton hover:bg-secondaryButtonHover text-xl text-whiteText font-semibold text-opacity-90 duration-200'
           />
           <Button
             label='Register'
             onClick={() => openModal("register")} // Open Register modal
-            className='bg-primary hover:bg-primaryHover text-whiteText font-semibold text-opacity-90 duration-200'
+            className='bg-primary hover:bg-primaryHover text-xl text-whiteText font-semibold text-opacity-90 duration-200'
           />
         </div>
       )}
@@ -37,12 +37,12 @@ const Home: React.FC = () => {
         <Button
           label='Explore Templates'
           onClick={() => navigate('/templates')}
-          className='bg-secondaryButton hover:bg-secondaryButtonHover text-whiteText font-semibold text-opacity-90 duration-200'
+          className='bg-secondaryButton hover:bg-secondaryButtonHover text-xl text-whiteText font-semibold text-opacity-90 duration-200'
         />
         <Button
           label='Explore Structures'
           onClick={() => navigate('/folders')}
-          className='bg-primary hover:bg-primaryHover text-whiteText font-semibold text-opacity-90 duration-200'
+          className='bg-primary hover:bg-primaryHover text-xl text-whiteText font-semibold text-opacity-90 duration-200'
         />
       </div>
     </div>

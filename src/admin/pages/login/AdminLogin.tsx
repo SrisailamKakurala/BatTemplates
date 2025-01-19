@@ -102,7 +102,7 @@ const AdminLogin: React.FC = () => {
           />
           <Button
             label="Sign In"
-            className="bg-primary hover:bg-primaryHover text-whiteText focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out w-full"
+            className="bg-primary hover:bg-primaryHover text-xl text-whiteText focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out w-full"
           />
         </form>
       </div>

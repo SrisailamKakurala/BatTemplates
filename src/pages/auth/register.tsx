@@ -56,7 +56,7 @@ const Register = () => {
           <Input {...register("fullName", { required: true })} type="text" placeholder="Full Name" error={errors.fullName?.type === "required"} className="w-full px-4 py-4 h-12" />
           <Input {...register("email", { required: true })} type="email" placeholder="Email" error={errors.email?.type === "required"} className="w-full px-4 py-4 h-12" />
           <Input {...register("password", { required: true })} type="password" placeholder="Password" error={errors.password?.type === "required"} className="w-full px-4 py-4 h-12" />
-          <Button label="Create Account" className="bg-primary hover:bg-primaryHover text-whiteText w-full mt-6" />
+          <Button label="Create Account" className="bg-primary hover:bg-primaryHover text-xl text-whiteText w-full mt-6" />
         </form>
 
         <p className="flex text-gray-400 font-normal text-sm mt-4">

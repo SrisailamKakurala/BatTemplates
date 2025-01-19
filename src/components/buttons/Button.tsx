@@ -11,7 +11,7 @@ const Button: React.FC<ButtonProps> = ({ label, onClick, className = '', icon, d
     <button
       disabled={disabled}
       onClick={onClick}
-      className={`flex items-center justify-center text-xl py-2 px-5 rounded-lg shadow-2xl transform transition-transform duration-200 ${className}`}
+      className={`flex items-center justify-center py-2 px-5 rounded-lg shadow-2xl transform transition-transform duration-200 ${className}`}
     >
       {icon && <span className="mr-2 ">{icon}</span>}
       {label}
