@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { FiSettings, FiFile, FiEdit, FiCalendar, FiBookOpen } from "react-icons/fi";
-import { saveSiteSettings } from "@/firebase/services/adminServices/siteSettings.service"; // Import the updated service
-import { useToast } from "@/hooks/ui/useToast"; // Import the toast hook
+import React, { useState } from "react"; // Import useState
+import { FiSettings, FiFile, FiEdit, FiCalendar, FiBookOpen } from "react-icons/fi"; // Import the required icons
+import { saveSiteSettings } from "@/firebase/services/adminServices/siteSettings.service"; // Ensure this import is correct
+import { useToast } from "@/hooks/ui/useToast"; // Ensure this import is correct
 
 interface SettingsFormProps {
   onSubmit: (settings: {
@@ -9,7 +9,7 @@ interface SettingsFormProps {
     siteDescription: string;
     since: string;
     guidelines: string;
-    logo: string | null;
+    logo?: File | null;
   }) => void;
 }
 
@@ -45,14 +45,15 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onSubmit }) => {
       // Show success toast
       addToast("Settings saved successfully!", "success");
 
-      // After successful submission, you can call the `onSubmit` prop if needed
-      onSubmit({
-        siteName,
-        siteDescription,
-        since,
-        guidelines,
-        logo: logo ? URL.createObjectURL(logo) : null, // For client-side preview (if needed)
-      });
+      // Clear fields after submission
+      setSiteName("");
+      setSiteDescription("");
+      setSince("");
+      setGuidelines("");
+      setLogo(null);
+
+      // Trigger the onSubmit callback
+      onSubmit({ siteName, siteDescription, since, guidelines, logo });
     } catch (error) {
       // Show error toast if something goes wrong
       addToast("Failed to save settings. Please try again.", "error");
@@ -60,12 +61,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-secondary p-8 rounded-lg shadow-lg max-w-6xl mx-auto w-full">
-      <h2 className="text-3xl text-white font-bold mb-6 text-center flex items-center justify-center gap-2">
-        <FiSettings className="text-primary" />
-        Site Settings
-      </h2>
-
+    <form onSubmit={handleSubmit} className="bg-secondary lg:p-8 p-4 rounded-lg shadow-lg max-w-6xl mx-auto w-full">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
           <label className="text-yellow-500 text-lg font-semibold mb-2 flex items-center gap-2" htmlFor="siteName">

@@ -37,17 +37,17 @@ const Sidebar: React.FC = () => {
     <div className="flex flex-col w-[20%] h-screen bg-primaryBg text-primary border-r border-gray-700 shadow-lg px-4">
       {/* Logo */}
       <div className="flex items-center justify-center py-6 border-b border-gray-700">
-        <Logo classNames="h-12 w-auto mx-auto" to="/"/>
+        <Logo classNames="h-12 w-auto mx-auto" to="/" />
       </div>
 
       {/* Navigation */}
       <div className="mt-8 flex-1 space-y-2">
-        <NavItem icon={<FiHome className="text-2xl " />} label="Home" to="/" classNames="opacity-90" />
-        <NavItem icon={<FiFolder className="text-2xl " />} label="Folders" to="/folders" classNames="opacity-90" />
-        <NavItem icon={<FiRefreshCw className="text-2xl " />} label="Templates" to="/templates" classNames="opacity-90" />
-        <NavItem icon={<FiBookmark className="text-2xl " />} label="Bookmarks" to="/bookmarks" classNames="opacity-90" />
-        <NavItem icon={<FiUser className="text-2xl " />} label="Profile" to="/profile" classNames="opacity-90" />
-        <NavItem icon={<FiAward className="text-2xl " />} label="Contributors" to="/contributors" classNames="opacity-90" />
+        <NavItem icon={<FiHome className="text-2xl" />} label="Home" to="/" />
+        <NavItem icon={<FiFolder className="text-2xl" />} label="Folders" to="/folders" />
+        <NavItem icon={<FiRefreshCw className="text-2xl" />} label="Templates" to="/templates" />
+        <NavItem icon={<FiBookmark className="text-2xl" />} label="Bookmarks" to="/bookmarks" />
+        <NavItem icon={<FiUser className="text-2xl" />} label="Profile" to="/profile" />
+        <NavItem icon={<FiAward className="text-2xl" />} label="Contributors" to="/contributors" />
       </div>
 
       {/* Logout - Conditional Rendering */}
@@ -58,7 +58,7 @@ const Sidebar: React.FC = () => {
             className="w-full flex items-center justify-start px-4 py-3 text-lg font-semibold hover:bg-primary rounded-xl hover:text-white transition-all duration-200"
           >
             <FiLogOut className="mr-3 text-2xl font-extrabold" />
-            Logout
+            <span className="hidden lg:inline">Logout</span> {/* Hide label on small screens */}
           </button>
         </div>
       )}

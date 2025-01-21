@@ -51,28 +51,31 @@ const AdminDashboard: React.FC = () => {
   }, [activeTab, searchTerm]);
 
   return (
-    <div className="p-6 sm:p-8 bg-primaryBg text-white min-h-screen">
-      <h1 className="text-4xl font-bold mb-6 flex items-center">
-        <span className="text-primary mr-4">{<FaAccusoft />}</span> Admin Panel
+    <div className="p-4 sm:p-6 lg:p-8 bg-primaryBg text-white min-h-screen">
+      {/* Heading */}
+      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 flex items-center justify-center sm:justify-start text-primary text-center">
+        <span className="mr-3">{<FaAccusoft />}</span> Admin Panel
       </h1>
 
       {/* Search */}
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder="Search by name, description, or author..."
-        className="w-full sm:w-1/2 px-4 py-2 rounded-md bg-gray-800 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 my-4"
-      />
+      <div className="w-full flex justify-center sm:justify-start">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search by name, description, or author..."
+          className="w-full sm:w-3/4 lg:w-1/2 px-4 py-2 rounded-md bg-gray-800 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 my-4"
+        />
+      </div>
 
       {/* Tabs */}
-      <Tabs activeTab={activeTab} setActiveTab={setActiveTab} classNames="" />
+      <Tabs activeTab={activeTab} setActiveTab={setActiveTab} classNames="mb-6" />
 
       {/* Content */}
       {loading ? (
-        <div className="text-center text-gray-300">Loading...</div>
+        <div className="text-center text-gray-300 text-lg sm:text-xl">Loading...</div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {(activeTab === "folders" ? folders : templates).map((item) => (
             <Card key={item.id} {...item} />
           ))}

@@ -13,13 +13,13 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, to, classNames }) => {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex items-center gap-3 p-2 rounded-lg text-primary font-semibold text-xl hover:bg-white hover:bg-opacity-[0.03] ${
+        `flex items-center gap-3 p-2 rounded-lg text-primary font-semibold text-lg hover:bg-white hover:bg-opacity-[0.03] ${
           isActive ? "bg-white bg-opacity-5 font-bold" : ""
         } ${classNames}`
       }
     >
-      <span className="h-10 w-10 flex items-center justify-center ">{icon}</span> {/* Icon rendered here */}
-      <span>{label}</span>
+      <span className="h-10 w-10 flex items-center justify-center">{icon}</span>
+      <span className="hidden sm:hidden md:inline md:text-sm lg:text-lg">{label}</span> {/* Responsive label */}
     </NavLink>
   );
 };
