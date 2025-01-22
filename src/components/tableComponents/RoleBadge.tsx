@@ -17,7 +17,7 @@ const RoleBadge: React.FC<RoleBadgeProps> = ({ role }) => {
   };
 
   return (
-    <span className={`inline-block px-2 py-1 rounded mx-1 text-sm ${getBadgeStyle()}`}>
+    <span className={`inline-block px-2 py-1 rounded m-1 text-sm ${getBadgeStyle()}`}>
       {role}
     </span>
   );

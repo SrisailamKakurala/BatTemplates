@@ -6,7 +6,7 @@ const EditProfileButton: React.FC = () => {
     <div className="absolute top-6 right-6">
       <button className="flex items-center space-x-2 text-whiteText duration-200 hover:bg-primaryHover font-semibold bg-primary py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all">
         <FiEdit className="text-xl" />
-        <span>Edit Profile</span>
+        <span className="md:inline hidden">Edit Profile</span>
       </button>
     </div>
   );

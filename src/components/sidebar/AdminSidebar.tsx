@@ -1,6 +1,6 @@
 import React from "react";
 import NavItem from "@/components/navitem/NavItem";
-import Logo from "../logo/Logo";
+import Logo, { LogoMobile } from "../logo/Logo";
 import {
   FiHome,
   FiUsers,
@@ -38,8 +38,14 @@ const AdminSidebar: React.FC = () => {
   return (
     <div className="flex flex-col w-[20%] h-screen bg-primaryBg text-primary border-r border-gray-700 shadow-lg px-4">
       {/* Logo */}
-      <div className="flex items-center justify-center py-4 border-b border-gray-700">
-        <Logo classNames="h-12 w-auto mx-auto" to="/admin/dashboard" />
+      <div className="flex items-center justify-center py-6 border-b border-gray-700">
+        {/* Show LogoMobile on small screens and Logo on larger screens */}
+        <div className="block lg:hidden">
+          <LogoMobile classNames="h-12 w-auto mx-auto" to="/" />
+        </div>
+        <div className="hidden lg:block">
+          <Logo classNames="h-12 w-auto mx-auto" to="/" />
+        </div>
       </div>
 
       {/* Navigation */}
@@ -62,7 +68,7 @@ const AdminSidebar: React.FC = () => {
             className="w-full flex items-center justify-start px-4 py-2 text-lg font-semibold hover:bg-primary rounded-xl hover:text-white transition-all duration-200"
           >
             <FiLogOut className="mr-3 text-2xl font-extrabold" />
-            <span className="hidden lg:inline">Logout</span> {/* Hide label on small screens */}
+            <span className="hidden lg:inline md:inline">Logout</span> {/* Hide label on small screens */}
           </button>
         </div>
       )}

@@ -28,7 +28,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   }
 
   return (
-    <div className="p-6 h-60 rounded shadow hover:shadow-lg bg-secondary hover:bg-secondaryHover cursor-pointer">
+    <div className="p-6 h-auto max-h-80 min-h-60 rounded shadow hover:shadow-lg bg-secondary hover:bg-secondaryHover cursor-pointer">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold text-white">{title}</h2>
         <div className="text-sm flex gap-1 text-primary"><span><FaStar size={18} fill="#FFD700" /></span> {likes}</div>

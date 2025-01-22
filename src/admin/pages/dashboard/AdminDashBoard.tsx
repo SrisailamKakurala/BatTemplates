@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { FaAccusoft } from "react-icons/fa";
 import Tabs from "@/components/tabs/ButtonTabs";
 import Card from "@/components/cards/Card";
-import { fetchPendingFolders, fetchHistoryFolders } from "@/firebase/services/adminServices/folder.service";
-import { fetchPendingTemplates, fetchHistoryTemplates } from "@/firebase/services/adminServices/template.sevice";
+import { fetchPendingFolders } from "@/firebase/services/adminServices/folder.service";
+import { fetchPendingTemplates } from "@/firebase/services/adminServices/template.sevice";
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"folders" | "templates">("folders");
@@ -17,14 +17,31 @@ const AdminDashboard: React.FC = () => {
       setLoading(true);
       try {
         let data: any[] = [];
+
         if (activeTab === "folders") {
-          data = await (await fetchPendingFolders()).concat(await fetchHistoryFolders());
+          // Fetch pending folders
+          data = await fetchPendingFolders();
+          console.log("folders: ", data);
           setFolders(data);
         } else {
-          data = await (await fetchPendingTemplates()).concat(await fetchHistoryTemplates());
+          // Fetch pending templates
+          data = await fetchPendingTemplates();
+          console.log("templates: ", data);
+
+          // Check if approved templates are already stored in localStorage
+          const storedTemplates = localStorage.getItem("approvedTemplates");
+          if (storedTemplates) {
+            const approvedTemplates = JSON.parse(storedTemplates);
+            // Combine pending and approved templates
+            data = data.concat(approvedTemplates);
+          } else {
+            // Fetch approved templates and store them in localStorage
+            // Since we are not fetching history templates anymore, this will be omitted
+            // If you still want to store them in localStorage, do that manually as needed
+          }
+
           setTemplates(data);
         }
-        console.log("Data:", data);
 
         // Filter data based on search term
         if (searchTerm) {
@@ -35,6 +52,7 @@ const AdminDashboard: React.FC = () => {
           );
         }
 
+        // Set final filtered data to state
         if (activeTab === "folders") {
           setFolders(data);
         } else {
@@ -53,7 +71,7 @@ const AdminDashboard: React.FC = () => {
   return (
     <div className="p-4 sm:p-6 lg:p-8 bg-primaryBg text-white min-h-screen">
       {/* Heading */}
-      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 flex items-center justify-center sm:justify-start text-primary text-center">
+      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6 flex items-center justify-center sm:justify-start text-primary text-center">
         <span className="mr-3">{<FaAccusoft />}</span> Admin Panel
       </h1>
 

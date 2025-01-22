@@ -31,7 +31,7 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto bg-secondary p-6 rounded-lg shadow-lg space-y-8 text-white overflow-y-scroll scroll-hide">
+    <div className="relative w-full md:h-auto h-full max-w-5xl mx-auto bg-secondary p-6 rounded-lg shadow-lg space-y-8 text-white overflow-y-scroll scroll-hide">
       <EditProfileButton />
       <ProfileHeader user={user} />
       <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab} />

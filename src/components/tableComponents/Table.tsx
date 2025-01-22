@@ -1,6 +1,7 @@
 import React from "react";
 import RoleBadge from "@/components/tableComponents/RoleBadge";
 import UserActions from "@/components/tableComponents/UserActions";
+import formatDate from "@/utils/formatDate";
 
 interface Data {
   name: string;
@@ -8,20 +9,18 @@ interface Data {
   roles: string[];
   contributions: any[];
   joinedAt: { seconds: number; nanoseconds: number };
+  category: string;
+  author: string;
+  status: string;
+  createdAt: { seconds: number; nanoseconds: number };
+  downloads: number;
+  action: string;
+  details: string;
 }
 
 interface TableProps {
   data: Data[];
 }
-
-const formatDate = (seconds: number) => {
-  const date = new Date(seconds * 1000); // Convert seconds to milliseconds
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(date);
-};
 
 const UserTable: React.FC<Partial<TableProps>> = ({ data = [] }) => {
   return (
