@@ -36,7 +36,7 @@ const AdminSidebar: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col w-[20%] h-screen bg-primaryBg text-primary border-r border-gray-700 shadow-lg px-4">
+    <div className="flex flex-col md:w-[20%] w-[12%] h-screen bg-primaryBg text-primary border-r border-gray-700 shadow-lg md:px-4 px-1">
       {/* Logo */}
       <div className="flex items-center justify-center py-6 border-b border-gray-700">
         {/* Show LogoMobile on small screens and Logo on larger screens */}
@@ -65,10 +65,10 @@ const AdminSidebar: React.FC = () => {
         <div className="mt-auto mb-2 border-t border-gray-700 py-1">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-start px-4 py-2 text-lg font-semibold hover:bg-primary rounded-xl hover:text-white transition-all duration-200"
+            className="w-full flex items-center md:justify-start justify-center md:px-4 md:py-3 text-lg font-semibold hover:bg-primary rounded-xl hover:text-white transition-all duration-200"
           >
-            <FiLogOut className="mr-3 text-2xl font-extrabold" />
-            <span className="hidden lg:inline md:inline">Logout</span> {/* Hide label on small screens */}
+            <FiLogOut className="md:mr-3 text-2xl font-extrabold" />
+            <span className="hidden lg:inline">Logout</span> {/* Hide label on small screens */}
           </button>
         </div>
       )}

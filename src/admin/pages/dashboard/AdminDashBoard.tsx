@@ -69,9 +69,9 @@ const AdminDashboard: React.FC = () => {
   }, [activeTab, searchTerm]);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 bg-primaryBg text-white min-h-screen">
+    <div className="p-4 sm:p-6 w-full lg:p-8 bg-primaryBg text-white min-h-screen ">
       {/* Heading */}
-      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6 flex items-center justify-center sm:justify-start text-primary text-center">
+      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold md:mb-6 mb-3 flex items-center justify-center sm:justify-start text-primary text-center">
         <span className="mr-3">{<FaAccusoft />}</span> Admin Panel
       </h1>
 
@@ -93,7 +93,7 @@ const AdminDashboard: React.FC = () => {
       {loading ? (
         <div className="text-center text-gray-300 text-lg sm:text-xl">Loading...</div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-4 ">
           {(activeTab === "folders" ? folders : templates).map((item) => (
             <Card key={item.id} {...item} />
           ))}

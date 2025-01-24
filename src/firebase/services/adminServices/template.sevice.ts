@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs } from "firebase/firestore"; // Import getDocs
+import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore"; // Import getDocs
 import { db } from "@/firebase/firebase.config";
 
 // Fetch pending templates directly from Firestore
@@ -20,3 +20,11 @@ export const fetchPendingTemplates = async () => {
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
+// Approve a template by ID
+export const approveTemplate = async (templateId: string) => {
+  const templateRef = doc(db, "templates", templateId);
+  await updateDoc(templateRef, {
+    isApproved: true,
+    reviewedAt: new Date().toISOString(), // Add a reviewedAt timestamp
+  });
+};

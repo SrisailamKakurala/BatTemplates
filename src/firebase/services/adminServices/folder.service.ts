@@ -8,5 +8,6 @@ export const fetchPendingFolders = async () => {
     where("isApproved", "==", false)
   );
   const querySnapshot = await getDocs(pendingQuery);
+  console.log(querySnapshot)
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
