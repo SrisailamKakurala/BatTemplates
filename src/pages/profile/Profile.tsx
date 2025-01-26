@@ -4,10 +4,12 @@ import ProfileHeader from "@/components/profile/ProfileHeader";
 import EditProfileButton from "@/components/profile/EditProfileButton";
 import ProfileTabs from "@/components/profile/ProfileTabs";
 import ProfileContent from "@/components/profile/ProfileContent";
+import useUtilsStore from "@/store/utilsStore";
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<"contributions" | "bookmarks">("contributions");
+  const { reloadProfile, setReloadProfile } = useUtilsStore();
 
   useEffect(() => {
     const authData = getAuthStorage();
@@ -15,6 +17,16 @@ const Profile: React.FC = () => {
       setUser(authData.state.user);
     }
   }, []);
+
+  useEffect(() => {
+    if (reloadProfile) {
+      const authData = getAuthStorage();
+      if (authData?.state?.isAuthenticated) {
+        setUser(authData.state.user);
+      }
+      setReloadProfile(false); // Reset the reloadProfile state
+    }
+  }, [reloadProfile, setReloadProfile]);
 
   const contributionsFolders = useMemo(() => user?.contributions?.filter((item: any) => item.type === "folder") || [], [user?.contributions]);
   const contributionsTemplates = useMemo(() => user?.contributions?.filter((item: any) => item.type === "template") || [], [user?.contributions]);
