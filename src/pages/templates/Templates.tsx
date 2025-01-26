@@ -5,30 +5,33 @@ import Button from "@/components/buttons/Button";
 import TemplateCard from "@/components/templates/TemplateCard";
 import useModalStore from "@/store/modalStore";
 import TemplateForm from "@/components/templates/TemplateForm";
+import { fetchApprovedTemplates } from "@/firebase/services/templateServices/fetchTemplates";
+import { Template } from "@/constants/schema";
 
 const Templates: React.FC = () => {
-  const [templates, setTemplates] = useState([]);
-  const [filteredTemplates, setFilteredTemplates] = useState([]);
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [filteredTemplates, setFilteredTemplates] = useState<Template[]>([]);
   const [formVisible, setFormVisible] = useState(false);
 
   const { openModal } = useModalStore(); // Accessing the modal store
 
   useEffect(() => {
-    const templatesLocal = JSON.parse(localStorage.getItem("templates") || "[]");
-    setTemplates(templatesLocal);
-    setFilteredTemplates(templatesLocal); // Initialize filtered templates
-  }, []);
+    const fetchTemplates = async () => {
+      try {
+        // Fetch approved templates
+        const approvedTemplates = await fetchApprovedTemplates();
+        setTemplates(approvedTemplates);
+        setFilteredTemplates(approvedTemplates);
 
-  // Sample template data
-  const template = {
-    title: "React Project Template",
-    description: "A simple boilerplate for a React application with hooks and state management.",
-    likes: 120,
-    techStack: "React, Redux, Axios, Tailwind CSS",
-    tags: "React, Redux, Frontend, Tailwind, JavaScript",
-    category: "Frontend Development",
-    id: "react-frontend-01",
-  };
+        // Store in localStorage
+        localStorage.setItem("templates", JSON.stringify(approvedTemplates));
+      } catch (error) {
+        console.error("Failed to fetch templates:", error);
+      }
+    };
+
+    fetchTemplates();
+  }, []);
 
   const handleOnclick = () => {
     const authStorage = localStorage.getItem("auth-storage");
@@ -37,14 +40,14 @@ const Templates: React.FC = () => {
     const authStatus = authStorage ? JSON.parse(authStorage) : null;
 
     if (authStatus?.state.isAuthenticated) {
-      setFormVisible(true)
+      setFormVisible(true);
     } else {
       openModal("signin"); // Open the SignIn modal
     }
   };
 
-  if(formVisible) {
-    return <TemplateForm setFormVisible={setFormVisible} />
+  if (formVisible) {
+    return <TemplateForm setFormVisible={setFormVisible} />;
   }
 
   return (
@@ -66,7 +69,7 @@ const Templates: React.FC = () => {
           />
           <Button
             label="Contribute"
-            onClick={handleOnclick} // Use the updated handleOnclick function
+            onClick={handleOnclick}
             icon={<FaPlus />}
             className="bg-primary text-white text-sm md:text-md px-4 py-2"
           />
@@ -75,10 +78,9 @@ const Templates: React.FC = () => {
 
       {/* Templates Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Using sample data three times */}
-        {[...Array(3)].map((_, index) => (
+        {filteredTemplates.map((template) => (
           <TemplateCard
-            key={index}
+            key={template.id}
             title={template.title}
             description={template.description}
             likes={template.likes}
@@ -86,6 +88,7 @@ const Templates: React.FC = () => {
             tags={template.tags}
             category={template.category}
             id={template.id}
+            githubLink={template.githubLink}
           />
         ))}
       </div>

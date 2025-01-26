@@ -1,4 +1,5 @@
 export interface Template {
+    id?: string; // Make id optional
     title: string;
     description: string;
     techStack: string;
@@ -11,4 +12,4 @@ export interface Template {
     isApproved: boolean;
     createdAt: number;
     reviewedAt: number | null;
-}
+  }

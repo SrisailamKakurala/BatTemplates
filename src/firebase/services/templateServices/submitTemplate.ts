@@ -1,21 +1,18 @@
 import { db } from "@/firebase/firebase.config";
 import { collection, addDoc } from "firebase/firestore";
 import { Template } from "@/constants/schema";
-import { useToast } from "@/hooks/ui/useToast";
 
-export const submitTemplate = async (template: Template) => {
-  const templatesRef = collection(db, "templates");
-  
-  const { addToast } = useToast();
-
+export const submitTemplate = async (
+  templateData: Template,
+  addToast: (message: string, type: 'success' | 'error' | 'info' | 'warning', duration?: number) => void
+) => {
   try {
-    // Attempt to add the template to Firestore
-    await addDoc(templatesRef, template);
-    console.log("Template successfully submitted:", template);
+    const templatesRef = collection(db, "templates");
+    await addDoc(templatesRef, templateData);
     addToast("Template submitted successfully!", "success");
   } catch (error) {
-    console.error("Error adding template:", error);
-    addToast("Error submitting template!", "error");
-    throw error;
+    console.error("Error submitting template:", error);
+    addToast("Failed to submit the template. Try again.", "error");
+    throw error; // Re-throw the error for handling in the component
   }
 };

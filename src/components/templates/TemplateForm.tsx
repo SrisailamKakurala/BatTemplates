@@ -4,6 +4,7 @@ import { FaPlus, FaTimes } from "react-icons/fa";
 import Button from "@/components/buttons/Button";
 import Input from "@/components/inputs/Input";
 import { submitTemplate } from "@/firebase/services/templateServices/submitTemplate";
+import { useToast } from "@/hooks/ui/useToast"; // Import the useToast hook
 
 interface TemplateFormProps {
   setFormVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,10 +26,11 @@ const TemplateForm: React.FC<TemplateFormProps> = ({ setFormVisible }) => {
     formState: { errors },
   } = useForm<FormData>();
 
+  const { addToast } = useToast(); // Use the useToast hook
+
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-
     const templateData = {
       ...data,
       likes: 0,
@@ -40,12 +42,10 @@ const TemplateForm: React.FC<TemplateFormProps> = ({ setFormVisible }) => {
     };
 
     try {
-      await submitTemplate(templateData); // Call service
+      await submitTemplate(templateData, addToast); // Pass addToast to the service
       setFormVisible(false); // Close the modal
-      alert("Template submitted successfully!");
     } catch (error) {
       console.error("Error submitting template:", error);
-      alert("Failed to submit the template. Try again.");
     }
   };
 

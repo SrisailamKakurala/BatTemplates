@@ -1,32 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Button from "@/components/buttons/Button";
 import formatDate from "@/utils/formatDate";
-import {
-  FaGithub,
-  FaTags,
-  FaCode,
-  FaCheckCircle,
-  FaThumbsUp,
-  FaTimes,
-  FaExclamationTriangle,
-  FaFlag,
-} from "react-icons/fa";
+import { FaGithub, FaTags, FaCode, FaCheckCircle, FaThumbsUp, FaTimes, FaExclamationTriangle, FaFlag,} from "react-icons/fa";
 import FlagModal from "@/components/modals/FlagModal";
 import { approveTemplate } from "@/firebase/services/adminServices/template.sevice"; // Import the approve service
-import { useToast } from "@/hooks/ui/useToast"; // Import the useToast hook
+import { useToast } from "@/hooks/ui/useToast";
+import { userTemplateProps } from "@/constants/interfaces";
 
-const Card: React.FC<{
-  id: string; // Add template ID prop
-  title: string;
-  category: string;
-  createdAt: number;
-  createdBy: string;
-  description: string;
-  githubLink: string;
-  isApproved: boolean;
-  type: string;
-  techStack: string;
-}> = ({
+
+const Card: React.FC<userTemplateProps> = ({
   id,
   title,
   category,
@@ -41,6 +23,8 @@ const Card: React.FC<{
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
   const [isApproving, setIsApproving] = useState(false); // Track approval state
   const [timeLeft, setTimeLeft] = useState(5); // Timer countdown
+  const [isActionTaken, setIsActionTaken] = useState(false); // Track if action (approve/reject) is taken
+  const [actionType, setActionType] = useState<"approved" | "rejected" | null>(null); // Track the type of action
   const { addToast } = useToast(); // Use the toast hook
 
   useEffect(() => {
@@ -57,6 +41,8 @@ const Card: React.FC<{
         .then(() => {
           addToast("Template approved successfully!", "success");
           console.log("Template approved:", id);
+          setIsActionTaken(true); // Mark action as taken
+          setActionType("approved"); // Set action type to "approved"
         })
         .catch((error) => {
           addToast("Failed to approve template.", "error");
@@ -90,6 +76,8 @@ const Card: React.FC<{
     if (window.confirm("Have you reviewed the submission thoroughly? Press OK to reject.")) {
       addToast("Template rejected.", "warning");
       console.log("Rejected");
+      setIsActionTaken(true); // Mark action as taken
+      setActionType("rejected"); // Set action type to "rejected"
     }
   };
 
@@ -151,9 +139,15 @@ const Card: React.FC<{
         <span>Please review the submission before approving or rejecting.</span>
       </div>
 
-      {/* Approve and Reject Buttons */}
+      {/* Approve and Reject Buttons or Action Taken Message */}
       <div className="mt-4 flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
-        {isApproving ? (
+        {isActionTaken ? (
+          <div className="flex items-center space-x-3">
+            <p className={`text-lg font-semibold ${actionType === "approved" ? "text-green-500" : "text-red-500"}`}>
+              {actionType === "approved" ? "Approved" : "Rejected"}
+            </p>
+          </div>
+        ) : isApproving ? (
           <div className="flex items-center space-x-3">
             <Button
               label={`Cancel Approval (${timeLeft}s)`}
@@ -181,11 +175,11 @@ const Card: React.FC<{
 
       {/* Flag Icon at Bottom-Right */}
       <button
-  onClick={handleFlagClick}
-  className="absolute right-4 top-4 md:bottom-4 md:top-auto text-white bg-primary p-2 rounded-md duration-200"
->
-  <FaFlag className="text-xl" />
-</button>
+        onClick={handleFlagClick}
+        className="absolute right-4 top-4 md:bottom-4 md:top-auto text-white bg-primary p-2 rounded-md duration-200"
+      >
+        <FaFlag className="text-xl" />
+      </button>
 
       {/* Flag Modal */}
       <FlagModal
