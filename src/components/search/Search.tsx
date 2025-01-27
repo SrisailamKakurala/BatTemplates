@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 interface InputProps extends React.ComponentProps<"input"> {
   error?: boolean;
   placeholder?: string;
-  page: "folders" | "templates";
+  page: "folders" | "templates" | "contributors";
   data: any[];
   onFilter: (filteredData: any[]) => void;
 }

@@ -14,6 +14,7 @@ const Card: React.FC<userTemplateProps> = ({
   category,
   createdAt,
   createdBy,
+  authorId,
   description,
   githubLink,
   isApproved,
@@ -37,7 +38,7 @@ const Card: React.FC<userTemplateProps> = ({
       }, 1000);
     } else if (isApproving && timeLeft === 0) {
       // Approve the template after the timer completes
-      approveTemplate(id)
+      approveTemplate(id, authorId)
         .then(() => {
           addToast("Template approved successfully!", "success");
           console.log("Template approved:", id);

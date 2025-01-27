@@ -39,7 +39,7 @@ const AdminDashboard: React.FC = () => {
             // Since we are not fetching history templates anymore, this will be omitted
             // If you still want to store them in localStorage, do that manually as needed
           }
-
+          console.log(data)
           setTemplates(data);
         }
 

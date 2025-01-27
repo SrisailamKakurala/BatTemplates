@@ -19,6 +19,7 @@ const Bookmarks: React.FC = () => {
       if (userId) {
         try {
           const { bookmarkedTemplates, bookmarkedFolders } = await fetchBookmarks(userId);
+          console.log("bookmarkedTemplates", bookmarkedTemplates);
           setFolders(bookmarkedFolders);
           setTemplates(bookmarkedTemplates);
         } catch (error) {

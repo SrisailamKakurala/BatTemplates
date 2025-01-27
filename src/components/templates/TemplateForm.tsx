@@ -36,6 +36,7 @@ const TemplateForm: React.FC<TemplateFormProps> = ({ setFormVisible }) => {
       likes: 0,
       author: user?.name || "Anonymous",
       authorEmail: user?.email || "N/A",
+      authorId: user?.id || "N/A",
       isApproved: false,
       createdAt: Date.now(),
       reviewedAt: null,

@@ -6,6 +6,7 @@ import Button from "@/components/buttons/Button";
 import { updateProfile } from "@/firebase/services/userServices/updateProfile.service";
 import { useToast } from "@/hooks/ui/useToast"; // Import the useToast hook
 import useUtilsStore from "@/store/utilsStore";
+import useAuthStore from "@/store/authStore";
 
 interface FormData {
   name: string;
@@ -47,30 +48,36 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose }) => {
     const profileData = {
       name: data.name,
       location: data.location,
-      personalLinks, // Array of social links
+      personalLinks,
     };
   
     try {
+  
       // Update the profile in Firestore and get the updated user data
-      const updatedUser = await updateProfile(currentUser.id, profileData, addToast);
+      const updatedUser = await updateProfile(currentUser.id, profileData);
   
-      // Update the user in `auth-storage` in localStorage
-      const authStorage = JSON.parse(localStorage.getItem("auth-storage") || "{}");
+      // Update the user in `auth-storage` using useAuthStore
+      useAuthStore.getState().signIn({
+        ...currentUser,
+        ...updatedUser,
+      });
   
-      if (authStorage.state?.user) {
-        // Merge the updated user data with the existing user data
-        authStorage.state.user = { ...authStorage.state.user, ...updatedUser };
+      // Trigger profile reload using useUtilsStore
+      useUtilsStore.getState().setReloadProfile(true);
   
-        // Save the updated `auth-storage` back to localStorage
-        localStorage.setItem("auth-storage", JSON.stringify(authStorage));
-      }
+      // Show success toast
+      addToast("Profile updated successfully!", "success");
   
       // Close the form after successful submission
       onClose();
     } catch (error) {
       console.error("Error updating profile:", error);
+  
+      // Show error toast
+      addToast("Failed to update profile. Please try again.", "error");
     }
   };
+  
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">

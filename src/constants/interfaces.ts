@@ -4,6 +4,7 @@ export interface userTemplateProps {
     category: string;
     createdAt: number;
     createdBy: string;
+    authorId: string;
     description: string;
     githubLink: string;
     isApproved: boolean;
