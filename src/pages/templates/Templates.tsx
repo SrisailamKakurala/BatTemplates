@@ -83,7 +83,7 @@ const Templates: React.FC = () => {
             key={template.id}
             title={template.title}
             description={template.description}
-            likes={template.likes}
+            likesCount={template.likes?.length}
             techStack={template.techStack}
             tags={template.tags}
             category={template.category}

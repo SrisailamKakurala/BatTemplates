@@ -20,8 +20,6 @@ export const createUserInFirestore = async (user: User) => {
         personalLinks: user.personalLinks || [], // Default to empty array
         noOfContributions: user.noOfContributions || 0, // Default to 0
         contributions: user.contributions || [], // Default to empty array
-        followersCount: user.followersCount || 0, // Default to 0
-        followingCount: user.followingCount || 0, // Default to 0
         bookmarks: user.bookmarks || [], // Default to empty array
       });
       console.log("User created successfully in Firestore.");
@@ -37,12 +35,12 @@ export const createUserInFirestore = async (user: User) => {
 // Fetch user data from Firestore
 export const getUserFromFirestore = async (userId: string) => {
   try {
-    const userRef = doc(db, "users", userId); // Assuming the collection is 'users'
+    const userRef = doc(db, "users", userId);
     const userDoc = await getDoc(userRef);
 
     if (userDoc.exists()) {
-      // Ensure the returned data is typed as User
-      return userDoc.data() as User;
+      // Ensure the returned data is typed as User and include userId
+      return { ...userDoc.data(), id: userId } as User & { id: string };
     } else {
       console.error("No user found with ID: ", userId);
       return null;
@@ -52,3 +50,4 @@ export const getUserFromFirestore = async (userId: string) => {
     return null;
   }
 };
+

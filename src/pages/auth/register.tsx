@@ -43,7 +43,7 @@ const Register = () => {
           icon={<FcGoogle size={30} />}
           label="Continue with Google"
           onClick={handleGoogleSignIn}
-          className="cursor-pointer bg-whiteText text-primaryBg text-xl font-semibold w-full mb-4"
+          className="cursor-pointer bg-whiteText text-primaryBg md:text-xl text-md font-semibold w-full mb-4"
         />
 
         <div className="flex items-center w-full mb-4">

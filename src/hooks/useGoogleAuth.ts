@@ -29,15 +29,14 @@ const useGoogleAuth = () => {
         personalLinks: [], // Default empty
         noOfContributions: 0, // Default zero
         contributions: [], // Default empty array
-        followersCount: 0, // Default zero
-        followingCount: 0, // Default zero
         bookmarks: [], // Default empty array
       };
-
+      console.log("User data:", user);
       await createUserInFirestore(user);
 
       // Fetching the full user data (including dynamic fields)
       const fullUserData = await getUserFromFirestore(id);
+      console.log("User before signIn:", fullUserData);
 
       if (fullUserData) {
         // Ensure the fullUserData is typed as User

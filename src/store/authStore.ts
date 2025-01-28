@@ -21,22 +21,28 @@ const useAuthStore = create<AuthState>()(
       (set) => ({
         isAuthenticated: false,
         user: null,
-        signIn: (user) => set({ isAuthenticated: true, user }),
+        signIn: (user) =>
+          set({
+            isAuthenticated: true,
+            user: {
+              ...user,
+            },
+          }),
         signOut: () => set({ isAuthenticated: false, user: null }),
       }),
       {
-        name: "auth-storage", // LocalStorage key
-        partialize: (state) => ({ isAuthenticated: state.isAuthenticated, user: state.user }), // Persist only necessary fields
+        name: "auth-storage",
+        partialize: (state) => ({ isAuthenticated: state.isAuthenticated, user: state.user }), // Ensure the id is part of user
         onRehydrateStorage: () => (state) => {
-          // Check if the accessToken exists in cookies during hydration
           const hasAccessToken = document.cookie.includes("accessToken=");
           if (!hasAccessToken) {
-            state?.signOut(); // Reset state if no accessToken is present
+            state?.signOut();
           }
         },
       }
     )
   )
 );
+
 
 export default useAuthStore;

@@ -1,65 +1,109 @@
 import React, { useState } from "react";
 import { FaStar, FaBookmark } from "react-icons/fa";
 import Button from "@/components/buttons/Button";
-import { addBookmark } from "@/firebase/services/templateServices/bookmarkService"; // Import the bookmark service
+import { addBookmark } from "@/firebase/services/templateServices/bookmarkService";
+import { toggleLike } from "@/firebase/services/templateServices/likeService";
 import useModalStore from "@/store/modalStore";
 
 interface TemplateCardProps {
   id: string;
   title: string;
   description: string;
-  likes: number;
+  likesCount: number;
   techStack: string;
   tags: string;
   category: string;
   githubLink: string;
-  isBookmarked?: boolean; // Add isBookmarked prop
+  isBookmarked?: boolean;
+  isLiked?: boolean;
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({
   id,
   title,
   description,
-  likes,
+  likesCount,
   techStack,
   tags,
   category,
   githubLink,
-  isBookmarked = false, // Default to false if not provided
+  isBookmarked = false,
+  isLiked = false, // Default to false if not provided
 }) => {
   const { openModal } = useModalStore();
-  const [localIsBookmarked, setLocalIsBookmarked] = useState(isBookmarked); // Local state for bookmark status
+  const [localIsBookmarked, setLocalIsBookmarked] = useState(isBookmarked);
+  const [localIsLiked, setLocalIsLiked] = useState(isLiked);
+  const [likes, setLikes] = useState(likesCount);
 
   const bookMarkHandler = async () => {
-    const authStorage = localStorage.getItem("auth-storage");
-    const authStatus = authStorage ? JSON.parse(authStorage) : null;
+    const userStorage = localStorage.getItem("user");
+    const user = userStorage ? JSON.parse(userStorage) : null;
 
-    if (authStatus?.state.isAuthenticated) {
-      const userId = authStatus.state.user?.id;
-      if (userId) {
-        try {
-          await addBookmark(userId, id); // Call the bookmark service
-          setLocalIsBookmarked(true); // Update local state to indicate bookmark is added
-        } catch (error) {
-          console.error("Failed to add bookmark:", error);
-        }
-      } else {
-        console.error("User ID is missing in local storage.");
+    if (user) {
+      const userId = user.id;
+      try {
+        await addBookmark(userId, id); // Call the bookmark service
+        setLocalIsBookmarked(true); // Update local state to indicate bookmark is added
+      } catch (error) {
+        console.error("Failed to add bookmark:", error);
       }
     } else {
-      openModal("signin"); // Open the SignIn modal if not authenticated
+      openModal("signin"); // Open the SignIn modal if user is not found in local storage
     }
   };
+
+  const likeHandler = async () => {
+    const userStorage = localStorage.getItem("user");
+    const user = userStorage ? JSON.parse(userStorage) : null;
+  
+    if (user) {
+      const userId = user.id;
+      try {
+        // Optimistic UI update
+        setLocalIsLiked(!localIsLiked);
+        setLikes((prev) => (localIsLiked ? prev - 1 : prev + 1));
+  
+        // Update Firestore and get the correct likes count
+        const updatedLikesCount = await toggleLike(id, userId, localIsLiked);
+  
+        // Synchronize likes count with Firestore
+        setLikes(updatedLikesCount);
+      } catch (error) {
+        console.error("Failed to toggle like:", error);
+  
+        // Revert optimistic UI update in case of an error
+        setLocalIsLiked(localIsLiked);
+        setLikes((prev) => (localIsLiked ? prev + 1 : prev - 1));
+      }
+    } else {
+      openModal("signin"); // Open the SignIn modal if user is not found in local storage
+    }
+  };
+
+  const viewHandler = async () => {
+    const userStorage = localStorage.getItem("user");
+    const user = userStorage ? JSON.parse(userStorage) : null;
+
+    if (user) {
+      window.open(githubLink, "_blank");
+    } else {
+      openModal("signin"); // Open the SignIn modal if user is not found in local storage
+    }
+  };
+  
+
 
   return (
     <div className="p-6 h-auto max-h-80 min-h-60 rounded shadow hover:shadow-lg bg-secondary hover:bg-secondaryHover cursor-pointer">
       <div className="flex justify-between items-center mb-4">
         <h2 className="md:text-2xl text-xl font-bold text-primary">{title}</h2>
-        <div className="text-sm flex gap-1 text-primary">
-          <span>
-            <FaStar size={18} fill="#FFD700" />
-          </span>{" "}
-          {likes}
+        <div
+          className={`text-sm flex gap-1 cursor-pointer ${localIsLiked ? "text-yellow-400" : "text-white"
+            }`}
+          onClick={likeHandler}
+        >
+          <FaStar size={18} />
+          {likes || 0}
         </div>
       </div>
 
@@ -79,15 +123,12 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
         <div className="flex gap-2 items-center">
           <FaBookmark
             size={30}
-            className={`cursor-pointer ${
-              localIsBookmarked ? "text-yellow-400" : "text-white"
-            }`} // Change color based on bookmark state
+            className={`cursor-pointer ${localIsBookmarked ? "text-yellow-400" : "text-white"
+              }`}
             onClick={bookMarkHandler}
           />
           <Button
-            onClick={() => {
-              window.open(githubLink, "_blank");
-            }}
+            onClick={viewHandler}
             label="View"
             className="bg-primary hover:bg-primaryHover text-white text-md py-1"
           />

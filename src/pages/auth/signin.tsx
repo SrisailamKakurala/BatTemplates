@@ -51,14 +51,14 @@ const SignIn = () => {
         className="bg-primaryBg px-8 py-5 rounded-md shadow-lg lg:w-1/3 md:w-1/2 w-[80%] flex flex-col items-center"
       >
         <h2 className="text-2xl font-bold text-primary mb-1">Sign In</h2>
-        <p className="text-gray-400 font-normal text-md mb-4">Welcome back! Please sign in to your account</p>
+        <p className="text-gray-400 font-normal text-md mb-4 text-center">Welcome back! Please sign in to your account</p>
 
         {/* Google Sign-In Button */}
         <Button
           icon={<FcGoogle size={30} />}
           label="Continue with Google"
           onClick={handleGoogleSignIn}
-          className="cursor-pointer bg-whiteText text-primaryBg text-xl font-semibold w-full mb-4"
+          className="cursor-pointer bg-whiteText text-primaryBg md:text-xl text-md font-semibold w-full mb-4"
         />
 
         <div className="flex items-center w-full mb-4">

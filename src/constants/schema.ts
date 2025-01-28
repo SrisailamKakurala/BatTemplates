@@ -1,12 +1,12 @@
 export interface Template {
-    id?: string; // Make id optional
+    id: string;
     title: string;
     description: string;
     techStack: string;
     tags: string;
     category: string;
     githubLink: string;
-    likes: number;
+    likes: string[];
     author: string;
     authorEmail: string;
     isApproved: boolean;

@@ -11,8 +11,6 @@ export interface User {
   personalLinks: string[];
   noOfContributions: number;
   contributions: Array<{ id: string; type: "template" | "folder"; name: string }>;
-  followersCount: number;
-  followingCount: number;
   bookmarks: Array<{ id: string; type: "folder" | "template" }>;
 }
 
