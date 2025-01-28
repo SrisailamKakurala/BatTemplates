@@ -1,28 +1,44 @@
-import React from "react";
+// components/Table.tsx
+import React, { useEffect } from "react";
 import RoleBadge from "@/components/tableComponents/RoleBadge";
 import UserActions from "@/components/tableComponents/UserActions";
 import formatDate from "@/utils/formatDate";
-
-interface Data {
-  name: string;
-  email: string;
-  roles: string[];
-  contributions: any[];
-  joinedAt: { seconds: number; nanoseconds: number };
-  category: string;
-  author: string;
-  status: string;
-  createdAt: { seconds: number; nanoseconds: number };
-  downloads: number;
-  action: string;
-  details: string;
-}
+import { TableData } from "@/constants/interfaces";
+import { promoteUser } from "@/firebase/services/adminServices/promotion.service";
+import { demoteUser } from "@/firebase/services/adminServices/demotion.service";
+import { useToast } from "@/hooks/ui/useToast";
 
 interface TableProps {
-  data: Data[];
+  data: TableData[];
 }
 
-const UserTable: React.FC<Partial<TableProps>> = ({ data = [] }) => {
+const Table: React.FC<Partial<TableProps>> = ({ data = [] }) => {
+  const { addToast } = useToast();
+
+  useEffect(() => {
+    console.log(data);
+  }, []);
+
+  const handlePromote = async (userId: string, role: string) => {
+    try {
+      console.log(userId, role);
+      await promoteUser(userId, role);
+      addToast(`User promoted to ${role} successfully`, "success");
+    } catch (error) {
+      addToast("Failed to promote user", "error");
+    }
+  };
+
+  const handleDemote = async (userId: string, role: string) => {
+    try {
+      console.log(userId, role);
+      await demoteUser(userId, role);
+      addToast(`User demoted from ${role} successfully`, "success");
+    } catch (error) {
+      addToast("Failed to demote user", "error");
+    }
+  };
+
   return (
     <div className="overflow-x-auto scroll-hide">
       <table className="min-w-full border-collapse border border-slate-700">
@@ -54,8 +70,8 @@ const UserTable: React.FC<Partial<TableProps>> = ({ data = [] }) => {
               </td>
               <td className="px-4 py-2 border border-slate-700 text-center">
                 <UserActions
-                  onPromote={() => console.log("Promoted", user.name)}
-                  onDemote={() => console.log("Demoted", user.name)}
+                  onPromote={() => handlePromote(user.id, "member")}
+                  onDemote={() => handleDemote(user.id, "member")}
                 />
               </td>
             </tr>
@@ -66,4 +82,4 @@ const UserTable: React.FC<Partial<TableProps>> = ({ data = [] }) => {
   );
 };
 
-export default UserTable;
+export default Table;

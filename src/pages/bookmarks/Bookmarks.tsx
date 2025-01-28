@@ -80,7 +80,7 @@ const Bookmarks: React.FC = () => {
                   id={template.id}
                   title={template.title}
                   description={template.description}
-                  likes={template.likes}
+                  likesCount={template.likes?.length || 0}
                   techStack={template.techStack}
                   tags={template.tags}
                   category={template.category}

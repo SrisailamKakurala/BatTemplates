@@ -4,5 +4,9 @@ import { db } from "@/firebase/firebase.config";
 export const fetchUsersFromFirestore = async () => {
   const usersCollection = collection(db, "users");
   const snapshot = await getDocs(usersCollection);
-  return snapshot.docs.map((doc) => doc.data());
+  return snapshot.docs.map((doc) => ({
+    id: doc.id, // Include the document ID
+    ...doc.data(), // Spread the document data
+  }));
 };
+

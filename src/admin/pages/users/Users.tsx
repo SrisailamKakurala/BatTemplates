@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaUserShield } from "react-icons/fa";
 import { fetchUsersFromFirestore } from "@/firebase/services/adminServices/userService.service";
-import UserTable from "@/components/tableComponents/Table";
+import Table from "@/components/tableComponents/Table";
 import Search from "@/components/search/Search";
 
 const Users: React.FC = () => {
@@ -12,7 +12,8 @@ const Users: React.FC = () => {
     const fetchAndSetUsers = async () => {
       try {
         const usersData = await fetchUsersFromFirestore();
-        localStorage.setItem("users", JSON.stringify(usersData));
+        // console.log(usersData);
+        // localStorage.setItem("users", JSON.stringify(usersData));
         setUsers(usersData);
         setFilteredUsers(usersData); // Initialize with full data
       } catch (error) {
@@ -47,7 +48,7 @@ const Users: React.FC = () => {
 
       {/* Table */}
       <div className="overflow-x-auto scroll-hide rounded-lg shadow-md">
-        <UserTable data={filteredUsers} /> {/* Use filtered data */}
+        <Table data={filteredUsers} />
       </div>
     </div>
   );
