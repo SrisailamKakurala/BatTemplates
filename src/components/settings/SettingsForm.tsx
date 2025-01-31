@@ -1,7 +1,7 @@
 import React, { useState } from "react"; // Import useState
-import { FiSettings, FiFile, FiEdit, FiCalendar, FiBookOpen } from "react-icons/fi"; // Import the required icons
-import { saveSiteSettings } from "@/firebase/services/adminServices/siteSettings.service"; // Ensure this import is correct
-import { useToast } from "@/hooks/ui/useToast"; // Ensure this import is correct
+import { FiSettings, FiFile, FiEdit, FiCalendar, FiBookOpen } from "react-icons/fi";
+// import { saveSiteSettings } from "@/firebase/services/adminServices/siteSettings.service";
+import { useToast } from "@/hooks/ui/useToast";
 
 interface SettingsFormProps {
   onSubmit: (settings: {
@@ -32,15 +32,15 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onSubmit }) => {
 
     try {
       // Call the service to save the settings and upload the logo
-      await saveSiteSettings(
-        {
-          siteName,
-          siteDescription,
-          since,
-          guidelines,
-        },
-        logo
-      );
+      // await saveSiteSettings(
+      //   {
+      //     siteName,
+      //     siteDescription,
+      //     since,
+      //     guidelines,
+      //   },
+      //   logo
+      // );
 
       // Show success toast
       addToast("Settings saved successfully!", "success");

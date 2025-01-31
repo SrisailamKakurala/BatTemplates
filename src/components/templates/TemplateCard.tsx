@@ -36,21 +36,29 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   const [likes, setLikes] = useState(likesCount);
 
   const bookMarkHandler = async () => {
+    // Get user from 'auth-storage' or fallback to 'user'
+    const authStorage = localStorage.getItem("auth-storage");
     const userStorage = localStorage.getItem("user");
-    const user = userStorage ? JSON.parse(userStorage) : null;
-
+  
+    const user = authStorage
+      ? JSON.parse(authStorage)?.state?.user
+      : userStorage
+      ? JSON.parse(userStorage)
+      : null;
+  
     if (user) {
       const userId = user.id;
       try {
         await addBookmark(userId, id); // Call the bookmark service
-        setLocalIsBookmarked(true); // Update local state to indicate bookmark is added
+        setLocalIsBookmarked(true); // Update local state
       } catch (error) {
         console.error("Failed to add bookmark:", error);
       }
     } else {
-      openModal("signin"); // Open the SignIn modal if user is not found in local storage
+      openModal("signin"); // Open SignIn modal if user is not found
     }
   };
+  
 
   const likeHandler = async () => {
     const userStorage = localStorage.getItem("user");

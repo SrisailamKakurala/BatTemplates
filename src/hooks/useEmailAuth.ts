@@ -26,8 +26,6 @@ const useEmailAuth = () => {
         personalLinks: [], // Default personal links
         noOfContributions: 0, // Default number of contributions
         contributions: [], // Default empty contributions
-        followersCount: 0, // Default followers count
-        followingCount: 0, // Default following count
         bookmarks: [], // Default empty bookmarks
       };
 
@@ -77,8 +75,6 @@ const useEmailAuth = () => {
           personalLinks: [],
           noOfContributions: 0,
           contributions: [],
-          followersCount: 0,
-          followingCount: 0,
           bookmarks: [],
         };
         

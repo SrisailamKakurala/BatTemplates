@@ -12,17 +12,30 @@ const Profile: React.FC = () => {
   // Fetch user data from Firestore
   const fetchUser = async () => {
     try {
-      const userId = JSON.parse(localStorage.getItem("user") || "{}")?.id; // Get user ID from localStorage
+      // Get user from 'auth-storage' or fallback to 'user'
+      const authStorage = localStorage.getItem("auth-storage");
+      const userStorage = localStorage.getItem("user");
+  
+      const user = authStorage
+        ? JSON.parse(authStorage)?.state?.user
+        : userStorage
+        ? JSON.parse(userStorage)
+        : null;
+  
+      const userId = user?.id; // Extract user ID
+  
       if (!userId) {
         console.error("User ID not found in localStorage.");
         return;
       }
+  
       const userData = await getUserFromFirestore(userId); // Fetch user data from Firestore
       setUser(userData); // Update state with fetched user data
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
   };
+  
 
   // Initial fetch on component mount
   useEffect(() => {

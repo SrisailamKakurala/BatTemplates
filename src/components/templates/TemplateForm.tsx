@@ -33,6 +33,7 @@ const TemplateForm: React.FC<TemplateFormProps> = ({ setFormVisible }) => {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     const templateData = {
       ...data,
+      id: "",
       likes: [],
       author: user?.name || "Anonymous",
       authorEmail: user?.email || "N/A",
