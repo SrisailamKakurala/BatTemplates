@@ -9,14 +9,17 @@ import {
   FiRefreshCw,
   FiAward,
   FiLogOut,
+  FiCoffee
 } from "react-icons/fi";
 import { getAuth, signOut as firebaseSignOut } from "firebase/auth";
 
-// Zustand auth store
+// Zustand store
 import useAuthStore from "@/store/authStore";
+import useModalStore from "@/store/modalStore";
 
 const Sidebar: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
+  const { openModal } = useModalStore();
 
   const handleLogout = async () => {
     try {
@@ -54,6 +57,17 @@ const Sidebar: React.FC = () => {
         <NavItem icon={<FiBookmark className="text-2xl" />} label="Bookmarks" to="/bookmarks" />
         <NavItem icon={<FiUser className="text-2xl" />} label="Profile" to="/profile" />
         <NavItem icon={<FiAward className="text-2xl" />} label="Contributors" to="/contributors" />
+      </div>
+
+      {/* buy me a coffee */}
+      <div className="mt-auto mb-2 py-1">
+        <button
+          onClick={() => openModal("donate")}
+          className="w-full flex items-center md:justify-start justify-center md:px-4 md:py-3 text-lg font-semibold bg-primary rounded-xl text-white transition-all duration-200"
+        >
+          <FiCoffee className="md:mr-3 text-2xl font-extrabold" />
+          <span className="hidden lg:inline">Buy Me a Coffee</span> {/* Hide label on small screens */}
+        </button>
       </div>
 
       {/* Logout - Conditional Rendering */}

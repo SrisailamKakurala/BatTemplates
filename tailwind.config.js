@@ -12,6 +12,7 @@ export default {
         secondary: '#111827', // for components
         secondaryHover: '#1F2937', // for components
         primaryBg: '#1E1E1E', // light black of body
+        primaryBg: '#1E1E1E', // light black of body
         authBg: '#1F1A1A',
         secondaryButton: '#1F2937',
         secondaryButtonHover: '#374151',

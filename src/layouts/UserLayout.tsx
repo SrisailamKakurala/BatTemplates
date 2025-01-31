@@ -10,6 +10,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import Loader from "@/components/loaders/Loader";
 import SignIn from "@/pages/auth/signin";
 import Register from "@/pages/auth/register";
+import BuyMeACoffee from "@/pages/BuyMeACoffee";
 import NotFound from "@/pages/404";
 
 // store
@@ -51,6 +52,7 @@ const UserLayout: React.FC = () => {
       {/* Conditionally render modals */}
       {activeModal === "signin" && <SignIn />}
       {activeModal === "register" && <Register />}
+      {activeModal === "donate" && <BuyMeACoffee />}
 
       <div className="flex-1 md:p-4 md:w-full w-[88%]">
         <Routes>
