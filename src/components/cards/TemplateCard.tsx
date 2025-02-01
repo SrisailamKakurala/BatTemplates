@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Button from "@/components/buttons/Button";
 import formatDate from "@/utils/formatDate";
-import { FaGithub, FaTags, FaCode, FaCheckCircle, FaThumbsUp, FaTimes, FaExclamationTriangle, FaFlag,} from "react-icons/fa";
+import { FaGithub, FaTags, FaCode, FaCheckCircle, FaThumbsUp, FaTimes, FaExclamationTriangle, FaFlag, } from "react-icons/fa";
 import FlagModal from "@/components/modals/FlagModal";
 import { approveTemplate } from "@/firebase/services/adminServices/template.sevice"; // Import the approve service
 import { useToast } from "@/hooks/ui/useToast";
 import { userTemplateProps } from "@/constants/interfaces";
 
 
-const Card: React.FC<userTemplateProps> = ({
+const TemplateCard: React.FC<userTemplateProps> = ({
   id,
   title,
   category,
@@ -29,6 +29,7 @@ const Card: React.FC<userTemplateProps> = ({
   const { addToast } = useToast(); // Use the toast hook
 
   useEffect(() => {
+
     let timer: NodeJS.Timeout;
 
     if (isApproving && timeLeft > 0) {
@@ -84,11 +85,6 @@ const Card: React.FC<userTemplateProps> = ({
 
   const handleFlagClick = () => {
     setIsFlagModalOpen(true);
-  };
-
-  const handleFlagSubmit = (reason: string) => {
-    console.log("Flagged Reason:", reason);
-    addToast("Template flagged successfully.", "info");
   };
 
   return (
@@ -186,11 +182,15 @@ const Card: React.FC<userTemplateProps> = ({
       <FlagModal
         isOpen={isFlagModalOpen}
         onClose={() => setIsFlagModalOpen(false)}
-        onSubmit={handleFlagSubmit}
         type={type}
+        contentId={id}
+        userId={authorId}
+        title={title}
+        githubLink={githubLink}
       />
+
     </div>
   );
 };
 
-export default Card;
+export default TemplateCard;

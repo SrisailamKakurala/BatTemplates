@@ -81,13 +81,13 @@ const Templates: React.FC = () => {
         {filteredTemplates.map((template) => (
           <TemplateCard
             key={template.id}
+            id={template.id}
             title={template.title}
             description={template.description}
             likesCount={template.likes?.length}
             techStack={template.techStack}
             tags={template.tags}
             category={template.category}
-            id={template.id}
             githubLink={template.githubLink}
           />
         ))}

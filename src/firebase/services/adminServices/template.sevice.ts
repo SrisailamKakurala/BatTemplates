@@ -24,6 +24,7 @@ export const fetchPendingTemplates = async () => {
 // Approve a template by ID
 export const approveTemplate = async (templateId: string, authorId: string) => {
   try {
+    console.log("Approving template with ID: ", templateId, "-" , authorId);
     // Step 1: Add the user's ID to the 'contributors' collection
     const contributorRef = doc(db, "contributors", authorId);
     await setDoc(contributorRef, { userId: authorId }, { merge: true }); // Add user ID if not already there

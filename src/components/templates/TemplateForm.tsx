@@ -41,6 +41,7 @@ const TemplateForm: React.FC<TemplateFormProps> = ({ setFormVisible }) => {
       isApproved: false,
       createdAt: Date.now(),
       reviewedAt: null,
+      type: "template"
     };
 
     try {

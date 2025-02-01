@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { FaUserCircle, FaGithub, FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa";
 
 const ContributorCard = ({ user }: { user: any }) => {
-    const [isLoading, setIsLoading] = useState(true); // Track if the image is loading
 
     useEffect(() => {
         console.log(user);
@@ -25,25 +24,27 @@ const ContributorCard = ({ user }: { user: any }) => {
         }
     };
 
-    // Handle image load event
-    const handleImageLoad = () => {
-        setIsLoading(false); // Set loading to false once the image is loaded
-    };
 
     return (
         <div key={user.id} className="flex flex-col lg:flex-row items-center lg:gap-8 gap-4 p-6 rounded-lg shadow-lg bg-secondary text-white hover:shadow-xl transition-shadow duration-300 max-w-full overflow-hidden">
             {/* Profile Picture */}
-            <div className="w-16 h-16 rounded-full border-4 border-primary bg-gray-600 flex justify-center items-center">
-                {isLoading ? (
-                    <FaUserCircle size={64} color="#6b7280" /> // Adjusted size for better visibility
+            <div className="w-16 h-16 overflow-hidden rounded-full border-4 border-primary bg-gray-600 flex justify-center items-center">
+                {user?.photoURL ? (
+                    <img
+                        src={user?.photoURL}
+                        alt="Profile Avatar"
+                        className="w-16 h-16 object-cover rounded-full"
+                    />
                 ) : (
-                    user?.photoURL && <img src={user?.photoURL} alt="Profile Avatar" className="w-16 h-16 object-cover" onLoad={handleImageLoad} />
+                    <FaUserCircle size={64} color="#6b7280" /> // Adjusted size for better visibility
                 )}
             </div>
+
 
             <div className="flex flex-col items-center lg:items-start">
                 <h3 className="text-xl font-semibold">{user?.name}</h3>
                 <p className="text-sm text-slate-400">{user?.email}</p>
+                <p className="text-md text-primary"><span className="text-primary font-extrabold">Contributions: </span> {user?.contributions?.length || 1}</p>
 
                 {/* Personal Links (Social Media Icons) */}
                 <div className="mt-4 flex gap-4">

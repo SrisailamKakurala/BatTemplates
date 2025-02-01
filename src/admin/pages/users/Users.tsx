@@ -32,7 +32,7 @@ const Users: React.FC = () => {
     <div className="w-full min-h-screen px-4 sm:px-8 py-4 bg-primaryBg">
       {/* Header */}
       <div className="flex flex-wrap sm:flex-nowrap justify-between items-center mb-8">
-        <div className="flex items-center gap-2 text-3xl sm:text-4xl font-extrabold text-primary">
+        <div className="flex items-center gap-2 md:text-3xl text-2xl font-extrabold text-primary">
           <FaUserShield />
           <h1 className="leading-none">User Management</h1>
         </div>

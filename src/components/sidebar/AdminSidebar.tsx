@@ -4,7 +4,6 @@ import Logo, { LogoMobile } from "../logo/Logo";
 import {
   FiHome,
   FiUsers,
-  FiRefreshCw,
   FiFlag,
   FiBarChart2,
   FiAward,
@@ -52,7 +51,6 @@ const AdminSidebar: React.FC = () => {
       <div className="mt-6 flex-1 space-y-0.5">
         <NavItem icon={<FiHome className="text-2xl" />} label="Dashboard" to="/admin/dashboard" />
         <NavItem icon={<FiUsers className="text-2xl" />} label="Users" to="/admin/users" />
-        <NavItem icon={<FiRefreshCw className="text-2xl" />} label="Templates" to="/admin/templates" />
         <NavItem icon={<FiFlag className="text-2xl" />} label="Flagged" to="/admin/flagged" />
         <NavItem icon={<FiBarChart2 className="text-2xl" />} label="Analytics" to="/admin/analytics" />
         <NavItem icon={<FiAward className="text-2xl" />} label="Contributors" to="/admin/contributors" />

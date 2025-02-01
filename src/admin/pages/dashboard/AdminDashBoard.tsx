@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaAccusoft } from "react-icons/fa";
 import Tabs from "@/components/tabs/ButtonTabs";
-import Card from "@/components/cards/Card";
+import TemplateCard from "@/components/cards/TemplateCard";
 import { fetchPendingFolders } from "@/firebase/services/adminServices/folder.service";
 import { fetchPendingTemplates } from "@/firebase/services/adminServices/template.sevice";
 
@@ -95,7 +95,7 @@ const AdminDashboard: React.FC = () => {
       ) : (
         <div className="grid gap-4 ">
           {(activeTab === "folders" ? folders : templates).map((item) => (
-            <Card key={item.id} {...item} />
+            <TemplateCard key={item.id} {...item} />
           ))}
         </div>
       )}
