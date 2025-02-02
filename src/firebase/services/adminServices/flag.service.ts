@@ -18,6 +18,7 @@ export const flagContent = async (contentId: string, userId: string, flaggedBy: 
         userId,
         flaggedBy,
         reason,
+        status: "pending",
         type,
         title,
         githubLink,

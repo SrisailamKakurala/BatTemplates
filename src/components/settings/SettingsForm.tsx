@@ -1,7 +1,7 @@
 import React, { useState } from "react"; // Import useState
-import { FiSettings, FiFile, FiEdit, FiCalendar, FiBookOpen } from "react-icons/fi";
-// import { saveSiteSettings } from "@/firebase/services/adminServices/siteSettings.service";
+import { FiSettings, FiEdit, FiCalendar, FiBookOpen } from "react-icons/fi";
 import { useToast } from "@/hooks/ui/useToast";
+import { saveSiteSettings } from "@/firebase/services/adminServices/siteSettings.service"; // Import the saveSiteSettings service
 
 interface SettingsFormProps {
   onSubmit: (settings: {
@@ -9,7 +9,6 @@ interface SettingsFormProps {
     siteDescription: string;
     since: string;
     guidelines: string;
-    logo?: File | null;
   }) => void;
 }
 
@@ -17,43 +16,27 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onSubmit }) => {
   const [siteName, setSiteName] = useState("");
   const [siteDescription, setSiteDescription] = useState("");
   const [since, setSince] = useState("");
-  const [logo, setLogo] = useState<File | null>(null);
   const [guidelines, setGuidelines] = useState("");
   const { addToast } = useToast(); // Hook for toast notifications
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setLogo(e.target.files[0]);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      // Call the service to save the settings and upload the logo
-      // await saveSiteSettings(
-      //   {
-      //     siteName,
-      //     siteDescription,
-      //     since,
-      //     guidelines,
-      //   },
-      //   logo
-      // );
-
       // Show success toast
       addToast("Settings saved successfully!", "success");
+
+      // Trigger the onSubmit callback (optional)
+      onSubmit({ siteName, siteDescription, since, guidelines });
+
+      // Call the saveSiteSettings service to save data in Firestore
+      await saveSiteSettings({ siteName, siteDescription, since, guidelines });
 
       // Clear fields after submission
       setSiteName("");
       setSiteDescription("");
       setSince("");
       setGuidelines("");
-      setLogo(null);
-
-      // Trigger the onSubmit callback
-      onSubmit({ siteName, siteDescription, since, guidelines, logo });
     } catch (error) {
       // Show error toast if something goes wrong
       addToast("Failed to save settings. Please try again.", "error");
@@ -109,19 +92,6 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onSubmit }) => {
           />
         </div>
 
-        <div>
-          <label className="text-yellow-500 text-lg font-semibold mb-2 flex items-center gap-2" htmlFor="logo">
-            <FiFile />
-            Logo
-          </label>
-          <input
-            type="file"
-            id="logo"
-            className="w-full text-white bg-white/5 focus:outline-none"
-            onChange={handleFileChange}
-          />
-        </div>
-
         <div className="sm:col-span-2">
           <label className="text-yellow-500 text-lg font-semibold mb-2 flex items-center gap-2" htmlFor="guidelines">
             <FiBookOpen />
@@ -141,7 +111,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onSubmit }) => {
       <div className="flex justify-center mt-6">
         <button
           type="submit"
-          className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center gap-2"
+          className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primaryHover transition-colors flex items-center gap-2"
         >
           <FiSettings />
           Save Changes

@@ -1,40 +1,24 @@
-// import { doc, setDoc } from "firebase/firestore";
-// import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-// // import { db, storage } from "@/firebase/firebase.config"; // Assuming you have Firebase initialized
+import { doc, setDoc } from "firebase/firestore"; // Firestore functions to save data
+import { db } from "@/firebase/firebase.config"; // Firebase configuration (assuming db is exported from here)
 
-// interface SettingsProps {
-//   siteName: string;
-//   siteDescription: string;
-//   since: string;
-//   guidelines: string;
-//   logo: string | null;
-// }
+interface SettingsProps {
+  siteName: string;
+  siteDescription: string;
+  since: string;
+  guidelines: string;
+}
 
-export const saveSiteSettings = () => {}
+// Function to save site settings (no logo handling)
+export const saveSiteSettings = async (settings: Partial<SettingsProps>) => {
+  try {
+    // Reference to the "settings" document in Firestore (the document ID is "siteInfo")
+    const settingsRef = doc(db, "settings", "siteInfo");
 
-// export const saveSiteSettings = async (
-//   settings: Partial<SettingsProps>,
-//   logo: File | null
-// ) => {
-//   // let logoUrl = null;
+    // Save the settings (without logo)
+    await setDoc(settingsRef, settings);
 
-// //   // If a logo file is provided, upload it to Firebase Storage
-// //   if (logo) {
-// //     logoUrl = await uploadLogoToStorage(logo); // Get the URL after uploading
-// //   }
-
-// //   // Save the settings along with the logo URL (if uploaded)
-// //   const settingsRef = doc(db, "settings", "siteInfo");
-// //   await setDoc(settingsRef, {
-// //     ...settings,
-// //     logo: logoUrl,
-// //   });
-// };
-
-// // // Function to handle logo upload to Firebase Storage
-// // const uploadLogoToStorage = async (logoFile: File): Promise<string> => {
-// //   const storageRef = ref(storage, `logos/${logoFile.name}`); // Use a unique path
-// //   await uploadBytes(storageRef, logoFile); // Upload the file
-// //   const logoUrl = await getDownloadURL(storageRef); // Get the download URL
-// //   return logoUrl;
-// // };
+    console.log("Settings saved successfully!");
+  } catch (error) {
+    console.error("Error saving settings:", error);
+  }
+};
