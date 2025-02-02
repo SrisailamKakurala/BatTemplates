@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getFlaggedContent, updateFlagStatus, deleteFlaggedContent } from "@/firebase/services/adminServices/flag.service";
 import { useToast } from "@/hooks/ui/useToast";
 import FlaggedContentList from "@/components/flagComponents/FlaggedContentList";
+import SkeletonList from "@/components/skeletons/SkeletonList"; // Import the new skeleton component
 import { FaFlag } from "react-icons/fa";
 
 const FlaggedContent: React.FC = () => {
@@ -61,16 +62,9 @@ const FlaggedContent: React.FC = () => {
         <FaFlag />
         <span>Flagged Content</span>
       </div>
+
       {loading ? (
-        <div className="space-y-4">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <div key={index} className="animate-pulse bg-secondary p-6 rounded-lg shadow-lg">
-              <div className="h-4 w-2/3 bg-gray-500 mb-2 rounded"></div>
-              <div className="h-3 w-1/2 bg-gray-600 mb-2 rounded"></div>
-              <div className="h-3 w-1/3 bg-gray-700 rounded"></div>
-            </div>
-          ))}
-        </div>
+        <SkeletonList count={3} height="h-16" />
       ) : flaggedItems.length === 0 ? (
         <p className="text-gray-400 text-xl mt-4">No flagged content.</p>
       ) : (

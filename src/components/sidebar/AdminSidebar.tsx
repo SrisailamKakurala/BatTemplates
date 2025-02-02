@@ -53,9 +53,9 @@ const AdminSidebar: React.FC = () => {
         <NavItem icon={<FiUsers className="text-2xl" />} label="Users" to="/admin/users" />
         <NavItem icon={<FiFlag className="text-2xl" />} label="Flagged" to="/admin/flagged" />
         <NavItem icon={<FiBarChart2 className="text-2xl" />} label="Analytics" to="/admin/analytics" />
+        <NavItem icon={<FiClipboard className="text-2xl" />} label="Logs" to="/admin/logs" />
         <NavItem icon={<FiAward className="text-2xl" />} label="Contributors" to="/admin/contributors" />
         <NavItem icon={<FiSettings className="text-2xl" />} label="Settings" to="/admin/settings" />
-        <NavItem icon={<FiClipboard className="text-2xl" />} label="Logs" to="/admin/logs" />
       </div>
 
       {/* Logout - Conditional Rendering */}

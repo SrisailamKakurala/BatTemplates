@@ -1,12 +1,6 @@
-import { useEffect } from "react";
 import { FaUserCircle, FaGithub, FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa";
 
 const ContributorCard = ({ user }: { user: any }) => {
-
-    useEffect(() => {
-        console.log(user);
-        console.log(user?.photoURL);
-    }, [user]);
 
     // Helper function to render social media icons
     const renderSocialLink = (platform: string, url: string) => {

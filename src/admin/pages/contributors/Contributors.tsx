@@ -1,9 +1,9 @@
-// components/Contributors.tsx
 import React, { useEffect, useState } from "react";
 import { fetchContributors } from "@/firebase/services/contributorServices/contributorService";
 import ContributorCard from "@/components/cards/ContributorCard";
 import Search from "@/components/search/Search";
-import { FaUsers } from "react-icons/fa"; // Import an icon for the title
+import SkeletonGrid from "@/components/skeletons/SkeletonGrid";
+import { FaUsers } from "react-icons/fa";
 
 const Contributors: React.FC = () => {
   const [contributors, setContributors] = useState<any[]>([]);
@@ -31,10 +31,6 @@ const Contributors: React.FC = () => {
     setFilteredContributors(filteredData);
   };
 
-  if (loading) {
-    return <div>Loading contributors...</div>;
-  }
-
   return (
     <div className="h-full w-full px-4 lg:px-8 py-6 overflow-y-scroll bg-primaryBg scroll-hide">
       {/* Header */}
@@ -44,7 +40,7 @@ const Contributors: React.FC = () => {
           <h1>Contributors</h1>
         </div>
 
-        <div className="">
+        <div>
           <Search
             placeholder="Search contributors..."
             page="contributors"
@@ -55,12 +51,16 @@ const Contributors: React.FC = () => {
         </div>
       </div>
 
-      {/* Grid Layout for Contributor Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-        {filteredContributors.map((user) => (
-          <ContributorCard key={user.id} user={user} />
-        ))}
-      </div>
+      {/* Grid Layout */}
+      {loading ? (
+        <SkeletonGrid count={6} height="h-28" />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+          {filteredContributors.map((user) => (
+            <ContributorCard key={user.id} user={user} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
