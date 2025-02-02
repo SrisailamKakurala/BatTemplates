@@ -7,11 +7,13 @@ import useModalStore from "@/store/modalStore";
 import TemplateForm from "@/components/templates/TemplateForm";
 import { fetchApprovedTemplates } from "@/firebase/services/templateServices/fetchTemplates";
 import { Template } from "@/constants/schema";
+import SkeletonGrid from "@/components/skeletons/SkeletonGrid";
 
 const Templates: React.FC = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [filteredTemplates, setFilteredTemplates] = useState<Template[]>([]);
   const [formVisible, setFormVisible] = useState(false);
+  const [loading, setLoading] = useState(true); // Track loading state
 
   const { openModal } = useModalStore(); // Accessing the modal store
 
@@ -24,6 +26,8 @@ const Templates: React.FC = () => {
         setFilteredTemplates(approvedTemplates);
       } catch (error) {
         console.error("Failed to fetch templates:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
       }
     };
 
@@ -74,21 +78,25 @@ const Templates: React.FC = () => {
       </div>
 
       {/* Templates Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredTemplates.map((template) => (
-          <TemplateCard
-            key={template.id}
-            id={template.id}
-            title={template.title}
-            description={template.description}
-            likesCount={template.likes?.length}
-            techStack={template.techStack}
-            tags={template.tags}
-            category={template.category}
-            githubLink={template.githubLink}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <SkeletonGrid count={9} height="h-40" width="w-full" />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredTemplates.map((template) => (
+            <TemplateCard
+              key={template.id}
+              id={template.id}
+              title={template.title}
+              description={template.description}
+              likesCount={template.likes?.length}
+              techStack={template.techStack}
+              tags={template.tags}
+              category={template.category}
+              githubLink={template.githubLink}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
