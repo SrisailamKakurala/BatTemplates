@@ -12,10 +12,8 @@ const Users: React.FC = () => {
     const fetchAndSetUsers = async () => {
       try {
         const usersData = await fetchUsersFromFirestore();
-        // console.log(usersData);
-        // localStorage.setItem("users", JSON.stringify(usersData));
         setUsers(usersData);
-        setFilteredUsers(usersData); // Initialize with full data
+        setFilteredUsers(usersData);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -48,7 +46,7 @@ const Users: React.FC = () => {
 
       {/* Table */}
       <div className="overflow-x-auto scroll-hide rounded-lg shadow-md">
-        <Table data={filteredUsers} />
+        <Table data={filteredUsers} type="users"/>
       </div>
     </div>
   );

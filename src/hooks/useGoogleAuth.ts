@@ -3,13 +3,12 @@ import { createUserInFirestore, getUserFromFirestore } from "@/firebase/services
 import { auth } from "@/firebase/firebase.config";
 import useAuthStore from "@/store/authStore";
 import useModalStore from "@/store/modalStore";
-import useUserStore, { User } from "@/store/userStore"; // Import the user store and type
+import { User } from "@/constants/schema"; // Import the user store and type
 import { useToast } from "@/hooks/ui/useToast"; // Import the useToast hook
 
 const useGoogleAuth = () => {
   const { signIn } = useAuthStore();
   const { closeModal } = useModalStore();
-  const { setUser } = useUserStore(); // Destructure the setUser method
   const { addToast } = useToast(); // Destructure addToast to show toasts
 
   const handleGoogleSignIn = async () => {
@@ -41,9 +40,6 @@ const useGoogleAuth = () => {
       if (fullUserData) {
         // Ensure the fullUserData is typed as User
         const typedUser = fullUserData as User;
-
-        // Set user in the store
-        setUser(typedUser); // Update the user state in the store
 
         // Sign-in action
         signIn({ ...typedUser });

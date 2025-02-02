@@ -22,9 +22,6 @@ const Templates: React.FC = () => {
         const approvedTemplates = await fetchApprovedTemplates();
         setTemplates(approvedTemplates);
         setFilteredTemplates(approvedTemplates);
-
-        // Store in localStorage
-        localStorage.setItem("templates", JSON.stringify(approvedTemplates));
       } catch (error) {
         console.error("Failed to fetch templates:", error);
       }

@@ -26,11 +26,7 @@ export interface TableData {
   roles: string[];
   contributions: any[];
   joinedAt: { seconds: number; nanoseconds: number };
-  category: string;
-  author: string;
-  status: string;
-  createdAt: { seconds: number; nanoseconds: number };
-  downloads: number;
   action: string;
+  timeStamp: { seconds: number; nanoseconds: number };
   details: string;
 }

@@ -2,7 +2,7 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import useAuthStore from "@/store/authStore";
 import useUtilsStore from "@/store/utilsStore";
-import { getUserFromFirestore } from "@/firebase/services/userServices/user.service"; // Use the correct import
+import { getUserFromFirestore } from "@/firebase/services/userServices/user.service";
 
 // Utility to read cookies
 const getCookie = (name: string): string | null => {
@@ -12,27 +12,27 @@ const getCookie = (name: string): string | null => {
   return null;
 };
 
-// Function to save user data to localStorage
-const saveUserToLocalStorage = (userData: any) => {
+// Function to save auth data to localStorage
+const saveAuthToLocalStorage = (authData: any) => {
   try {
-    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("auth-storage", JSON.stringify(authData));
   } catch (error) {
-    console.error("Error saving user data to localStorage:", error);
+    console.error("Error saving auth data to localStorage:", error);
   }
 };
 
-// Function to get user data from localStorage
-const getUserFromLocalStorage = (): any | null => {
+// Function to get auth data from localStorage
+const getAuthFromLocalStorage = (): any | null => {
   try {
-    const userData = localStorage.getItem("user");
-    return userData ? JSON.parse(userData) : null;
+    const authData = localStorage.getItem("auth-storage");
+    return authData ? JSON.parse(authData) : null;
   } catch (error) {
-    console.error("Error reading user data from localStorage:", error);
+    console.error("Error reading auth data from localStorage:", error);
     return null;
   }
 };
 
-// Middleware to check access token and update auth state
+// Middleware to check authentication state
 const authMiddleware = async () => {
   const auth = getAuth();
   const accessToken = getCookie("accessToken");
@@ -40,13 +40,13 @@ const authMiddleware = async () => {
   const setLoading = useUtilsStore.getState().setLoading;
   setLoading(true); // Start loading
 
-  let userFromStorage = getUserFromLocalStorage();
+  let authFromStorage = getAuthFromLocalStorage();
 
-  if (userFromStorage) {
-    // User data exists in localStorage, update Zustand store with that data
-    useAuthStore.getState().signIn(userFromStorage);
+  if (authFromStorage && authFromStorage.state?.isAuthenticated) {
+    // Load user data from localStorage into Zustand
+    useAuthStore.getState().signIn(authFromStorage.state.user);
     console.log("User data loaded from localStorage");
-    setLoading(false); // Stop loading
+    setLoading(false);
     return;
   }
 
@@ -66,19 +66,23 @@ const authMiddleware = async () => {
         const userData = await getUserFromFirestore(currentUser.uid);
 
         if (userData) {
-          // Combine user data and save to localStorage
-          const fullUserData = { ...user, ...userData };
-          saveUserToLocalStorage(fullUserData); // Save to localStorage
+          const authData = {
+            state: {
+              isAuthenticated: true,
+              user: { ...user, ...userData },
+            },
+            version: 0,
+          };
 
-          // Update Zustand store with user data
-          useAuthStore.getState().signIn(fullUserData);
+          saveAuthToLocalStorage(authData);
+          useAuthStore.getState().signIn(authData.state.user);
 
           console.log("User authenticated via accessToken cookie");
         } else {
           console.log("User data not found");
         }
 
-        setLoading(false); // Stop loading
+        setLoading(false);
         return;
       }
     } catch (error) {
@@ -100,13 +104,16 @@ const authMiddleware = async () => {
       const additionalData = await getUserFromFirestore(user.uid);
 
       if (additionalData) {
-        const fullUserData = { ...userData, ...additionalData };
+        const authData = {
+          state: {
+            isAuthenticated: true,
+            user: { ...userData, ...additionalData },
+          },
+          version: 0,
+        };
 
-        // Save to localStorage for persistence
-        saveUserToLocalStorage(fullUserData);
-
-        // Update Zustand store with user data
-        useAuthStore.getState().signIn(fullUserData);
+        saveAuthToLocalStorage(authData);
+        useAuthStore.getState().signIn(authData.state.user);
 
         console.log("User authenticated via Firebase");
       } else {
@@ -116,7 +123,7 @@ const authMiddleware = async () => {
       useAuthStore.getState().signOut();
       console.log("User not authenticated");
     }
-    setLoading(false); // Stop loading
+    setLoading(false);
   });
 };
 

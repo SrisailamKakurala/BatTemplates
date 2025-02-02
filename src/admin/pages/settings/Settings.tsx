@@ -16,8 +16,8 @@ const handleSettingsSubmit = (settings: {
 const Settings: React.FC = () => {
   return (
     <div className="flex flex-col h-screen overflow-y-scroll scroll-hide bg-dark lg:p-6 md:p-3 p-2">
-      <h2 className="text-3xl text-white font-bold mb-6 text-center flex items-center justify-start gap-2 ml-2">
-        <FiSettings className="text-primary" />
+      <h2 className="text-3xl text-primary font-bold mb-6 text-center flex items-center justify-start gap-2 ml-2">
+        <FiSettings />
         Site Settings
       </h2>
       <SettingsForm onSubmit={handleSettingsSubmit} />

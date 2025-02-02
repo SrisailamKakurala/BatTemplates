@@ -28,86 +28,76 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   category,
   githubLink,
   isBookmarked = false,
-  isLiked = false, // Default to false if not provided
+  isLiked = false,
 }) => {
   const { openModal } = useModalStore();
   const [localIsBookmarked, setLocalIsBookmarked] = useState(isBookmarked);
   const [localIsLiked, setLocalIsLiked] = useState(isLiked);
   const [likes, setLikes] = useState(likesCount);
 
-  const bookMarkHandler = async () => {
-    // Get user from 'auth-storage' or fallback to 'user'
+  // Function to retrieve the user from auth-storage
+  const getUser = () => {
     const authStorage = localStorage.getItem("auth-storage");
-    const userStorage = localStorage.getItem("user");
-  
-    const user = authStorage
-      ? JSON.parse(authStorage)?.state?.user
-      : userStorage
-      ? JSON.parse(userStorage)
-      : null;
-  
+    return authStorage ? JSON.parse(authStorage)?.state?.user : null;
+  };
+
+  const bookMarkHandler = async () => {
+    const user = getUser();
     if (user) {
       const userId = user.id;
       try {
-        await addBookmark(userId, id); // Call the bookmark service
-        setLocalIsBookmarked(true); // Update local state
+        await addBookmark(userId, id);
+        setLocalIsBookmarked(true);
       } catch (error) {
         console.error("Failed to add bookmark:", error);
       }
     } else {
-      openModal("signin"); // Open SignIn modal if user is not found
+      openModal("signin");
     }
   };
-  
 
   const likeHandler = async () => {
-    const userStorage = localStorage.getItem("user");
-    const user = userStorage ? JSON.parse(userStorage) : null;
-  
+    const user = getUser();
     if (user) {
       const userId = user.id;
       try {
         // Optimistic UI update
         setLocalIsLiked(!localIsLiked);
         setLikes((prev) => (localIsLiked ? prev - 1 : prev + 1));
-  
+
         // Update Firestore and get the correct likes count
         const updatedLikesCount = await toggleLike(id, userId, localIsLiked);
-  
+
         // Synchronize likes count with Firestore
         setLikes(updatedLikesCount);
       } catch (error) {
         console.error("Failed to toggle like:", error);
-  
         // Revert optimistic UI update in case of an error
         setLocalIsLiked(localIsLiked);
         setLikes((prev) => (localIsLiked ? prev + 1 : prev - 1));
       }
     } else {
-      openModal("signin"); // Open the SignIn modal if user is not found in local storage
+      openModal("signin");
     }
   };
 
   const viewHandler = async () => {
-    const userStorage = localStorage.getItem("user");
-    const user = userStorage ? JSON.parse(userStorage) : null;
-
+    const user = getUser();
     if (user) {
       window.open(githubLink, "_blank");
     } else {
-      openModal("signin"); // Open the SignIn modal if user is not found in local storage
+      openModal("signin");
     }
   };
-  
-
 
   return (
     <div className="p-6 h-auto max-h-80 min-h-60 rounded shadow hover:shadow-lg bg-secondary hover:bg-secondaryHover cursor-pointer">
       <div className="flex justify-between items-center mb-4">
         <h2 className="md:text-2xl text-xl font-bold text-primary">{title}</h2>
         <div
-          className={`text-sm flex gap-1 cursor-pointer ${localIsLiked ? "text-yellow-400" : "text-white"
-            }`}
+          className={`text-sm flex gap-1 cursor-pointer ${
+            localIsLiked ? "text-yellow-400" : "text-white"
+          }`}
           onClick={likeHandler}
         >
           <FaStar size={18} />
@@ -131,8 +121,9 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
         <div className="flex gap-2 items-center">
           <FaBookmark
             size={30}
-            className={`cursor-pointer ${localIsBookmarked ? "text-yellow-400" : "text-white"
-              }`}
+            className={`cursor-pointer ${
+              localIsBookmarked ? "text-yellow-400" : "text-white"
+            }`}
             onClick={bookMarkHandler}
           />
           <Button

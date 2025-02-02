@@ -1,9 +1,6 @@
-// utils/localStorageUtil.ts
-export const getAuthStorage = (): any => {
-    if (typeof window !== "undefined") {
-      const storedData = localStorage.getItem("auth-storage");
-      return storedData ? JSON.parse(storedData) : null;
-    }
-    return null;
-  };
-  
+// @/utils/localStorageUtil.ts
+// Retrieve user data from auth-storage
+export const getUser = () => {
+  const authStorage = localStorage.getItem("auth-storage");
+  return authStorage ? JSON.parse(authStorage)?.state?.user : null;
+};
