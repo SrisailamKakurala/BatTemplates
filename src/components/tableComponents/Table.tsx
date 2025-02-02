@@ -89,9 +89,14 @@ const Table: React.FC<TableProps> = ({ data, type }) => {
                       <RoleBadge key={idx} role={role} />
                     ))}
                   </td>
-                  <td className="px-4 py-2 border border-slate-700">{item.details}</td>
+                  <td className="px-4 py-2 border border-slate-700">
+                    {item.details.split("\n").map((line: string, idx: number) => (
+                      <div key={idx} className="pl-4">{line}</div>
+                    ))}
+                  </td>
                   <td className="px-4 py-2 border border-slate-700">{formatDate(item.timestamp.seconds)}</td>
                 </>
+
               )}
             </tr>
           ))}

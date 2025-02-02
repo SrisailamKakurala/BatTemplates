@@ -19,20 +19,18 @@ export const submitTemplate = async (
     // Update the document with the generated ID
     await setDoc(doc(db, "templates", docRef.id), templateWithId);
 
-    // 🔹 Log the action in Firestore
     await addLogToFirestore({
       action: "Template Submitted",
       userId: templateData.authorId,
       userEmail: templateData.authorEmail,
       details: `
-                User: ${templateData.author} | 
-                template: ${templateData.title} | 
-                templateId: ${docRef.id} | 
-                Time: ${new Date().toLocaleTimeString()}
-                `
-
-
+        User: ${templateData.author}
+        template: ${templateData.title}
+        templateId: ${docRef.id}
+        Time: ${new Date().toLocaleTimeString()}
+      `
     });
+    
 
     addToast("Template submitted successfully!", "success");
 
