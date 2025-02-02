@@ -24,7 +24,14 @@ export const submitTemplate = async (
       action: "Template Submitted",
       userId: templateData.authorId,
       userEmail: templateData.authorEmail,
-      details: `User ${templateData.author} submitted a new template: ${templateData.title}`,
+      details: `
+                User: ${templateData.author} | 
+                template: ${templateData.title} | 
+                templateId: ${docRef.id} | 
+                Time: ${new Date().toLocaleTimeString()}
+                `
+
+
     });
 
     addToast("Template submitted successfully!", "success");
