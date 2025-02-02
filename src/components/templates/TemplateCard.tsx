@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaStar, FaBookmark } from "react-icons/fa";
+import { FaStar, FaBookmark, FaEdit, FaTrash } from "react-icons/fa";
 import Button from "@/components/buttons/Button";
 import { addBookmark } from "@/firebase/services/templateServices/bookmarkService";
 import { toggleLike } from "@/firebase/services/templateServices/likeService";
@@ -16,6 +16,7 @@ interface TemplateCardProps {
   githubLink: string;
   isBookmarked?: boolean;
   isLiked?: boolean;
+  authorId: string; // New prop for authorId
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({
@@ -29,6 +30,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   githubLink,
   isBookmarked = false,
   isLiked = false,
+  authorId,
 }) => {
   const { openModal } = useModalStore();
   const [localIsBookmarked, setLocalIsBookmarked] = useState(isBookmarked);
@@ -41,8 +43,10 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
     return authStorage ? JSON.parse(authStorage)?.state?.user : null;
   };
 
+  const user = getUser();
+
   const bookMarkHandler = async () => {
-    const user = getUser();
+    
     if (user) {
       const userId = user.id;
       try {
@@ -57,7 +61,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   };
 
   const likeHandler = async () => {
-    const user = getUser();
+    
     if (user) {
       const userId = user.id;
       try {
@@ -82,12 +86,22 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   };
 
   const viewHandler = async () => {
-    const user = getUser();
+    
     if (user) {
       window.open(githubLink, "_blank");
     } else {
       openModal("signin");
     }
+  };
+
+  const editHandler = () => {
+    // Add logic for editing template
+    console.log("Edit template:", id);
+  };
+
+  const deleteHandler = () => {
+    // Add logic for deleting template
+    console.log("Delete template:", id);
   };
 
   return (
@@ -133,6 +147,24 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
           />
         </div>
       </div>
+
+      {/* Conditionally render Edit and Delete buttons if the template's id is the same as the author's id */}
+      {user.id === authorId && (
+        <div className="flex gap-2 mt-4">
+          <Button
+            icon={<FaEdit />}
+            onClick={editHandler}
+            label="Edit"
+            className="bg-blue-500 hover:bg-blue-600 text-white text-md py-1 w-1/2"
+          />
+          <Button
+            icon={<FaTrash />}
+            onClick={deleteHandler}
+            label="Delete"
+            className="bg-red-500 hover:bg-red-600 text-white text-md py-1 w-1/2"
+          />
+        </div>
+      )}
     </div>
   );
 };

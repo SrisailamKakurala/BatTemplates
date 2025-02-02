@@ -93,6 +93,7 @@ const Templates: React.FC = () => {
               tags={template.tags}
               category={template.category}
               githubLink={template.githubLink}
+              authorId={template.authorId}
             />
           ))}
         </div>

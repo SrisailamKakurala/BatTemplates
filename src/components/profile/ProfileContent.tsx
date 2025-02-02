@@ -13,8 +13,8 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
   return (
     <>
       <h4 className="text-xl text-primary font-bold underline underline-offset-4 mb-2">Contributions</h4>
-      <TabContent title="Folders" items={contributionsFolders} />
       <TabContent title="Templates" items={contributionsTemplates} />
+      <TabContent title="Folders" items={contributionsFolders} />
     </>
   );
 };

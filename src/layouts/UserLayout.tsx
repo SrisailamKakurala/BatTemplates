@@ -54,7 +54,7 @@ const UserLayout: React.FC = () => {
       {activeModal === "register" && <Register />}
       {activeModal === "donate" && <BuyMeACoffee />}
 
-      <div className="flex-1 md:p-4 md:w-full w-[88%]">
+      <div className="flex-1 md:p-4 md:w-full w-[88%] overflow-y-scroll scroll-hide">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/folders" element={<Folders />} />

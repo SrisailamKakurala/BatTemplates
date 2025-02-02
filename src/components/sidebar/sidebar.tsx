@@ -55,8 +55,8 @@ const Sidebar: React.FC = () => {
         <NavItem icon={<FiFolder className="text-2xl" />} label="Folders" to="/folders" />
         <NavItem icon={<FiRefreshCw className="text-2xl" />} label="Templates" to="/templates" />
         <NavItem icon={<FiBookmark className="text-2xl" />} label="Bookmarks" to="/bookmarks" />
-        <NavItem icon={<FiUser className="text-2xl" />} label="Profile" to="/profile" />
         <NavItem icon={<FiAward className="text-2xl" />} label="Contributors" to="/contributors" />
+        <NavItem icon={<FiUser className="text-2xl" />} label="Profile" to="/profile" />
       </div>
 
       {/* buy me a coffee */}
