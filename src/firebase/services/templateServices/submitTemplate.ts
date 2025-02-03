@@ -20,7 +20,7 @@ export const submitTemplate = async (
     await setDoc(doc(db, "templates", docRef.id), templateWithId);
 
     await addLogToFirestore({
-      action: "Template Submitted",
+      action: "📙 Template Submitted",
       userId: templateData.authorId,
       userEmail: templateData.authorEmail,
       details: `

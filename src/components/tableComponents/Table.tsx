@@ -14,20 +14,20 @@ interface TableProps {
 const Table: React.FC<TableProps> = ({ data, type }) => {
   const { addToast } = useToast();
 
-  const handlePromote = async (userId: string, role: string) => {
+  const handlePromote = async (userId: string, role: string, email: string) => {
     try {
       console.log(userId, role);
-      await promoteUser(userId, role);
+      await promoteUser(userId, role, email);
       addToast(`User promoted to ${role} successfully`, "success");
     } catch (error) {
       addToast("Failed to promote user", "error");
     }
   };
 
-  const handleDemote = async (userId: string, role: string) => {
+  const handleDemote = async (userId: string, role: string, email: string) => {
     try {
       console.log(userId, role);
-      await demoteUser(userId, role);
+      await demoteUser(userId, role, email);
       addToast(`User demoted from ${role} successfully`, "success");
     } catch (error) {
       addToast("Failed to demote user", "error");
@@ -75,8 +75,8 @@ const Table: React.FC<TableProps> = ({ data, type }) => {
                   <td className="px-4 py-2 border border-slate-700">{formatDate(item.joinedAt.seconds)}</td>
                   <td className="px-4 py-2 border border-slate-700 text-center">
                     <UserActions
-                      onPromote={() => handlePromote(item.id, "member")}
-                      onDemote={() => handleDemote(item.id, "member")}
+                      onPromote={() => handlePromote(item.id, "member", item.email)}
+                      onDemote={() => handleDemote(item.id, "member", item.email)}
                     />
                   </td>
                 </>

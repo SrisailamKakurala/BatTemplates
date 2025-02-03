@@ -54,7 +54,7 @@ const Contributors: React.FC = () => {
 
       {/* Grid Layout */}
       {loading ? (
-        <SkeletonGrid count={6} height="h-28" />
+        <SkeletonGrid count={6} height="h-36" />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
           {filteredContributors.map((user) => (

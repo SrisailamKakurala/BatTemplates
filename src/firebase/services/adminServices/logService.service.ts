@@ -1,5 +1,5 @@
 import { db } from "@/firebase/firebase.config";
-import { collection, addDoc, getDocs, query, Timestamp } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, Timestamp, orderBy } from "firebase/firestore";
 import { fetchUserRoles } from "@/firebase/services/adminServices/userService.service";
 
 const LOGS_COLLECTION = "logs"; // Firestore collection name for logs
@@ -13,7 +13,7 @@ export const addLogToFirestore = async ({
 }: {
   action: string;
   userId: string;
-  userEmail: string;
+  userEmail?: string;
   details: string;
 }) => {
   try {
@@ -43,7 +43,9 @@ export const addLogToFirestore = async ({
 // 🔹 Fetch logs from Firestore
 export const fetchLogsFromFirestore = async () => {
   try {
-    const logsQuery = query(collection(db, LOGS_COLLECTION));
+    // Create a query to fetch logs and order by timestamp (ascending by default)
+    const logsQuery = query(collection(db, LOGS_COLLECTION), orderBy("timestamp", "desc")); // Order by timestamp in descending order
+
     const querySnapshot = await getDocs(logsQuery);
 
     const logs = querySnapshot.docs.map((doc) => ({

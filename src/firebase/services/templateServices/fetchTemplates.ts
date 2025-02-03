@@ -1,10 +1,12 @@
-import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, query, where, doc, getDoc, orderBy } from "firebase/firestore";
 import { db } from "@/firebase/firebase.config";
 import { Template } from "@/constants/schema";
 
 export const fetchApprovedTemplates = async (): Promise<Template[]> => {
   const templatesRef = collection(db, "templates");
-  const q = query(templatesRef, where("isApproved", "==", true));
+  
+  // Query to get templates where 'isApproved' is true and ordered by 'likes' field in descending order
+  const q = query(templatesRef, where("isApproved", "==", true), orderBy("likes", "desc"));
 
   const querySnapshot = await getDocs(q);
   const templates: Template[] = querySnapshot.docs.map((doc) => ({

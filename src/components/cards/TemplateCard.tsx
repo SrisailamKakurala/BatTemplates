@@ -6,6 +6,8 @@ import FlagModal from "@/components/modals/FlagModal";
 import { approveTemplate } from "@/firebase/services/adminServices/template.sevice"; // Import the approve service
 import { useToast } from "@/hooks/ui/useToast";
 import { userTemplateProps } from "@/constants/interfaces";
+import { getUser } from "@/utils/localStorageUtil";
+import { addLogToFirestore } from "@/firebase/services/adminServices/logService.service";
 
 
 const TemplateCard: React.FC<userTemplateProps> = ({
@@ -15,6 +17,7 @@ const TemplateCard: React.FC<userTemplateProps> = ({
   createdAt,
   createdBy,
   authorId,
+  authorEmail,
   description,
   githubLink,
   isApproved,
@@ -22,14 +25,14 @@ const TemplateCard: React.FC<userTemplateProps> = ({
   techStack,
 }) => {
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
-  const [isApproving, setIsApproving] = useState(false); // Track approval state
-  const [timeLeft, setTimeLeft] = useState(5); // Timer countdown
-  const [isActionTaken, setIsActionTaken] = useState(false); // Track if action (approve/reject) is taken
-  const [actionType, setActionType] = useState<"approved" | "rejected" | null>(null); // Track the type of action
-  const { addToast } = useToast(); // Use the toast hook
+  const [isApproving, setIsApproving] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(5);
+  const [isActionTaken, setIsActionTaken] = useState(false);
+  const [actionType, setActionType] = useState<"approved" | "rejected" | null>(null);
+  const { addToast } = useToast();
 
   useEffect(() => {
-
+    const user = getUser();
     let timer: NodeJS.Timeout;
 
     if (isApproving && timeLeft > 0) {
@@ -39,8 +42,7 @@ const TemplateCard: React.FC<userTemplateProps> = ({
       }, 1000);
     } else if (isApproving && timeLeft === 0) {
       // Approve the template after the timer completes
-      console.log("Approving template...", id);
-      approveTemplate(id, authorId)
+      approveTemplate(id, authorId, authorEmail, user?.email)
         .then(() => {
           addToast("Template approved successfully!", "success");
           console.log("Template approved:", id);
@@ -65,8 +67,8 @@ const TemplateCard: React.FC<userTemplateProps> = ({
   };
 
   const handleApprove = () => {
-    setIsApproving(true); // Start the approval process
-    setTimeLeft(5); // Reset the timer
+    setIsApproving(true);
+    setTimeLeft(5);
   };
 
   const handleCancelApproval = () => {
@@ -75,14 +77,33 @@ const TemplateCard: React.FC<userTemplateProps> = ({
     addToast("Approval canceled.", "info");
   };
 
-  const handleReject = () => {
-    if (window.confirm("Have you reviewed the submission thoroughly? Press OK to reject.")) {
-      addToast("Template rejected.", "warning");
-      console.log("Rejected");
-      setIsActionTaken(true); // Mark action as taken
-      setActionType("rejected"); // Set action type to "rejected"
+
+const handleReject = () => {
+  if (window.confirm("Have you reviewed the submission thoroughly? Press OK to reject.")) {
+    // Display rejection toast
+    addToast("Template rejected.", "warning");
+
+    // Log rejection action
+    const user = getUser(); // Retrieve the current user (assuming getUser function exists)
+    if (user) {
+      // Log rejection action with user information
+      addLogToFirestore({
+        action: "❌ Template Rejected",
+        userId: user.id,
+        userEmail: user.email,
+        details: `
+                Template: ${id}
+                Rejected by: ${user?.email}
+                `,
+      });
     }
-  };
+
+    // Update state
+    setIsActionTaken(true); // Mark action as taken
+    setActionType("rejected"); // Set action type to "rejected"
+  }
+};
+
 
   const handleFlagClick = () => {
     setIsFlagModalOpen(true);

@@ -1,5 +1,7 @@
 import { db } from "@/firebase/firebase.config";
-import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc, serverTimestamp, query, where } from "firebase/firestore";
+import { collection, addDoc, getDocs, getDoc, updateDoc, doc, deleteDoc, serverTimestamp, query, where } from "firebase/firestore";
+import { addLogToFirestore } from "@/firebase/services/adminServices/logService.service";
+import { getUser } from "@/utils/localStorageUtil";
 
 const FLAG_COLLECTION = "flaggedContent";
 
@@ -10,31 +12,57 @@ const FLAG_COLLECTION = "flaggedContent";
  * @param reason - The reason for flagging
  * @param type - Type of flagged content (e.g., "template", "comment", "profile")
  */
-export const flagContent = async (contentId: string, userId: string, flaggedBy: string, reason: string, type: string, title: string, githubLink: string) => {
-    try {
-      // Add the document with a placeholder ID
-      const docRef = await addDoc(collection(db, "flaggedContent"), {
-        contentId,
-        userId,
-        flaggedBy,
-        reason,
-        status: "pending",
-        type,
-        title,
-        githubLink,
-        flaggedAt: serverTimestamp(),
+export const flagContent = async (
+  contentId: string,
+  userId: string,
+  flaggedBy: string,
+  reason: string,
+  type: string,
+  title: string,
+  githubLink?: string
+) => {
+  try {
+    // Add the flagged content to Firestore
+    const docRef = await addDoc(collection(db, "flaggedContent"), {
+      contentId,
+      userId,
+      flaggedBy,
+      reason,
+      status: "pending",
+      type,
+      title,
+      githubLink,
+      flaggedAt: serverTimestamp(),
+    });
+
+    // Now update the document with its generated ID
+    const docRefWithId = doc(db, "flaggedContent", docRef.id); // Get the document reference with the generated ID
+    await updateDoc(docRefWithId, { contentId: docRef.id });
+
+    // Log the flagging action
+    const user = getUser();
+    if (user) {
+      // Log flagging action with relevant details
+      await addLogToFirestore({
+        action: "🚩 Content Flagged",
+        userId: user?.id,
+        userEmail: user?.email,
+        details: `
+            Content with ID: ${contentId} 
+            type: ${type}
+            flagged by ${flaggedBy} 
+            for reason: ${reason}
+            Time: ${new Date().toLocaleTimeString()}
+            `,
       });
-  
-      // Now update the document with its generated ID
-      const docRefWithId = doc(db, "flaggedContent", docRef.id); // Get the document reference with the generated ID
-      await updateDoc(docRefWithId, { contentId: docRef.id });
-  
-      return true;
-    } catch (error) {
-      console.error("Error flagging content:", error);
-      return false;
     }
-  };
+
+    return true;
+  } catch (error) {
+    console.error("Error flagging content:", error);
+    return false;
+  }
+};
 
 /**
  * Get all flagged content (Admin Only)
@@ -59,8 +87,36 @@ export const getFlaggedContent = async () => {
  */
 export const updateFlagStatus = async (flagId: string, status: "resolved" | "rejected") => {
   try {
-    const flagRef = doc(db, FLAG_COLLECTION, flagId);
-    await updateDoc(flagRef, { status });
+    const flagRef = doc(db, "flaggedContent", flagId); // Assuming your collection is "flaggedContent"
+    
+    // Fetch the flag data to get additional info (optional for log details)
+    const flagDoc = await getDoc(flagRef);
+    const flagData = flagDoc.data();
+    
+    if (flagData) {
+      const { contentId, title, reason } = flagData;
+
+      // Update flag status
+      await updateDoc(flagRef, { status });
+
+      // Log the status update action
+      const user = getUser();
+      if (user) {
+        await addLogToFirestore({
+          action: `👍 Flag Status Updated to - ${status}`, // Action name
+          userId: user.id,
+          userEmail: user.email,
+          details: `
+                Flag ID: ${flagId} status changed to ${status} 
+                By: ${user.email}
+                Flagged Content ID: ${contentId} 
+                Title: ${title} 
+                Reason: ${reason}
+                Time: ${new Date().toLocaleTimeString()}`,
+        });
+      }
+    }
+    
     return true;
   } catch (error) {
     console.error("Error updating flag status:", error);

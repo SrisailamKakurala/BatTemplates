@@ -76,7 +76,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   const viewHandler = () => (user ? window.open(githubLink, "_blank") : openModal("signin"));
 
   return (
-    <div className="p-6 h-auto max-h-80 min-h-60 rounded shadow hover:shadow-lg bg-secondary hover:bg-secondaryHover cursor-pointer">
+    <div className="p-6 h-auto min-h-60 rounded shadow hover:shadow-lg bg-secondary hover:bg-secondaryHover cursor-pointer">
       <div className="flex justify-between items-center mb-4">
         <h2 className="md:text-2xl text-xl font-bold text-primary">{title}</h2>
         <div
