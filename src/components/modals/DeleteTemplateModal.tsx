@@ -23,7 +23,7 @@ const DeleteTemplateModal: React.FC<DeleteTemplateModalProps> = ({ templateId, o
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-100">
       <div className="bg-secondary rounded-lg p-6 w-full max-w-sm">
         <h2 className="text-xl font-bold text-primary">Confirm Deletion</h2>
         <p className="text-slate-300 my-4">Are you sure you want to delete this template?</p>

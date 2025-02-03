@@ -3,6 +3,7 @@ import Tabs from "@/components/tabs/ButtonTabs";
 import TemplateCard from "@/components/templates/TemplateCard";
 import { fetchBookmarks } from "@/firebase/services/bookmarkServices/fetchBookmarks";
 import { FaBookmark } from "react-icons/fa";
+import CircularLoader from "@/components/loaders/CircularLoader";
 
 const Bookmarks: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"folders" | "templates">("folders");
@@ -37,7 +38,7 @@ const Bookmarks: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <CircularLoader />;
   }
 
   return (
@@ -85,7 +86,8 @@ const Bookmarks: React.FC = () => {
                   tags={template.tags}
                   category={template.category}
                   githubLink={template.githubLink}
-                  isBookmarked={true} // Set isBookmarked to true for all templates
+                  isBookmarked={true}
+                  authorId={template.authorId}
                 />
               ))}
             </div>
