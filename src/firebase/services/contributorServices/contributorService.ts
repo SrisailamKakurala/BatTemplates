@@ -30,3 +30,4 @@ export const fetchContributors = async () => {
     throw error; // Re-throw error to handle it in the component if necessary
   }
 };
+

@@ -15,7 +15,6 @@ const TemplateCard: React.FC<userTemplateProps> = ({
   title,
   category,
   createdAt,
-  createdBy,
   authorId,
   authorEmail,
   description,
@@ -115,7 +114,7 @@ const handleReject = () => {
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-primary">{title}</h1>
           <h3 className="text-sm md:text-md text-gray-400 mt-1">
-            Submitted by {createdBy} on {formatDate(createdAt / 1000)}
+            Submitted by {authorEmail} on {formatDate(createdAt / 1000)}
           </h3>
         </div>
         <Button

@@ -29,11 +29,18 @@ const AdminLayout: React.FC = () => {
         }
       >
         <Route path="dashboard" element={<AdminDashBoard />} />
-        <Route path="users" element={<Users />} />
+        {/* Only Admin can access Users and Settings */}
+        <Route
+          path="users"
+          element={<ProtectedRoute allowedRoles={["admin"]}><Users /></ProtectedRoute>}
+        />
+        <Route
+          path="settings"
+          element={<ProtectedRoute allowedRoles={["admin"]}><Settings /></ProtectedRoute>}
+        />
         <Route path="flagged" element={<FlaggedContent />} />
         <Route path="analytics" element={<Analytics />} />
         <Route path="contributors" element={<Contributors />} />
-        <Route path="settings" element={<Settings />} />
         <Route path="logs" element={<Logs />} />
       </Route>
 

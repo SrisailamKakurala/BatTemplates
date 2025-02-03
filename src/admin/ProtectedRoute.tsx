@@ -3,7 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 
 interface ProtectedRouteProps {
   allowedRoles: string[];
-  children?: React.ReactNode; // Allow children to be passed
+  children?: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles, children }) => {
@@ -21,7 +21,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles, children 
     return <Navigate to="/admin" />;
   }
 
-  // Render children or Outlet if the user has the required roles
   return <>{children || <Outlet />}</>;
 };
 

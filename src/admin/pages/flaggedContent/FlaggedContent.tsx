@@ -58,7 +58,7 @@ const FlaggedContent: React.FC = () => {
 
   return (
     <div className="p-6">
-      <div className="flex gap-2 font-extrabold md:text-3xl text-2xl text-primary mb-6">
+      <div className="flex md:justify-start justify-center gap-2 font-extrabold md:text-3xl text-2xl text-primary mb-6">
         <FaFlag />
         <span>Flagged Content</span>
       </div>

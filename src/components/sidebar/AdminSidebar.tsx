@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NavItem from "@/components/navitem/NavItem";
 import Logo, { LogoMobile } from "../logo/Logo";
 import {
@@ -12,19 +12,31 @@ import {
   FiLogOut,
 } from "react-icons/fi";
 import { getAuth, signOut as firebaseSignOut } from "firebase/auth";
-
-// Zustand auth store
-import useAuthStore from "@/store/authStore";
+import { getUser } from "@/utils/localStorageUtil"; // Import the getUser utility
 
 const AdminSidebar: React.FC = () => {
-  const { isAuthenticated } = useAuthStore();
+  const [userRoles, setUserRoles] = useState<string[]>([]);  // State to store user roles
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  // Fetch user roles and authentication state
+  useEffect(() => {
+    const user = getUser();  // Get user data from localStorage
+    if (user) {
+      setIsAuthenticated(true);
+      setUserRoles(user.roles || []);  // Assuming roles are stored in the user object
+    } else {
+      setIsAuthenticated(false);
+      setUserRoles([]);
+    }
+  }, []);
 
   const handleLogout = async () => {
     try {
       const auth = getAuth();
       await firebaseSignOut(auth);
       document.cookie = "accessToken=; max-age=0; path=/; samesite=strict";
-      useAuthStore.getState().signOut();
+      setIsAuthenticated(false);
+      setUserRoles([]);
       localStorage.removeItem("auth-storage");
       localStorage.removeItem("user");
       window.location.reload();
@@ -50,12 +62,21 @@ const AdminSidebar: React.FC = () => {
       {/* Navigation */}
       <div className="mt-6 flex-1 space-y-0.5">
         <NavItem icon={<FiHome className="text-2xl" />} label="Dashboard" to="/admin/dashboard" />
-        <NavItem icon={<FiUsers className="text-2xl" />} label="Users" to="/admin/users" />
+        {/* Conditionally render Users and Settings links */}
+        {userRoles.includes("admin") && (
+          <>
+            <NavItem icon={<FiUsers className="text-2xl" />} label="Users" to="/admin/users" />
+          </>
+        )}
         <NavItem icon={<FiFlag className="text-2xl" />} label="Flagged" to="/admin/flagged" />
         <NavItem icon={<FiBarChart2 className="text-2xl" />} label="Analytics" to="/admin/analytics" />
         <NavItem icon={<FiClipboard className="text-2xl" />} label="Logs" to="/admin/logs" />
         <NavItem icon={<FiAward className="text-2xl" />} label="Contributors" to="/admin/contributors" />
-        <NavItem icon={<FiSettings className="text-2xl" />} label="Settings" to="/admin/settings" />
+        {userRoles.includes("admin") && (
+          <>
+            <NavItem icon={<FiSettings className="text-2xl" />} label="Settings" to="/admin/settings" />
+          </>
+        )}
       </div>
 
       {/* Logout - Conditional Rendering */}
