@@ -53,7 +53,7 @@ const Contributors: React.FC = () => {
 
       {/* Loading Skeleton */}
       {loading ? (
-        <SkeletonGrid count={6} height="h-28" width="w-full" />
+        <SkeletonGrid count={6} height="h-36" width="w-full" />
       ) : (
         // Grid Layout for Contributor Cards
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">

@@ -4,6 +4,8 @@ import Button from "@/components/buttons/Button";
 import { addBookmark } from "@/firebase/services/templateServices/bookmarkService";
 import { toggleLike } from "@/firebase/services/templateServices/likeService";
 import useModalStore from "@/store/modalStore";
+import EditTemplateForm from "@/components/templates/EditTemplateForm";
+import DeleteTemplateModal from "@/components/modals/DeleteTemplateModal";
 
 interface TemplateCardProps {
   id: string;
@@ -16,7 +18,7 @@ interface TemplateCardProps {
   githubLink: string;
   isBookmarked?: boolean;
   isLiked?: boolean;
-  authorId: string; // New prop for authorId
+  authorId: string;
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({
@@ -36,21 +38,15 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   const [localIsBookmarked, setLocalIsBookmarked] = useState(isBookmarked);
   const [localIsLiked, setLocalIsLiked] = useState(isLiked);
   const [likes, setLikes] = useState(likesCount);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  // Function to retrieve the user from auth-storage
-  const getUser = () => {
-    const authStorage = localStorage.getItem("auth-storage");
-    return authStorage ? JSON.parse(authStorage)?.state?.user : null;
-  };
-
-  const user = getUser();
+  const user = JSON.parse(localStorage.getItem("auth-storage") || "{}")?.state?.user;
 
   const bookMarkHandler = async () => {
-    
     if (user) {
-      const userId = user.id;
       try {
-        await addBookmark(userId, id);
+        await addBookmark(user.id, id);
         setLocalIsBookmarked(true);
       } catch (error) {
         console.error("Failed to add bookmark:", error);
@@ -61,22 +57,14 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   };
 
   const likeHandler = async () => {
-    
     if (user) {
-      const userId = user.id;
       try {
-        // Optimistic UI update
         setLocalIsLiked(!localIsLiked);
         setLikes((prev) => (localIsLiked ? prev - 1 : prev + 1));
-
-        // Update Firestore and get the correct likes count
-        const updatedLikesCount = await toggleLike(id, userId, localIsLiked);
-
-        // Synchronize likes count with Firestore
+        const updatedLikesCount = await toggleLike(id, user.id, localIsLiked);
         setLikes(updatedLikesCount);
       } catch (error) {
         console.error("Failed to toggle like:", error);
-        // Revert optimistic UI update in case of an error
         setLocalIsLiked(localIsLiked);
         setLikes((prev) => (localIsLiked ? prev + 1 : prev - 1));
       }
@@ -85,86 +73,59 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
     }
   };
 
-  const viewHandler = async () => {
-    
-    if (user) {
-      window.open(githubLink, "_blank");
-    } else {
-      openModal("signin");
-    }
-  };
-
-  const editHandler = () => {
-    // Add logic for editing template
-    console.log("Edit template:", id);
-  };
-
-  const deleteHandler = () => {
-    // Add logic for deleting template
-    console.log("Delete template:", id);
-  };
+  const viewHandler = () => (user ? window.open(githubLink, "_blank") : openModal("signin"));
 
   return (
     <div className="p-6 h-auto max-h-80 min-h-60 rounded shadow hover:shadow-lg bg-secondary hover:bg-secondaryHover cursor-pointer">
       <div className="flex justify-between items-center mb-4">
         <h2 className="md:text-2xl text-xl font-bold text-primary">{title}</h2>
         <div
-          className={`text-sm flex gap-1 cursor-pointer ${
-            localIsLiked ? "text-yellow-400" : "text-white"
-          }`}
+          className={`text-sm flex gap-1 cursor-pointer ${localIsLiked ? "text-yellow-400" : "text-white"}`}
           onClick={likeHandler}
         >
           <FaStar size={18} />
-          {likes || 0}
+          {likes}
         </div>
       </div>
 
       <p className="text-slate-300 text-sm mt-2">{description}</p>
-
-      <p className="text-slate-300 text-xs my-2">
-        <span className="text-primary">Tech</span>: {techStack}
-      </p>
-
-      <p className="text-slate-300 text-xs my-2">
-        <span className="text-primary">Tags</span>: {tags}
-      </p>
+      <p className="text-slate-300 text-xs my-2"><span className="text-primary">Tech</span>: {techStack}</p>
+      <p className="text-slate-300 text-xs my-2"><span className="text-primary">Tags</span>: {tags}</p>
 
       <div className="flex items-center justify-between mt-5">
         <p className="text-primary text-lg my-2 font-semibold">{category}</p>
-
         <div className="flex gap-2 items-center">
           <FaBookmark
             size={30}
-            className={`cursor-pointer ${
-              localIsBookmarked ? "text-yellow-400" : "text-white"
-            }`}
+            className={`cursor-pointer ${localIsBookmarked ? "text-yellow-400" : "text-white"}`}
             onClick={bookMarkHandler}
           />
-          <Button
-            onClick={viewHandler}
-            label="View"
-            className="bg-primary hover:bg-primaryHover text-white text-md py-1"
-          />
+          <Button onClick={viewHandler} label="View" className="bg-primary hover:bg-primaryHover text-white text-md py-1" />
         </div>
       </div>
 
-      {/* Conditionally render Edit and Delete buttons if the template's id is the same as the author's id */}
-      {user.id === authorId && (
+      {user?.id === authorId && (
         <div className="flex gap-2 mt-4">
-          <Button
-            icon={<FaEdit />}
-            onClick={editHandler}
-            label="Edit"
-            className="bg-blue-500 hover:bg-blue-600 text-white text-md py-1 w-1/2"
-          />
-          <Button
-            icon={<FaTrash />}
-            onClick={deleteHandler}
-            label="Delete"
-            className="bg-red-500 hover:bg-red-600 text-white text-md py-1 w-1/2"
-          />
+          <Button icon={<FaEdit />} onClick={() => setIsEditOpen(true)} label="Edit" className="bg-blue-500 hover:bg-blue-600 text-white text-md py-1 w-1/2" />
+          <Button icon={<FaTrash />} onClick={() => setIsDeleteOpen(true)} label="Delete" className="bg-red-500 hover:bg-red-600 text-white text-md py-1 w-1/2" />
         </div>
       )}
+
+      {
+      isEditOpen && 
+      <EditTemplateForm
+        templateId={id}
+        onClose={() => setIsEditOpen(false)}
+        defaultValues={{
+            title: title,
+            description: description,
+            techStack: techStack,
+            tags: tags,
+            category: category,
+        }}
+      />  
+      }
+      {isDeleteOpen && <DeleteTemplateModal templateId={id} onClose={() => setIsDeleteOpen(false)} />}
     </div>
   );
 };
