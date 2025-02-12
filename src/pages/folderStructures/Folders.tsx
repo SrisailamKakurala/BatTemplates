@@ -76,7 +76,7 @@ const Folders: React.FC = () => {
         </div>
       </div>
 
-      {/* Templates Grid */}
+      {/* Folders Grid */}
       {/* {loading ? (
         <SkeletonGrid count={9} height="h-40" width="w-full" />
       ) : (
