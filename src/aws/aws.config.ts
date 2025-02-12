@@ -1,7 +1,7 @@
 export const awsConfig = {
-    region: process.env.VITE_AWS_REGION,
-    accessKeyId: process.env.VITE_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.VITE_AWS_SECRET_ACCESS_KEY,
-    bucketName: process.env.VITE_AWS_BUCKET_NAME
+    region: import.meta.env.VITE_AWS_REGION,
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+    bucketName: import.meta.env.VITE_AWS_BUCKET_NAME
   };
   

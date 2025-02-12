@@ -13,18 +13,33 @@ const s3Client = new S3Client({
 });
 
 /**
+ * Converts a file to an ArrayBuffer for S3 upload.
+ * @param file - The file to convert.
+ * @returns {Promise<ArrayBuffer>}
+ */
+const fileToArrayBuffer = (file: File): Promise<ArrayBuffer> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as ArrayBuffer);
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file);
+  });
+};
+
+/**
  * Uploads a file to AWS S3.
  * @param file - The file to upload.
  * @returns {Promise<string | null>} - The uploaded file URL or null if failed.
  */
 export const uploadFileToS3 = async (file: File): Promise<string | null> => {
   try {
+    const fileBuffer = await fileToArrayBuffer(file); // Convert file to ArrayBuffer
     const fileKey = `uploads/${Date.now()}-${file.name}`; // Unique file name
 
     const params = {
       Bucket: awsConfig.bucketName,
       Key: fileKey,
-      Body: file,
+      Body: new Uint8Array(fileBuffer), // ✅ Convert ArrayBuffer to Uint8Array
       ContentType: file.type,
     };
 
