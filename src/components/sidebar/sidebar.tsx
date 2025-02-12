@@ -52,7 +52,7 @@ const Sidebar: React.FC = () => {
       {/* Navigation */}
       <div className="mt-8 flex-1 space-y-2">
         <NavItem icon={<FiHome className="text-2xl" />} label="Home" to="/" />
-        <NavItem icon={<FiFolder className="text-2xl" />} label="Folders" to="/folders" />
+        <NavItem icon={<FiFolder className="text-2xl" />} label="Structures" to="/folders" />
         <NavItem icon={<FiRefreshCw className="text-2xl" />} label="Templates" to="/templates" />
         <NavItem icon={<FiBookmark className="text-2xl" />} label="Bookmarks" to="/bookmarks" />
         <NavItem icon={<FiAward className="text-2xl" />} label="Contributors" to="/contributors" />
@@ -63,9 +63,9 @@ const Sidebar: React.FC = () => {
       <div className="mt-auto mb-2 py-1">
         <button
           onClick={() => openModal("donate")}
-          className="w-full flex items-center md:justify-start justify-center md:px-4 md:py-3 text-lg font-semibold bg-primary rounded-xl text-white transition-all duration-200"
+          className="w-full flex items-center lg:justify-start justify-center md:px-4 md:py-3 py-1 text-lg font-semibold bg-primary md:rounded-xl rounded-sm text-white transition-all duration-200"
         >
-          <FiCoffee className="md:mr-3 text-2xl font-extrabold" />
+          <FiCoffee className="lg:mr-3 text-2xl font-extrabold" />
           <span className="hidden lg:inline">Buy Me a Coffee</span> {/* Hide label on small screens */}
         </button>
       </div>

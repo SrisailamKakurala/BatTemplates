@@ -8,7 +8,7 @@ interface TabsProps {
 
 // Defining the `tabsConfig` with explicit types for `id`
 const tabsConfig: { id: "folders" | "templates"; label: string }[] = [
-  { id: "folders", label: "Folders" },
+  { id: "folders", label: "Structures" },
   { id: "templates", label: "Templates" },
 ];
 

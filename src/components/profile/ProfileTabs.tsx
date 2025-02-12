@@ -1,35 +1,13 @@
 import React from "react";
 
-interface ProfileTabsProps {
-  activeTab: "contributions" | "bookmarks";
-  setActiveTab: (tab: "contributions" | "bookmarks") => void;
-}
-
-const ProfileTabs: React.FC<ProfileTabsProps> = ({ activeTab, setActiveTab }) => {
+const ProfileHeader: React.FC = () => {
   return (
     <div className="flex border-b-[0.1px] border-gray-700 justify-center sm:justify-start">
-      <button
-        className={`py-3 px-6 text-lg sm:text-xl font-semibold ${
-          activeTab === "contributions"
-            ? "text-primary border-b-4 border-primary"
-            : "text-gray-400 hover:text-primary"
-        } transition-all`}
-        onClick={() => setActiveTab("contributions")}
-      >
+      <h2 className="py-3 px-6 text-lg sm:text-xl font-semibold text-primary border-b-4 border-primary">
         Contributions
-      </button>
-      <button
-        className={`py-3 px-6 text-lg sm:text-xl font-semibold ${
-          activeTab === "bookmarks"
-            ? "text-primary border-b-4 border-primary"
-            : "text-gray-400 hover:text-primary"
-        } transition-all`}
-        onClick={() => setActiveTab("bookmarks")}
-      >
-        Bookmarks
-      </button>
+      </h2>
     </div>
   );
 };
 
-export default ProfileTabs;
+export default ProfileHeader;
