@@ -6,7 +6,7 @@ import Templates from "@/pages/templates/Templates";
 import Bookmarks from "@/pages/bookmarks/Bookmarks";
 import Profile from "@/pages/profile/Profile";
 import Contributors from "@/pages/contributors/Contributors";
-import Sidebar from "@/components/sidebar/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar.tsx";
 import Loader from "@/components/loaders/Loader";
 import SignIn from "@/pages/auth/signin";
 import Register from "@/pages/auth/register";

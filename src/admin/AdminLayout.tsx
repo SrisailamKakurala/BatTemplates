@@ -4,7 +4,7 @@ import Users from "@/admin/pages/users/Users";
 import FlaggedContent from "@/admin/pages/flaggedContent/FlaggedContent";
 import Analytics from "@/admin/pages/analytics/Analytics";
 import Settings from "@/admin/pages/settings/Settings";
-import Logs from "@/admin/pages/logs/Logs";
+import Logs from "@/admin/pages/logs/Logs.tsx";
 import Contributors from "@/admin/pages/contributors/Contributors";
 import AdminLogin from "@/admin/pages/login/AdminLogin";
 import ProtectedRoute from "@/admin/ProtectedRoute";
