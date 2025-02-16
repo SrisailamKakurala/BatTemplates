@@ -23,6 +23,7 @@ const Folders: React.FC = () => {
           const approvedTemplates = await fetchPendingFolders();
           setStructures(approvedTemplates);
           setFilteredStructures(approvedTemplates);
+          console.log(filteredStructures, loading);
         } catch (error) {
           console.error("Failed to fetch templates:", error);
         } finally {
