@@ -46,6 +46,7 @@ export interface Folder {
   isApproved: boolean;
   downloads: number;
   likes: string[];
+  type: string;
   discussions: DiscussionMessage[];
 }
 

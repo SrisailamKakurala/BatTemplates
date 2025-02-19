@@ -4,6 +4,7 @@ import Tabs from "@/components/tabs/ButtonTabs";
 import TemplateCard from "@/components/cards/TemplateCard";
 import { fetchPendingFolders } from "@/firebase/services/adminServices/folder.service";
 import { fetchPendingTemplates } from "@/firebase/services/adminServices/template.sevice";
+import StructureCard from "@/components/cards/StructureCard";
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"folders" | "templates">("folders");
@@ -93,12 +94,14 @@ const AdminDashboard: React.FC = () => {
       {loading ? (
         <div className="text-center text-gray-300 text-lg sm:text-xl">Loading...</div>
       ) : (
-        <div className="grid gap-4 ">
-          {(activeTab === "folders" ? folders : templates).map((item) => (
-            <TemplateCard key={item.id} {...item} />
-          ))}
+        <div className="grid gap-4">
+          {activeTab === "folders"
+            ? folders?.map((folder) => (<StructureCard key={folder.id} {...folder} />))
+            : templates?.map((template) => (<TemplateCard key={template.id} {...template} />))}
         </div>
       )}
+
+
     </div>
   );
 };

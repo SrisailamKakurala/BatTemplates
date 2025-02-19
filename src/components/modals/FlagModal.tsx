@@ -10,10 +10,10 @@ interface FlagModalProps {
   userId: string;
   contentId: string;
   title: string;
-  githubLink: string;
+  source: string;
 }
 
-const FlagModal: React.FC<FlagModalProps> = ({ isOpen, onClose, type, userId, contentId, title, githubLink }) => {
+const FlagModal: React.FC<FlagModalProps> = ({ isOpen, onClose, type, userId, contentId, title, source }) => {
   const [reason, setReason] = useState("");
   const { addToast } = useToast();
 
@@ -33,7 +33,7 @@ const FlagModal: React.FC<FlagModalProps> = ({ isOpen, onClose, type, userId, co
       return;
     }
 
-    const success = await flagContent(contentId, userId, flaggedBy, reason, type, title, githubLink);
+    const success = await flagContent(contentId, userId, flaggedBy, reason, type, title, source);
     if (success) {
       addToast("Content flagged successfully.", "success");
       onClose();
@@ -50,9 +50,9 @@ const FlagModal: React.FC<FlagModalProps> = ({ isOpen, onClose, type, userId, co
         <h2 className="text-xl font-bold mb-4 text-primaryHover">Flag {type}</h2>
         <p className="text-sm text-gray-400 mb-2">Title: {title}</p>
         <p className="text-sm text-gray-400 mb-2">
-          GitHub:{" "}
-          <a href={githubLink} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">
-            {githubLink}
+          Source:{" "}
+          <a href={source} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">
+            {source}
           </a>
         </p>
         <textarea
