@@ -5,6 +5,7 @@ import useModalStore from "@/store/modalStore";
 import { Folder } from "@/constants/schema";
 import { toggleLike } from "@/firebase/services/folderServices/like.service";
 import ImageModal from "@/components/modals/ImageModal";
+import EditStructureForm from "./EditStructureForm";
 
 interface StructureCardProps {
     folder: Folder;
@@ -47,6 +48,16 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
             }
         } else {
             openModal("signin");
+        }
+    };
+
+    const handleEditSubmit = async (updatedData: Folder) => {
+        try {
+            // Call your API or Firestore update function
+            // await updateStructure(id, updatedData);
+            setIsEditOpen(false);
+        } catch (error) {
+            console.error("Failed to update structure:", error);
         }
     };
 
@@ -126,6 +137,15 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
                     />
                 )}
             </div>
+
+            {isEditOpen && (
+                <EditStructureForm
+                    isOpen={isEditOpen}
+                    onClose={() => setIsEditOpen(false)}
+                    structure={folder}
+                    onSubmit={handleEditSubmit}
+                />
+            )}
 
             <ImageModal isOpen={isImageModalOpen} onClose={() => setIsImageModalOpen(false)} images={images} />
         </div>
