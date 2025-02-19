@@ -5,12 +5,12 @@ import { FaGithub, FaTags, FaCode, FaCheckCircle, FaThumbsUp, FaTimes, FaExclama
 import FlagModal from "@/components/modals/FlagModal";
 import { approveTemplate } from "@/firebase/services/adminServices/template.sevice"; // Import the approve service
 import { useToast } from "@/hooks/ui/useToast";
-import { userTemplateProps } from "@/constants/interfaces";
+import { Template } from "@/constants/schema";
 import { getUser } from "@/utils/localStorageUtil";
 import { addLogToFirestore } from "@/firebase/services/adminServices/logService.service";
 
 
-const TemplateCard: React.FC<userTemplateProps> = ({
+const TemplateCard: React.FC<Template> = ({
   id,
   title,
   category,

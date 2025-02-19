@@ -1,7 +1,7 @@
 import { FaPlusCircle, FaTimesCircle } from "react-icons/fa";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { userFolderProps } from "@/constants/interfaces";
+import { Folder } from "@/constants/schema";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/buttons/Button";
 
@@ -14,7 +14,7 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Partial<userFolderProps>>();
+  } = useForm<Partial<Folder>>();
 
   const [images, setImages] = useState<File[]>([]);
 
@@ -28,7 +28,7 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
     setImages(images.filter((_, i) => i !== index));
   };
 
-  const onSubmit = (data: Partial<userFolderProps>) => {
+  const onSubmit = (data: Partial<Folder>) => {
     console.log("Folder Data:", data, "Images:", images);
     setFormVisible(false);
   };
