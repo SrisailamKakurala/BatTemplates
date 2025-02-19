@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { FaStar, FaDownload, FaEdit, FaTrash } from "react-icons/fa";
+import { FaStar, FaDownload, FaEdit, FaTrash, FaImages } from "react-icons/fa";
 import Button from "@/components/buttons/Button";
 import useModalStore from "@/store/modalStore";
 import { Folder } from "@/constants/schema";
-import EditStructureForm from "@/components/folders/EditStructureForm";
-import DeleteStructureModal from "@/components/folders/DeleteStructureModal";
 import { toggleLike } from "@/firebase/services/folderServices/like.service";
+import ImageModal from "@/components/modals/ImageModal";
 
 interface StructureCardProps {
     folder: Folder;
@@ -22,6 +21,7 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
         howToUse,
         downloadLink,
         downloads,
+        images = [],
         likes,
         authorId,
     } = folder;
@@ -32,6 +32,7 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
     const [likesCount, setLikesCount] = useState(likes.length);
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
     const likeHandler = async () => {
         if (user) {
@@ -58,7 +59,7 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
     };
 
     return (
-        <div className="p-6 h-auto min-h-60 rounded shadow hover:shadow-lg bg-secondary hover:bg-secondaryHover cursor-pointer">
+        <div className="p-6 h-auto min-h-60 rounded shadow hover:shadow-lg bg-secondary hover:bg-secondaryHover cursor-pointer flex flex-col justify-between">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="md:text-2xl text-xl font-bold text-primary">{title}</h2>
                 <div
@@ -70,24 +71,27 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
                 </div>
             </div>
 
-            <p className="text-slate-300 text-sm mt-2">{description}</p>
-            <p className="text-slate-300 text-xs my-2">
-                <span className="text-primary">Category</span>: {category}
-            </p>
-            <p className="text-slate-300 text-xs my-2">
-                <span className="text-primary">OS</span>: {os}
-            </p>
-            <p className="text-slate-300 text-xs my-2">
-                <span className="text-primary">Tech Stack</span>: {techStack}
-            </p>
-            <p className="text-slate-300 text-xs my-2">
-                <span className="text-primary">How to Use</span>: {howToUse}
-            </p>
+            <div className="">
 
+                <p className="text-slate-300 text-sm mt-2">{description}</p>
+                <p className="text-slate-300 text-xs my-2">
+                    <span className="text-primary">Category</span>: {category}
+                </p>
+                <p className="text-slate-300 text-xs my-2">
+                    <span className="text-primary">OS</span>: {os}
+                </p>
+                <p className="text-slate-300 text-xs my-2">
+                    <span className="text-primary">Tech Stack</span>: {techStack}
+                </p>
+                <p className="text-slate-300 text-xs my-2">
+                    <span className="text-primary">How to Use</span>: {howToUse}
+                </p>
 
-            <div className="flex items-center justify-between mt-5">
-                <p className="text-primary text-lg my-2 font-semibold">{downloads} Downloads</p>
-                <div className="flex gap-2 items-center">
+            </div>
+
+            <div>
+                <div className="flex items-center justify-between mt-5">
+                    <p className="text-primary text-lg my-2 font-semibold">{downloads} Downloads</p>
                     <Button
                         icon={<FaDownload />}
                         onClick={downloadHandler}
@@ -95,42 +99,35 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
                         className="bg-primary hover:bg-primaryHover text-white text-md py-1"
                     />
                 </div>
+
+                {user?.id === authorId && (
+                    <div className="flex gap-2 mt-4">
+                        <Button
+                            icon={<FaEdit />}
+                            onClick={() => setIsEditOpen(true)}
+                            label="Edit"
+                            className="bg-blue-500 hover:bg-blue-600 text-white text-md py-1 w-1/2"
+                        />
+                        <Button
+                            icon={<FaTrash />}
+                            onClick={() => setIsDeleteOpen(true)}
+                            label="Delete"
+                            className="bg-red-500 hover:bg-red-600 text-white text-md py-1 w-1/2"
+                        />
+                    </div>
+                )}
+
+                {images.length > 0 && (
+                    <Button
+                        icon={<FaImages />}
+                        onClick={() => setIsImageModalOpen(true)}
+                        label="View Structure"
+                        className="bg-green-500 hover:bg-green-600 text-white text-md py-1 mt-4 w-full"
+                    />
+                )}
             </div>
 
-            {user?.id === authorId && (
-                <div className="flex gap-2 mt-4">
-                    <Button
-                        icon={<FaEdit />}
-                        onClick={() => setIsEditOpen(true)}
-                        label="Edit"
-                        className="bg-blue-500 hover:bg-blue-600 text-white text-md py-1 w-1/2"
-                    />
-                    <Button
-                        icon={<FaTrash />}
-                        onClick={() => setIsDeleteOpen(true)}
-                        label="Delete"
-                        className="bg-red-500 hover:bg-red-600 text-white text-md py-1 w-1/2"
-                    />
-                </div>
-            )}
-
-            {isEditOpen && (
-                // <EditStructureForm
-                //   folderId={id}
-                //   onClose={() => setIsEditOpen(false)}
-                //   defaultValues={{
-                //     title,
-                //     description,
-                //     category,
-                //     os,
-                //     techStack,
-                //     howToUse,
-                //     structure,
-                //   }}
-                // />
-                <></>
-            )}
-            {/* {isDeleteOpen && <DeleteStructureModal folderId={id} onClose={() => setIsDeleteOpen(false)} />} */}
+            <ImageModal isOpen={isImageModalOpen} onClose={() => setIsImageModalOpen(false)} images={images} />
         </div>
     );
 };

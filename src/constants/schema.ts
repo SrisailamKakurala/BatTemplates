@@ -42,8 +42,9 @@ export interface Folder {
   authorId: string;
   authorEmail: string;
   downloadLink: string;
-  isApproved: boolean;
   downloads: number;
+  images: string[];
+  isApproved: boolean;
   likes: string[];
   type: string;
   discussions: DiscussionMessage[];
