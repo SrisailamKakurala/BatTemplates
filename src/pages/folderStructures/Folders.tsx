@@ -1,6 +1,6 @@
 import Button from "@/components/buttons/Button";
 import Search from "@/components/search/Search";
-import { userFolderProps } from "@/constants/interfaces";
+import { Folder } from "@/constants/schema";
 import React, { useState, useEffect } from "react";
 import { FaFolderOpen, FaPlus } from "react-icons/fa";
 import useModalStore from "@/store/modalStore";
@@ -10,8 +10,8 @@ import StructuresForm from "@/components/folders/StructuresForm";
 
 const Folders: React.FC = () => {
   const { openModal } = useModalStore(); // Accessing the modal store
-  const [structures, setStructures] = useState<userFolderProps[]>([]);
-  const [filteredStructures, setFilteredStructures] = useState<userFolderProps[]>([]);
+  const [structures, setStructures] = useState<Folder[]>([]);
+  const [filteredStructures, setFilteredStructures] = useState<Folder[]>([]);
   const [loading, setLoading] = useState(true); // Track loading state
   const [formVisible, setFormVisible] = useState(false);
   
@@ -20,17 +20,17 @@ const Folders: React.FC = () => {
       const fetchStructures = async () => {
         try {
           // Fetch approved templates
-          const approvedTemplates = await fetchPendingFolders();
-          setStructures(approvedTemplates);
-          setFilteredStructures(approvedTemplates);
+          const approvedStructures = await fetchPendingFolders();
+          setStructures(approvedStructures);
+          setFilteredStructures(approvedStructures);
           console.log(filteredStructures, loading);
         } catch (error) {
-          console.error("Failed to fetch templates:", error);
+          console.error("Failed to fetch Structures:", error);
         } finally {
           setLoading(false); // Set loading to false after fetching
         }
       };
-  
+
       fetchStructures();
   }, []);
     

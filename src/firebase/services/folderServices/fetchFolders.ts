@@ -6,7 +6,7 @@ import { db } from "@/firebase/firebase.config";
  * @returns {Promise<any[]>} - Array of pending folders.
  */
 export const fetchPendingFolders = async (): Promise<any[]> => {
-  const foldersRef = collection(db, "folders");
+  const foldersRef = collection(db, "structures");
 
   // Query to get folders where 'isApproved' is false, ordered by 'createdAt' (newest first)
   const q = query(foldersRef, where("isApproved", "==", false), orderBy("createdAt", "desc"));
@@ -27,7 +27,7 @@ export const fetchPendingFolders = async (): Promise<any[]> => {
  * @returns The folder data.
  */
 export const fetchFolderById = async (folderId: string) => {
-  const folderRef = doc(db, "folders", folderId);
+  const folderRef = doc(db, "structures", folderId);
   const folderSnapshot = await getDoc(folderRef);
 
   if (folderSnapshot.exists()) {

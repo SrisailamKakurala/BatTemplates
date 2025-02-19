@@ -4,7 +4,7 @@ import { FaPlus, FaTimes } from "react-icons/fa";
 import Button from "@/components/buttons/Button";
 import Input from "@/components/inputs/Input";
 import { submitTemplate } from "@/firebase/services/templateServices/submitTemplate";
-import { useToast } from "@/hooks/ui/useToast"; // Import the useToast hook
+import { useToast } from "@/hooks/ui/useToast";
 import { getUser } from "@/utils/localStorageUtil";
 
 interface TemplateFormProps {
@@ -43,6 +43,7 @@ const TemplateForm: React.FC<TemplateFormProps> = ({ setFormVisible }) => {
       createdAt: Date.now(),
       reviewedAt: null,
       type: "template",
+      views: 0,
     };
 
     try {

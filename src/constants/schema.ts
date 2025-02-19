@@ -32,20 +32,20 @@ export interface Template {
 
 export interface Folder {
   id: string;
-  os: string;
   title: string;
+  description: string;
   category: string;
+  os: string;
+  techStack: string;
+  howToUse: string;
+  structure: string[];
   createdAt: number;
   authorId: string;
   authorEmail: string;
-  description: string;
   downloadLink: string;
   isApproved: boolean;
-  techStack: string;
   downloads: number;
   likes: string[];
-  howToUse: string;
-  structure: string;
   discussions: DiscussionMessage[];
 }
 
