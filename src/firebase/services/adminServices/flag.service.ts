@@ -19,7 +19,7 @@ export const flagContent = async (
   reason: string,
   type: string,
   title: string,
-  githubLink?: string
+  source?: string
 ) => {
   try {
     // Add the flagged content to Firestore
@@ -31,7 +31,7 @@ export const flagContent = async (
       status: "pending",
       type,
       title,
-      githubLink,
+      source,
       flaggedAt: serverTimestamp(),
     });
 

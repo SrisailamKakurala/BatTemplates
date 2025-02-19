@@ -1,5 +1,23 @@
 import { doc, getDoc, collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import { db } from "@/firebase/firebase.config";
+import { Folder } from "@/constants/schema";
+
+export const fetchApprovedFolders = async (): Promise<Folder[]> => {
+  const structuresRef = collection(db, "structures");
+  
+  // Query to get structures where 'isApproved' is true and ordered by 'likes' field in descending order
+  const q = query(structuresRef, where("isApproved", "==", true), orderBy("downloads", "desc"));
+
+  const querySnapshot = await getDocs(q);
+  const structures: Folder[] = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Folder[];
+
+  console.log(structures);
+
+  return structures;
+};
 
 /**
  * Fetch all pending folders (not yet approved).

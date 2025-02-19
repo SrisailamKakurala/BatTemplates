@@ -20,7 +20,6 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
         os,
         techStack,
         howToUse,
-        structure,
         downloadLink,
         downloads,
         likes,
@@ -84,17 +83,6 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
             <p className="text-slate-300 text-xs my-2">
                 <span className="text-primary">How to Use</span>: {howToUse}
             </p>
-
-            <div className="mt-3">
-                <span className="text-primary text-lg font-semibold">Folder Structure:</span>
-                <ul className="text-slate-300 text-xs mt-1">
-                    {Array.isArray(structure) && structure.length > 0 ? (
-                        structure.map((item, index) => <li key={index}>- {item}</li>)
-                    ) : (
-                        <li className="text-gray-400">No structure available</li>
-                    )}
-                </ul>
-            </div>
 
 
             <div className="flex items-center justify-between mt-5">

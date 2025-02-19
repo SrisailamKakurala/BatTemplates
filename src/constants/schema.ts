@@ -38,7 +38,6 @@ export interface Folder {
   os: string;
   techStack: string;
   howToUse: string;
-  structure: string[];
   createdAt: number;
   authorId: string;
   authorEmail: string;

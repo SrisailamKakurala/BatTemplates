@@ -8,7 +8,6 @@ import { useToast } from "@/hooks/ui/useToast";
 import { Folder } from "@/constants/schema";
 import { getUser } from "@/utils/localStorageUtil";
 import { addLogToFirestore } from "@/firebase/services/adminServices/logService.service";
-import { useNavigate } from "react-router-dom";
 import MarkdownModal from "@/components/modals/MarkdownModal";
 
 const StructureCard: React.FC<Folder> = ({
@@ -20,13 +19,8 @@ const StructureCard: React.FC<Folder> = ({
   authorEmail,
   description,
   os,
-  techStack,
-  howToUse,
-  structure,
   downloadLink,
   isApproved,
-  downloads,
-  likes,
 }) => {
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
@@ -48,18 +42,18 @@ const StructureCard: React.FC<Folder> = ({
       }, 1000);
     } else if (isApproving && timeLeft === 0) {
       approveStructure(id, authorId, authorEmail, user?.email)
-        // .then(() => {
-        //   addToast("Structure approved successfully!", "success");
-        //   setIsActionTaken(true);
-        //   setActionType("approved");
-        // })
-        // .catch((error) => {
-        //   addToast("Failed to approve structure.", "error");
-        //   console.error("Error approving structure:", error);
-        // })
-        // .finally(() => {
-        //   setIsApproving(false);
-        // });
+        .then(() => {
+          addToast("Structure approved successfully!", "success");
+          setIsActionTaken(true);
+          setActionType("approved");
+        })
+        .catch((error) => {
+          addToast("Failed to approve structure.", "error");
+          console.error("Error approving structure:", error);
+        })
+        .finally(() => {
+          setIsApproving(false);
+        });
     }
 
     return () => clearInterval(timer);

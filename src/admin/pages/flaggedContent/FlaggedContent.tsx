@@ -18,7 +18,7 @@ const FlaggedContent: React.FC = () => {
       try {
         const data = await getFlaggedContent();
         if (isMounted) {
-          setFlaggedItems(data);
+          setFlaggedItems(data.reverse());
         }
       } catch (error) {
         console.error("Error fetching flagged content:", error);

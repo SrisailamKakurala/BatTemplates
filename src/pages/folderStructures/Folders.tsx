@@ -4,8 +4,10 @@ import { Folder } from "@/constants/schema";
 import React, { useState, useEffect } from "react";
 import { FaFolderOpen, FaPlus } from "react-icons/fa";
 import useModalStore from "@/store/modalStore";
-import { fetchPendingFolders } from "@/firebase/services/folderServices/fetchFolders";
+import { fetchApprovedFolders } from "@/firebase/services/folderServices/fetchFolders";
 import StructuresForm from "@/components/folders/StructuresForm";
+import SkeletonGrid from "@/components/skeletons/SkeletonGrid";
+import StructureCard from "@/components/folders/StructureCard";
 
 
 const Folders: React.FC = () => {
@@ -14,26 +16,26 @@ const Folders: React.FC = () => {
   const [filteredStructures, setFilteredStructures] = useState<Folder[]>([]);
   const [loading, setLoading] = useState(true); // Track loading state
   const [formVisible, setFormVisible] = useState(false);
-  
+
 
   useEffect(() => {
-      const fetchStructures = async () => {
-        try {
-          // Fetch approved templates
-          const approvedStructures = await fetchPendingFolders();
-          setStructures(approvedStructures);
-          setFilteredStructures(approvedStructures);
-          console.log(filteredStructures, loading);
-        } catch (error) {
-          console.error("Failed to fetch Structures:", error);
-        } finally {
-          setLoading(false); // Set loading to false after fetching
-        }
-      };
+    const fetchStructures = async () => {
+      try {
+        // Fetch approved folder structures
+        const approvedStructures = await fetchApprovedFolders();
+        setStructures(approvedStructures);
+        setFilteredStructures(approvedStructures);
+        console.log(filteredStructures);
+      } catch (error) {
+        console.error("Failed to fetch Structures:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
+      }
+    };
 
-      fetchStructures();
+    fetchStructures();
   }, []);
-    
+
   const handleOnclick = () => {
     const authStorage = localStorage.getItem("auth-storage");
 
@@ -50,7 +52,7 @@ const Folders: React.FC = () => {
   if (formVisible) {
     return <StructuresForm setFormVisible={setFormVisible} />;
   }
-  
+
   return (
     <div className="h-full w-full bg-primaryBg px-4 lg:px-8 py-6 overflow-y-scroll scroll-hide">
       {/* Header */}
@@ -78,43 +80,17 @@ const Folders: React.FC = () => {
       </div>
 
       {/* Folders Grid */}
-      {/* {loading ? (
+      {loading ? (
         <SkeletonGrid count={9} height="h-40" width="w-full" />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredTemplates.map((template) => (
-            <TemplateCard
-              key={template.id}
-              id={template.id}
-              title={template.title}
-              description={template.description}
-              likesCount={template.likes?.length}
-              techStack={template.techStack}
-              tags={template.tags}
-              category={template.category}
-              githubLink={template.githubLink}
-              authorId={template.authorId}
-            />
+          {filteredStructures.map((folder) => (
+            <StructureCard key={folder.id} folder={folder} />
           ))}
         </div>
-      )} */}
+      )}
     </div>
   );
 };
-
-// const Folders: React.FC = () => {
-//   const navigate = useNavigate();
-//   return (
-//     <div className="flex flex-col items-center justify-center h-full text-white p-6 space-y-4 text-center">
-//       <h1 className="text-3xl font-bold text-primary">Coming Soon!</h1>
-//       <p className="text-lg text-gray-300">
-//         The <span className="text-primary">Folders</span> feature is under development and will be available in the future. Stay tuned!
-//       </p>
-//       <button onClick={() => navigate("/")} className="mt-4 px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg shadow transition-transform transform hover:scale-105">
-//         Back to Home
-//       </button>
-//     </div>
-//   );
-// };
 
 export default Folders;
