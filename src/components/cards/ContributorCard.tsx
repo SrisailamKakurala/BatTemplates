@@ -24,11 +24,20 @@ const ContributorCard = ({ user }: { user: any }) => {
             {/* Profile Picture */}
             <div className="w-16 h-16 overflow-hidden rounded-full border-4 border-primary bg-gray-600 flex justify-center items-center">
                 {user?.photoURL ? (
-                    <img src={user?.photoURL} alt="Profile Avatar" className="w-full h-full object-cover" />
+                    <img
+                        key={user.photoURL}
+                        src={user.photoURL}
+                        alt="Profile Avatar"
+                        className="w-full h-full object-cover rounded-full"
+                        onError={() => {
+                            user.photoURL = "";
+                        }}
+                    />
                 ) : (
-                    <FaUserCircle size={128} color="#6b7280" />
+                    <FaUserCircle size={64} className="w-full h-full text-gray-500" />
                 )}
             </div>
+
 
 
             <div className="flex flex-col items-center lg:items-start">
@@ -38,15 +47,15 @@ const ContributorCard = ({ user }: { user: any }) => {
 
                 {/* Personal Links (Social Media Icons) */}
                 <div className="mt-4 flex gap-4">
-                {user?.personalLinks &&
-                    Object.keys(user.personalLinks).map((key) => {
-                        const link = user.personalLinks[key];
-                        return (
-                            <div key={key}> {/* Add key prop */}
-                                {renderSocialLink(link.platform, link.url)}
-                            </div>
-                        );
-                })}
+                    {user?.personalLinks &&
+                        Object.keys(user.personalLinks).map((key) => {
+                            const link = user.personalLinks[key];
+                            return (
+                                <div key={key}> {/* Add key prop */}
+                                    {renderSocialLink(link.platform, link.url)}
+                                </div>
+                            );
+                        })}
 
                 </div>
             </div>

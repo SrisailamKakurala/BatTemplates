@@ -23,7 +23,6 @@ export const fetchContributors = async () => {
     const userDetails = await Promise.all(userDetailsPromises);
     // Remove any nulls (in case any user doesn't exist)
     const validUserDetails = userDetails.filter((user) => user !== null);
-    console.log(validUserDetails)
     return validUserDetails;
   } catch (error) {
     console.error("Error fetching contributors:", error);

@@ -16,8 +16,6 @@ const Contributors: React.FC = () => {
         const fetchedContributors = await fetchContributors();
         setContributors(fetchedContributors);
         setFilteredContributors(fetchedContributors);
-        console.log(contributors)
-        console.log(filteredContributors)
       } catch (error) {
         console.error("Error fetching contributors:", error);
       } finally {
@@ -60,7 +58,7 @@ const Contributors: React.FC = () => {
         // Grid Layout for Contributor Cards
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
           {filteredContributors.map((user) => (
-            <ContributorCard key={user.id} user={user} />
+            <ContributorCard key={user.id || user.email} user={user} />
           ))}
         </div>
       )}
