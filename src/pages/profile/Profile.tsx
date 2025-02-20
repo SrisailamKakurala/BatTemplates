@@ -48,13 +48,15 @@ const Profile: React.FC = () => {
 
   // Filter contributions into folders and templates
   const contributionsFolders = useMemo(
-    () => user?.contributions?.filter((item: any) => item.type === "folder") || [],
+    () => user?.contributions?.filter((item: any) => item.type === "structures") || [],
     [user?.contributions]
   );
   const contributionsTemplates = useMemo(
     () => user?.contributions?.filter((item: any) => item.type === "template") || [],
     [user?.contributions]
   );
+
+  console.log(user)
 
   if (!user) {
     return (

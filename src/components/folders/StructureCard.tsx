@@ -9,6 +9,7 @@ import ImageModal from "@/components/modals/ImageModal";
 import EditStructureForm from "@/components/folders/EditStructureForm";
 import { incrementDownloadCount } from "@/firebase/services/folderServices/download.service";
 import { updateFolder } from "@/firebase/services/folderServices/update.service";
+import DeleteModal from "../modals/DeleteModal";
 
 interface StructureCardProps {
     folder: Folder;
@@ -92,6 +93,14 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
         }
     };
 
+    const handleImageModalOpen = async () => {
+        if (user) {
+            setIsImageModalOpen(true);
+        } else {
+            openModal("signin");
+        }
+    }
+
     return (
         <div className="p-6 h-auto min-h-60 rounded shadow hover:shadow-lg bg-secondary hover:bg-secondaryHover cursor-pointer flex flex-col justify-between">
             <div className="flex justify-between items-center mb-4 md:gap-4 gap-1">
@@ -160,7 +169,7 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
                 {images.length > 0 && (
                     <Button
                         icon={<FaImages />}
-                        onClick={() => setIsImageModalOpen(true)}
+                        onClick={handleImageModalOpen}
                         label="View Structure"
                         className="bg-green-500 hover:bg-green-600 text-white text-md py-1 mt-4 w-full"
                     />
@@ -175,6 +184,8 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
                     onSubmit={handleEditSubmit}
                 />
             )}
+
+            {isDeleteOpen && <DeleteModal id={id} type="structure" onClose={() => setIsDeleteOpen(false)} />}
 
             <ImageModal isOpen={isImageModalOpen} onClose={() => setIsImageModalOpen(false)} images={images} />
         </div>

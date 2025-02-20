@@ -5,7 +5,7 @@ import { addBookmark } from "@/firebase/services/templateServices/bookmarkServic
 import { toggleLike } from "@/firebase/services/templateServices/likeService";
 import useModalStore from "@/store/modalStore";
 import EditTemplateForm from "@/components/templates/EditTemplateForm";
-import DeleteTemplateModal from "@/components/modals/DeleteTemplateModal";
+import DeleteTemplateModal from "@/components/modals/DeleteModal";
 
 interface TemplateCardProps {
   id: string;
@@ -125,7 +125,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
         }}
       />  
       }
-      {isDeleteOpen && <DeleteTemplateModal templateId={id} onClose={() => setIsDeleteOpen(false)} />}
+      {isDeleteOpen && <DeleteTemplateModal type="template" id={id} onClose={() => setIsDeleteOpen(false)} />}
     </div>
   );
 };
