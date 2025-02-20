@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import TemplateCard from "@/components/templates/TemplateCard";
 import { fetchTemplatesByIds } from "@/firebase/services/templateServices/fetchTemplates";
 import { fetchFoldersByIds } from "@/firebase/services/folderServices/fetchFolders";
+import StructureCard from "../folders/StructureCard";
 
 interface TabContentProps {
   title: string;
@@ -18,11 +19,11 @@ const TabContent: React.FC<TabContentProps> = ({ title, items }) => {
       setLoading(true);
       try {
         const templateIds = items.filter((item) => item.type === "template").map((item) => item.id);
-        const folderIds = items.filter((item) => item.type === "folder").map((item) => item.id);
+        const structureIds = items.filter((item) => item.type === "structure").map((item) => item.id);
 
         const [fetchedTemplates, fetchedFolders] = await Promise.all([
           fetchTemplatesByIds(templateIds),
-          fetchFoldersByIds(folderIds),
+          fetchFoldersByIds(structureIds),
         ]);
 
         setTemplates(fetchedTemplates);
@@ -51,15 +52,7 @@ const TabContent: React.FC<TabContentProps> = ({ title, items }) => {
             <TemplateCard key={template.id} {...template} />
           ))}
           {folders.map((folder) => (
-            <li
-              key={folder.id}
-              className="bg-secondary text-white p-4 rounded-lg shadow-lg hover:shadow-xl hover:scale-102 transition-transform duration-300"
-            >
-              <div className="flex justify-between items-center">
-                <span className="font-semibold text-lg">📂 {folder.name}</span>
-                <span className="text-sm text-gray-400">{folder.id}</span>
-              </div>
-            </li>
+            <StructureCard key={folder.id} folder={folder} />
           ))}
         </div>
       )}
