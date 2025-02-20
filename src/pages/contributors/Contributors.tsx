@@ -16,6 +16,8 @@ const Contributors: React.FC = () => {
         const fetchedContributors = await fetchContributors();
         setContributors(fetchedContributors);
         setFilteredContributors(fetchedContributors);
+        console.log(contributors)
+        console.log(filteredContributors)
       } catch (error) {
         console.error("Error fetching contributors:", error);
       } finally {

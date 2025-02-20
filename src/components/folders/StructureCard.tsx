@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { FaStar, FaDownload, FaEdit, FaTrash, FaImages } from "react-icons/fa";
+import { FaStar, FaDownload, FaEdit, FaTrash, FaImages, FaBookmark } from "react-icons/fa";
 import Button from "@/components/buttons/Button";
 import useModalStore from "@/store/modalStore";
 import { Folder } from "@/constants/schema";
 import { toggleLike } from "@/firebase/services/folderServices/like.service";
+import { toggleBookmark } from "@/firebase/services/folderServices/bookmark.service"; // Added back
 import ImageModal from "@/components/modals/ImageModal";
-import EditStructureForm from "./EditStructureForm";
+import EditStructureForm from "@/components/folders/EditStructureForm";
+import { incrementDownloadCount } from "@/firebase/services/folderServices/download.service";
+import { updateFolder } from "@/firebase/services/folderServices/update.service";
 
 interface StructureCardProps {
     folder: Folder;
@@ -34,6 +37,7 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const [localIsBookmarked, setLocalIsBookmarked] = useState(user?.bookmarks?.includes(id) || false);
 
     const likeHandler = async () => {
         if (user) {
@@ -51,19 +55,38 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
         }
     };
 
+    const bookmarkHandler = async () => {
+        if (user) {
+            try {
+                setLocalIsBookmarked(!localIsBookmarked);
+                await toggleBookmark(id, user.id, localIsBookmarked);
+            } catch (error) {
+                console.error("Failed to toggle bookmark:", error);
+                setLocalIsBookmarked(localIsBookmarked);
+            }
+        } else {
+            openModal("signin");
+        }
+    };
+
+
     const handleEditSubmit = async (updatedData: Folder) => {
         try {
-            // Call your API or Firestore update function
-            // await updateStructure(id, updatedData);
+            await updateFolder(id, updatedData); // Call the update service
             setIsEditOpen(false);
         } catch (error) {
             console.error("Failed to update structure:", error);
         }
     };
 
-    const downloadHandler = () => {
+    const downloadHandler = async () => {
         if (user) {
-            window.open(downloadLink, "_blank");
+            try {
+                window.open(downloadLink, "_blank");
+                await incrementDownloadCount(id); // Increment download count
+            } catch (error) {
+                console.error("Download failed:", error);
+            }
         } else {
             openModal("signin");
         }
@@ -71,7 +94,7 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
 
     return (
         <div className="p-6 h-auto min-h-60 rounded shadow hover:shadow-lg bg-secondary hover:bg-secondaryHover cursor-pointer flex flex-col justify-between">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-4 md:gap-4 gap-1">
                 <h2 className="md:text-2xl text-xl font-bold text-primary">{title}</h2>
                 <div
                     className={`text-sm flex gap-1 cursor-pointer ${localIsLiked ? "text-yellow-400" : "text-white"}`}
@@ -82,8 +105,7 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
                 </div>
             </div>
 
-            <div className="">
-
+            <div>
                 <p className="text-slate-300 text-sm mt-2">{description}</p>
                 <p className="text-slate-300 text-xs my-2">
                     <span className="text-primary">Category</span>: {category}
@@ -97,18 +119,25 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
                 <p className="text-slate-300 text-xs my-2">
                     <span className="text-primary">How to Use</span>: {howToUse}
                 </p>
-
             </div>
 
             <div>
                 <div className="flex items-center justify-between mt-5">
-                    <p className="text-primary text-lg my-2 font-semibold">{downloads} Downloads</p>
-                    <Button
-                        icon={<FaDownload />}
-                        onClick={downloadHandler}
-                        label="Download"
-                        className="bg-primary hover:bg-primaryHover text-white text-md py-1"
-                    />
+                    <p className="text-primary md:text-lg text-xs my-2 font-semibold">{downloads} Downloads</p>
+                    <div className="flex items-center md:gap-3 gap-1">
+                        <div
+                            className={`cursor-pointer ${localIsBookmarked ? "text-yellow-500" : "text-white"}`}
+                            onClick={bookmarkHandler}
+                        >
+                            <FaBookmark size={28} />
+                        </div>
+                        <Button
+                            icon={<FaDownload />}
+                            onClick={downloadHandler}
+                            label="Download"
+                            className="bg-primary hover:bg-primaryHover text-white md:text-md text-sm py-1"
+                        />
+                    </div>
                 </div>
 
                 {user?.id === authorId && (

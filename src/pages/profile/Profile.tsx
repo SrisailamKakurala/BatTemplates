@@ -6,7 +6,7 @@ import useUtilsStore from "@/store/utilsStore";
 import { getUserFromFirestore } from "@/firebase/services/userServices/user.service";
 
 const Profile: React.FC = () => {
-  const [user, setUser] = useState<any>(null); // Store user data from Firestore
+  const [user, setUser] = useState<any>(null);
   const { reloadProfile, setReloadProfile } = useUtilsStore();
 
   // Function to retrieve the user from auth-storage

@@ -16,28 +16,28 @@ export const fetchBookmarks = async (userId: string) => {
 
   // Fetch details of bookmarked templates and folders
   const templatesRef = collection(db, "templates");
-  const foldersRef = collection(db, "folders");
+  const structuresRef = collection(db, "structures");
 
   const templatesSnapshot = await getDocs(templatesRef);
-  const foldersSnapshot = await getDocs(foldersRef);
+  const structuresSnapshot = await getDocs(structuresRef);
 
   const templates = templatesSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  const folders = foldersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  const structures = structuresSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
   console.log("Fetched Templates:", templates); // Log templates
-  console.log("Fetched Folders:", folders); // Log folders
+  console.log("Fetched structures:", structures); // Log structures
 
-  // Filter bookmarked templates and folders
+  // Filter bookmarked templates and structures
   const bookmarkedTemplates = templates.filter((template) =>
     bookmarks.includes(template.id)
   );
 
-  const bookmarkedFolders = folders.filter((folder) =>
+  const bookmarkedStructures = structures.filter((folder) =>
     bookmarks.includes(folder.id)
   );
 
   console.log("Filtered Bookmarked Templates:", bookmarkedTemplates); // Log filtered templates
-  console.log("Filtered Bookmarked Folders:", bookmarkedFolders); // Log filtered folders
+  console.log("Filtered Bookmarked structures:", bookmarkedStructures); // Log filtered structures
 
-  return { bookmarkedTemplates, bookmarkedFolders };
+  return { bookmarkedTemplates, bookmarkedStructures };
 };

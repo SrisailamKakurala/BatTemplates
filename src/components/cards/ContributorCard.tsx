@@ -24,13 +24,9 @@ const ContributorCard = ({ user }: { user: any }) => {
             {/* Profile Picture */}
             <div className="w-16 h-16 overflow-hidden rounded-full border-4 border-primary bg-gray-600 flex justify-center items-center">
                 {user?.photoURL ? (
-                    <img
-                        src={user?.photoURL}
-                        alt="Profile Avatar"
-                        className="w-16 h-16 object-cover rounded-full"
-                    />
+                    <img src={user?.photoURL} alt="Profile Avatar" className="w-full h-full object-cover" />
                 ) : (
-                    <FaUserCircle size={64} color="#6b7280" /> // Adjusted size for better visibility
+                    <FaUserCircle size={128} color="#6b7280" />
                 )}
             </div>
 
@@ -42,11 +38,16 @@ const ContributorCard = ({ user }: { user: any }) => {
 
                 {/* Personal Links (Social Media Icons) */}
                 <div className="mt-4 flex gap-4">
-                    {user?.personalLinks &&
-                        Object.keys(user.personalLinks).map((key) => {
-                            const link = user.personalLinks[key];
-                            return renderSocialLink(link.platform, link.url);
-                        })}
+                {user?.personalLinks &&
+                    Object.keys(user.personalLinks).map((key) => {
+                        const link = user.personalLinks[key];
+                        return (
+                            <div key={key}> {/* Add key prop */}
+                                {renderSocialLink(link.platform, link.url)}
+                            </div>
+                        );
+                })}
+
                 </div>
             </div>
         </div>
