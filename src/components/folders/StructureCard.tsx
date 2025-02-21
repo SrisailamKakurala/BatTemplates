@@ -10,6 +10,8 @@ import EditStructureForm from "@/components/folders/EditStructureForm";
 import { incrementDownloadCount } from "@/firebase/services/folderServices/download.service";
 import { updateFolder } from "@/firebase/services/folderServices/update.service";
 import DeleteModal from "../modals/DeleteModal";
+import { useToast } from "@/hooks/ui/useToast";
+
 
 interface StructureCardProps {
     folder: Folder;
@@ -39,6 +41,9 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [localIsBookmarked, setLocalIsBookmarked] = useState(user?.bookmarks?.includes(id) || false);
+
+    const { addToast } = useToast();
+    
 
     const likeHandler = async () => {
         if (user) {
@@ -75,6 +80,7 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
         try {
             await updateFolder(id, updatedData); // Call the update service
             setIsEditOpen(false);
+            addToast("Updated Successfully", "success");
         } catch (error) {
             console.error("Failed to update structure:", error);
         }

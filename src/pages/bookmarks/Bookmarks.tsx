@@ -4,6 +4,7 @@ import TemplateCard from "@/components/templates/TemplateCard";
 import { fetchBookmarks } from "@/firebase/services/bookmarkServices/fetchBookmarks";
 import { FaBookmark } from "react-icons/fa";
 import CircularLoader from "@/components/loaders/CircularLoader";
+import StructureCard from "@/components/folders/StructureCard";
 
 const Bookmarks: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"folders" | "templates">("folders");
@@ -58,13 +59,7 @@ const Bookmarks: React.FC = () => {
           {folders.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {folders.map((folder) => (
-                <div
-                  key={folder.id}
-                  className="p-6 rounded shadow bg-secondary hover:bg-secondaryHover cursor-pointer"
-                >
-                  <h3 className="text-xl font-bold text-primary">{folder.name}</h3>
-                  <p className="text-slate-300 text-sm mt-2">{folder.description}</p>
-                </div>
+                <StructureCard key={folder.id} folder={folder} />
               ))}
             </div>
           ) : (

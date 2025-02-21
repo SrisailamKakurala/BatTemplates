@@ -18,7 +18,7 @@ export const deleteStructure = async (structureId: string) => {
     }
 
     const structureData = structureSnap.data();
-    const authorId = structureData.authorId;
+    const authorId = structureData?.authorId;
 
     // Step 1: Delete the structure
     await deleteDoc(structureRef);
@@ -32,10 +32,10 @@ export const deleteStructure = async (structureId: string) => {
     // Step 3: Log the deletion
     await addLogToFirestore({
       action: "🗑️ Structure Deleted",
-      userId: structureData.authorId,
+      userId: structureData?.authorId,
       userEmail: structureData.authorEmail,
       details: `
-        User: ${structureData.author}
+        User: ${structureData.authorId}
         Deleted Structure: ${structureData.title}
         Structure ID: ${structureId}
         Time: ${new Date().toLocaleTimeString()}

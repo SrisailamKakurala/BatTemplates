@@ -3,7 +3,7 @@ import Button from "@/components/buttons/Button";
 import formatDate from "@/utils/formatDate";
 import { FaGithub, FaTags, FaCode, FaCheckCircle, FaThumbsUp, FaTimes, FaExclamationTriangle, FaFlag, } from "react-icons/fa";
 import FlagModal from "@/components/modals/FlagModal";
-import { approveTemplate } from "@/firebase/services/adminServices/template.sevice"; // Import the approve service
+import { approveTemplate } from "@/firebase/services/adminServices/template.service"; // Import the approve service
 import { useToast } from "@/hooks/ui/useToast";
 import { Template } from "@/constants/schema";
 import { getUser } from "@/utils/localStorageUtil";
@@ -207,7 +207,7 @@ const handleReject = () => {
         contentId={id}
         userId={authorId}
         title={title}
-        githubLink={githubLink}
+        source={githubLink}
       />
 
     </div>

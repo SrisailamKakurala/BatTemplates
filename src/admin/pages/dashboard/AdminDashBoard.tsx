@@ -3,7 +3,7 @@ import { FaAccusoft } from "react-icons/fa";
 import Tabs from "@/components/tabs/ButtonTabs";
 import TemplateCard from "@/components/cards/TemplateCard";
 import { fetchPendingFolders } from "@/firebase/services/adminServices/folder.service";
-import { fetchPendingTemplates } from "@/firebase/services/adminServices/template.sevice";
+import { fetchPendingTemplates } from "@/firebase/services/adminServices/template.service";
 import StructureCard from "@/components/cards/StructureCard";
 
 const AdminDashboard: React.FC = () => {

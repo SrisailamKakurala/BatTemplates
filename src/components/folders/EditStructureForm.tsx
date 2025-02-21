@@ -26,6 +26,7 @@ const EditStructureForm: React.FC<EditStructureFormProps> = ({
     howToUse: structure.howToUse,
   });
 
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
