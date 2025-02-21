@@ -52,20 +52,30 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
       console.error("User not authenticated");
       return;
     }
-
+  
+    if (!file) {
+      addToast("Script file is required!", "error");
+      return;
+    }
+  
+    if (images.length === 0) {
+      addToast("At least one image is required!", "error");
+      return;
+    }
+  
     console.log("Uploading folder structure...");
-
+  
     const folderId = await uploadFolderStructure(data, file, images, user.id, user.email);
-
+  
     if (folderId) {
       console.log("Folder uploaded successfully:", folderId);
       setFormVisible(false);
       addToast("Structure Submitted successfully!", "success");
-
     } else {
       console.error("Failed to upload folder structure.");
     }
   };
+  
   
 
   return (
@@ -130,6 +140,7 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
                 >
                   <FaUpload /> Choose File
                 </label>
+                {!file && <p className="text-red-500 text-sm mt-1">Script file is required</p>}
                 {file && (
                   <div className="flex items-center gap-2 text-white mt-2">
                     {file.name}{" "}
@@ -158,6 +169,7 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
                 >
                   <FaUpload /> Upload Images
                 </label>
+                {images.length === 0 && <p className="text-red-500 text-sm mt-1">At least one image is required</p>}
                 <div className="flex flex-wrap gap-2 mt-2">
                   {images.map((file, index) => (
                     <div key={index} className="relative">

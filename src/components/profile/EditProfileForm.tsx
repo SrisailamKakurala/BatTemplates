@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FiGithub, FiLinkedin, FiTwitter, FiInstagram } from "react-icons/fi";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/buttons/Button";
 import { updateProfile } from "@/firebase/services/userServices/updateProfile.service";
-import { useToast } from "@/hooks/ui/useToast"; // Import the useToast hook
+import { useToast } from "@/hooks/ui/useToast";
 import useUtilsStore from "@/store/utilsStore";
 import useAuthStore from "@/store/authStore";
+import { getUser } from "@/utils/localStorageUtil";
 
 interface FormData {
   name: string;
@@ -17,26 +18,66 @@ interface FormData {
   instagramLink: string;
 }
 
+interface PersonalLink {
+  platform: string;
+  url: string;
+}
+
 interface EditProfileFormProps {
   onClose: () => void; // Function to close the form
 }
 
 const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose }) => {
-
-  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+  const currentUser = getUser();
   const { addToast } = useToast();
+
+  // Initialize form with default values
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+    reset, // Add reset to reset the form with default values
+  } = useForm<FormData>({
+    defaultValues: {
+      name: currentUser?.name || "",
+      location: currentUser?.location || "",
+      githubLink:
+        currentUser?.personalLinks?.find((link: PersonalLink) => link.platform === "GitHub")?.url || "",
+      linkedinLink:
+        currentUser?.personalLinks?.find((link: PersonalLink) => link.platform === "LinkedIn")?.url || "",
+      xLink:
+        currentUser?.personalLinks?.find((link: PersonalLink) => link.platform === "X")?.url || "",
+      instagramLink:
+        currentUser?.personalLinks?.find((link: PersonalLink) => link.platform === "Instagram")?.url || "",
+    },
+  });
+
+  // Reset the form with current user data when the component mounts
+  useEffect(() => {
+    if (currentUser) {
+      reset({
+        name: currentUser.name || "",
+        location: currentUser.location || "",
+        githubLink:
+          currentUser.personalLinks?.find((link: PersonalLink) => link.platform === "GitHub")?.url || "",
+        linkedinLink:
+          currentUser.personalLinks?.find((link: PersonalLink) => link.platform === "LinkedIn")?.url || "",
+        xLink:
+          currentUser.personalLinks?.find((link: PersonalLink) => link.platform === "X")?.url || "",
+        instagramLink:
+          currentUser.personalLinks?.find((link: PersonalLink) => link.platform === "Instagram")?.url || "",
+      });
+    }
+  }, [reset]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     if (!currentUser) {
       console.error("No user is logged in.");
       return;
     }
-  
+
+    // console.log(data);
+
     // Format social links into an array of objects
     const personalLinks = [
       { platform: "GitHub", url: data.githubLink },
@@ -44,40 +85,40 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose }) => {
       { platform: "X", url: data.xLink },
       { platform: "Instagram", url: data.instagramLink },
     ].filter((link) => link.url); // Filter out empty links
-  
+
     const profileData = {
       name: data.name,
       location: data.location,
       personalLinks,
     };
-  
+
     try {
-  
       // Update the profile in Firestore and get the updated user data
       const updatedUser = await updateProfile(currentUser.id, profileData);
-  
+
+      // console.log(updatedUser);
+
       // Update the user in `auth-storage` using useAuthStore
       useAuthStore.getState().signIn({
         ...currentUser,
         ...updatedUser,
       });
-  
+
       // Trigger profile reload using useUtilsStore
       useUtilsStore.getState().setReloadProfile(true);
-  
+
       // Show success toast
       addToast("Profile updated successfully!", "success");
-  
+
       // Close the form after successful submission
       onClose();
     } catch (error) {
       console.error("Error updating profile:", error);
-  
+
       // Show error toast
       addToast("Failed to update profile. Please try again.", "error");
     }
   };
-  
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -219,7 +260,7 @@ const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose }) => {
           <div className="flex justify-end space-x-4">
             <Button
               label="Cancel"
-              onClick={onClose} // Use the onClose prop to close the form
+              onClick={onClose}
               className="px-4 py-2 text-whiteText bg-slate-600 rounded-md hover:bg-slate-700 transition-all"
             />
             <Button

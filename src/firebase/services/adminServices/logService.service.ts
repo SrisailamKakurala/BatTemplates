@@ -1,10 +1,9 @@
 import { db } from "@/firebase/firebase.config";
-import { collection, addDoc, getDocs, query, Timestamp, orderBy } from "firebase/firestore";
+import { collection, addDoc, query, Timestamp, where, getDocs, deleteDoc, orderBy } from "firebase/firestore";
 import { fetchUserRoles } from "@/firebase/services/adminServices/userService.service";
 
-const LOGS_COLLECTION = "logs"; // Firestore collection name for logs
+const LOGS_COLLECTION = "logs";
 
-// 🔹 Add a log entry to Firestore
 export const addLogToFirestore = async ({
   action,
   userId,
@@ -17,6 +16,9 @@ export const addLogToFirestore = async ({
   details: string;
 }) => {
   try {
+    // First, delete old logs
+    await deleteOldLogs();
+
     // Fetch user roles using userId
     const userRoles = await fetchUserRoles(userId);
 
@@ -30,13 +32,39 @@ export const addLogToFirestore = async ({
       timestamp: Timestamp.now(),
     };
 
-    // console.log("Log Data:", logData);
-
     // Add log to Firestore
     await addDoc(collection(db, LOGS_COLLECTION), logData);
     console.log("Log added successfully:", logData);
   } catch (error) {
     console.error("Error adding log:", error);
+  }
+};
+
+const deleteOldLogs = async () => {
+  try {
+    // Calculate timestamp for 1 month ago
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    const oneMonthAgoTimestamp = Timestamp.fromDate(oneMonthAgo);
+
+    // Create query for old logs
+    const oldLogsQuery = query(
+      collection(db, LOGS_COLLECTION),
+      where("timestamp", "<=", oneMonthAgoTimestamp)
+    );
+
+    // Get old logs
+    const oldLogs = await getDocs(oldLogsQuery);
+
+    // Delete each old log
+    const deletionPromises = oldLogs.docs.map(doc => deleteDoc(doc.ref));
+    await Promise.all(deletionPromises);
+
+    if (oldLogs.size > 0) {
+      console.log(`Deleted ${oldLogs.size} logs older than one month`);
+    }
+  } catch (error) {
+    console.error("Error deleting old logs:", error);
   }
 };
 

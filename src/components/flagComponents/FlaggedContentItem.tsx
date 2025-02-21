@@ -44,7 +44,7 @@ const FlaggedContentItem: React.FC<FlaggedContentItemProps> = ({ item, onResolve
         label="Resolve"
         icon={<FaCheck />}
         onClick={() => onResolve(item.id)}
-        className="bg-green-500 text-white"
+        className="bg-green-500 text-white md:mt-0 mt-4"
       />
     </div>
   );
