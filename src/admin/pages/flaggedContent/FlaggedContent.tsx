@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getFlaggedContent, updateFlagStatus, deleteFlaggedContent } from "@/firebase/services/adminServices/flag.service";
+import { getFlaggedContent, updateFlagStatus } from "@/firebase/services/adminServices/flag.service";
 import { useToast } from "@/hooks/ui/useToast";
 import FlaggedContentList from "@/components/flagComponents/FlaggedContentList";
 import SkeletonList from "@/components/skeletons/SkeletonList"; // Import the new skeleton component
@@ -45,16 +45,6 @@ const FlaggedContent: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this flagged content?")) return;
-    const success = await deleteFlaggedContent(id);
-    if (success) {
-      addToast("Flagged content deleted.", "success");
-      setFlaggedItems((prev) => prev.filter((item) => item.id !== id));
-    } else {
-      addToast("Failed to delete content.", "error");
-    }
-  };
 
   return (
     <div className="p-6">
@@ -68,7 +58,7 @@ const FlaggedContent: React.FC = () => {
       ) : flaggedItems.length === 0 ? (
         <p className="text-gray-400 text-xl mt-4">No flagged content.</p>
       ) : (
-        <FlaggedContentList items={flaggedItems} onResolve={handleResolve} onDelete={handleDelete} />
+        <FlaggedContentList items={flaggedItems} onResolve={handleResolve} />
       )}
     </div>
   );

@@ -1,14 +1,13 @@
 import React from "react";
-import { FaExclamationTriangle, FaCheck, FaTrash } from "react-icons/fa";
+import { FaExclamationTriangle, FaCheck } from "react-icons/fa";
 import ActionButton from "@/components/flagComponents/ActionButton"; // Import ActionButton component
 
 interface FlaggedContentItemProps {
   item: any;
   onResolve: (id: string) => void;
-  onDelete: (id: string) => void;
 }
 
-const FlaggedContentItem: React.FC<FlaggedContentItemProps> = ({ item, onResolve, onDelete }) => {
+const FlaggedContentItem: React.FC<FlaggedContentItemProps> = ({ item, onResolve }) => {
   return (
     <div
       key={item.id}
@@ -39,20 +38,14 @@ const FlaggedContentItem: React.FC<FlaggedContentItemProps> = ({ item, onResolve
         {item.flaggedBy && <p className="text-sm text-gray-300 mt-1">👤 Flagged By: {item.flaggedBy}</p>}
         <p className="text-sm text-gray-300 mt-1">🔎 Type: {item.type}</p>
       </div>
-      <div className="flex space-x-3 mt-4 sm:mt-0">
-        <ActionButton
-          label="Resolve"
-          icon={<FaCheck />}
-          onClick={() => onResolve(item.id)}
-          className="bg-green-500 text-white"
-        />
-        <ActionButton
-          label="Delete"
-          icon={<FaTrash />}
-          onClick={() => onDelete(item.id)}
-          className="bg-red-500 text-white"
-        />
-      </div>
+
+      {/* resolve button */}
+      <ActionButton
+        label="Resolve"
+        icon={<FaCheck />}
+        onClick={() => onResolve(item.id)}
+        className="bg-green-500 text-white"
+      />
     </div>
   );
 };

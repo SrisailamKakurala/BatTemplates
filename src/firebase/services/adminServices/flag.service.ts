@@ -85,7 +85,7 @@ export const getFlaggedContent = async () => {
  * @param flagId - The ID of the flagged content
  * @param status - New status ("resolved", "rejected")
  */
-export const updateFlagStatus = async (flagId: string, status: "resolved" | "rejected") => {
+export const updateFlagStatus = async (flagId: string, status: string) => {
   try {
     const flagRef = doc(db, "flaggedContent", flagId); // Assuming your collection is "flaggedContent"
     
@@ -96,8 +96,8 @@ export const updateFlagStatus = async (flagId: string, status: "resolved" | "rej
     if (flagData) {
       const { contentId, title, reason } = flagData;
 
-      // Update flag status
-      await updateDoc(flagRef, { status });
+
+      status === "resolved" ? await deleteDoc(doc(db, FLAG_COLLECTION, flagId)) : null;
 
       // Log the status update action
       const user = getUser();
@@ -108,7 +108,7 @@ export const updateFlagStatus = async (flagId: string, status: "resolved" | "rej
           userEmail: user.email,
           details: `
                 Flag ID: ${flagId} status changed to ${status} 
-                By: ${user.email}
+                By: ${user?.email}
                 Flagged Content ID: ${contentId} 
                 Title: ${title} 
                 Reason: ${reason}
@@ -120,20 +120,6 @@ export const updateFlagStatus = async (flagId: string, status: "resolved" | "rej
     return true;
   } catch (error) {
     console.error("Error updating flag status:", error);
-    return false;
-  }
-};
-
-/**
- * Delete flagged content (Admin Only)
- * @param flagId - The ID of the flagged content to delete
- */
-export const deleteFlaggedContent = async (flagId: string) => {
-  try {
-    await deleteDoc(doc(db, FLAG_COLLECTION, flagId));
-    return true;
-  } catch (error) {
-    console.error("Error deleting flagged content:", error);
     return false;
   }
 };
