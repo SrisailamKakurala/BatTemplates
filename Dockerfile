@@ -8,25 +8,28 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --only=production
 
 # Copy project files
 COPY . .
 
-# Build the app
+# Build the Vite app
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
+# Production stage (Using a lightweight static server)
+FROM node:20-alpine
 
-# Copy built assets from build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+# Install a lightweight static file server
+RUN npm install -g serve
 
-# Copy nginx config if you have custom configuration
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Set working directory
+WORKDIR /app
 
-# Expose port 80
-EXPOSE 80
+# Copy built assets from the build stage
+COPY --from=build /app/dist /app
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Expose the port where the Vite app will run
+EXPOSE 4173
+
+# Start the Vite app using 'serve'
+CMD ["serve", "-s", "-l", "4173", "/app"]
