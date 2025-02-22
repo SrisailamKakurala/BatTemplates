@@ -13,6 +13,9 @@ RUN npm install
 # Copy project files
 COPY . .
 
+# Ensure TypeScript is installed
+RUN npx tsc --version
+
 # Build the Vite app
 RUN npm run build
 
