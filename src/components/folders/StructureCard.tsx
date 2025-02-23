@@ -138,8 +138,11 @@ const StructureCard: React.FC<StructureCardProps> = ({ folder }) => {
 
             <div>
                 <div className="flex items-center justify-between mt-5">
-                    <p className="text-primary md:text-lg text-xs my-2 font-semibold">{downloads} Downloads</p>
-                    <div className="flex items-center md:gap-3 gap-1">
+                    <div className="text-primary md:text-lg text-xs my-2 font-semibold flex gap-2 items-center justify-center">
+                        <p>{downloads}</p>
+                        <FaDownload />
+                    </div>
+                    <div className="flex items-center gap-1">
                         <div
                             className={`cursor-pointer ${localIsBookmarked ? "text-yellow-500" : "text-white"}`}
                             onClick={bookmarkHandler}
