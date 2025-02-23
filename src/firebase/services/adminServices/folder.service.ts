@@ -2,6 +2,7 @@ import { collection, query, where, getDocs, getDoc, doc, setDoc, updateDoc, arra
 import { db } from "@/firebase/firebase.config";
 import { addLogToFirestore } from "@/firebase/services/adminServices/logService.service";
 import formatDate from "@/utils/formatDate";
+import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity.service";
 
 // Fetch pending folders directly from Firestore
 export const fetchPendingFolders = async () => {
@@ -74,6 +75,8 @@ export const approveStructure = async (
         Time: ${new Date().toLocaleTimeString()}
       `,
     });
+
+    await updateDailyActivity();
 
     console.log("✅ Structure approved, contributor added (if not already), and user contributions updated successfully.");
   } catch (error) {

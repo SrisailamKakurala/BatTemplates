@@ -5,7 +5,7 @@ import Button from "@/components/buttons/Button";
 import TemplateCard from "@/components/templates/TemplateCard";
 import useModalStore from "@/store/modalStore";
 import TemplateForm from "@/components/templates/TemplateForm";
-import { fetchApprovedTemplates } from "@/firebase/services/templateServices/fetchTemplates";
+import { fetchApprovedTemplates } from "@/firebase/services/templateServices/fetchTemplates.service";
 import { Template } from "@/constants/schema";
 import SkeletonGrid from "@/components/skeletons/SkeletonGrid";
 

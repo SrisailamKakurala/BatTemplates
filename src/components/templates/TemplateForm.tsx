@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import Button from "@/components/buttons/Button";
 import Input from "@/components/inputs/Input";
-import { submitTemplate } from "@/firebase/services/templateServices/submitTemplate";
+import { submitTemplate } from "@/firebase/services/templateServices/submitTemplate.service";
 import { useToast } from "@/hooks/ui/useToast";
 import { getUser } from "@/utils/localStorageUtil";
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Tabs from "@/components/tabs/ButtonTabs";
 import TemplateCard from "@/components/templates/TemplateCard";
-import { fetchBookmarks } from "@/firebase/services/bookmarkServices/fetchBookmarks";
+import { fetchBookmarks } from "@/firebase/services/bookmarkServices/fetchBookmarks.service";
 import { FaBookmark } from "react-icons/fa";
 import CircularLoader from "@/components/loaders/CircularLoader";
 import StructureCard from "@/components/folders/StructureCard";

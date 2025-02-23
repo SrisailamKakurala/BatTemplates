@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "@/components/buttons/Button";
-import { deleteTemplate } from "@/firebase/services/templateServices/deleteTemplateService";
+import { deleteTemplate } from "@/firebase/services/templateServices/deleteTemplate.service";
 import { deleteStructure } from "@/firebase/services/folderServices/deleteStructure.service"; // Structure delete service
 import { useToast } from "@/hooks/ui/useToast";
 

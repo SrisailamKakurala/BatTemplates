@@ -2,6 +2,7 @@ import { db } from "@/firebase/firebase.config";
 import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { Template } from "@/constants/schema";
 import { addLogToFirestore } from "@/firebase/services/adminServices/logService.service";
+import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity.service";
 
 export const submitTemplate = async (
   templateData: Template,
@@ -33,6 +34,9 @@ export const submitTemplate = async (
     
 
     addToast("Template submitted successfully!", "success");
+
+    // Log this action in daily activity
+    await updateDailyActivity();
 
     return templateWithId;
   } catch (error) {

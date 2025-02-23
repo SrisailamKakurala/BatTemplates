@@ -2,6 +2,7 @@ import { collection, query, where, getDocs, doc, updateDoc, setDoc, arrayUnion }
 import { addLogToFirestore } from "@/firebase/services/adminServices/logService.service";
 import { db } from "@/firebase/firebase.config";
 import formatDate from "@/utils/formatDate";
+import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity.service";
 
 // Fetch pending templates directly from Firestore
 export const fetchPendingTemplates = async () => {
@@ -78,6 +79,8 @@ export const approveTemplate = async (templateId: string, authorId: string, auth
         Time: ${new Date().toLocaleTimeString()}
       `,
     });
+
+    await updateDailyActivity();
 
     console.log("✅ Template approved, contributor added, and user contributions updated successfully.");
   } catch (error) {

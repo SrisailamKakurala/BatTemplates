@@ -1,6 +1,7 @@
 import { db } from "@/firebase/firebase.config";
 import { doc, deleteDoc, getDoc, updateDoc, arrayRemove } from "firebase/firestore";
 import { addLogToFirestore } from "@/firebase/services/adminServices/logService.service";
+import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity.service";
 
 /**
  * Delete a template and remove it from the author's contributions array.
@@ -41,6 +42,9 @@ export const deleteTemplate = async (templateId: string) => {
         Time: ${new Date().toLocaleTimeString()}
       `,
     });
+
+    // Log this action in daily activity
+    await updateDailyActivity();
 
     console.log("✅ Template deleted and removed from contributions.");
     return true;

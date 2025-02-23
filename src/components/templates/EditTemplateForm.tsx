@@ -2,7 +2,7 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/buttons/Button";
-import { updateTemplate } from "@/firebase/services/templateServices/updateTemplateService";
+import { updateTemplate } from "@/firebase/services/templateServices/updateTemplate.service";
 import { useToast } from "@/hooks/ui/useToast";
 
 interface EditTemplateFormProps {

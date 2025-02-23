@@ -1,5 +1,6 @@
 import { doc, updateDoc, getDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "@/firebase/firebase.config";
+import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity.service";
 
 export const toggleLike = async (templateId: string, userId: string, isLiked: boolean) => {
   try {
@@ -19,6 +20,9 @@ export const toggleLike = async (templateId: string, userId: string, isLiked: bo
     // Fetch the updated document to get the latest likes array
     const updatedDoc = await getDoc(templateDocRef);
     const updatedLikesArray = updatedDoc.data()?.likes || [];
+
+    // Log this action in daily activity
+    await updateDailyActivity();
 
     return updatedLikesArray.length; // Return the updated likes count
   } catch (error) {

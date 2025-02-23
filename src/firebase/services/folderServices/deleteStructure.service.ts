@@ -1,6 +1,7 @@
 import { db } from "@/firebase/firebase.config";
 import { doc, deleteDoc, getDoc, updateDoc, arrayRemove } from "firebase/firestore";
 import { addLogToFirestore } from "@/firebase/services/adminServices/logService.service";
+import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity.service";
 
 /**
  * Delete a structure and remove it from the author's contributions array.
@@ -41,6 +42,8 @@ export const deleteStructure = async (structureId: string) => {
         Time: ${new Date().toLocaleTimeString()}
       `,
     });
+
+    await updateDailyActivity();
 
     console.log("✅ Structure deleted and removed from contributions.");
     return true;

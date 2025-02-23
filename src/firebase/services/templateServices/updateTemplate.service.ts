@@ -1,5 +1,6 @@
 import { db } from "@/firebase/firebase.config";
 import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity.service";
 
 /**
  * Update a template's details.
@@ -14,6 +15,9 @@ export const updateTemplate = async (templateId: string, updatedData: Record<str
       ...updatedData,
       reviewedAt: serverTimestamp(),
     });
+
+    // Log this action in daily activity
+    await updateDailyActivity();
 
     return true;
   } catch (error) {

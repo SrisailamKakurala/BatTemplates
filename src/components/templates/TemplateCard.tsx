@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { FaStar, FaBookmark, FaEdit, FaTrash } from "react-icons/fa";
 import Button from "@/components/buttons/Button";
-import { addBookmark } from "@/firebase/services/templateServices/bookmarkService";
-import { toggleLike } from "@/firebase/services/templateServices/likeService";
+import { addBookmark } from "@/firebase/services/templateServices/bookmark.service";
+import { toggleLike } from "@/firebase/services/templateServices/like.service";
 import useModalStore from "@/store/modalStore";
 import EditTemplateForm from "@/components/templates/EditTemplateForm";
 import DeleteTemplateModal from "@/components/modals/DeleteModal";
+import { viewHandler } from "@/firebase/services/templateServices/viewHandler.service";
 
 interface TemplateCardProps {
   id: string;
@@ -73,7 +74,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
     }
   };
 
-  const viewHandler = () => (user ? window.open(githubLink, "_blank") : openModal("signin"));
+  const handleView = () => (user ? viewHandler(id, githubLink) : openModal("signin"));
 
   return (
     <div className="p-6 h-auto min-h-60 rounded shadow hover:shadow-lg bg-secondary hover:bg-secondaryHover cursor-pointer">
@@ -100,7 +101,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
             className={`cursor-pointer ${localIsBookmarked ? "text-yellow-400" : "text-white"}`}
             onClick={bookMarkHandler}
           />
-          <Button onClick={viewHandler} label="View" className="bg-primary hover:bg-primaryHover text-white text-md py-1" />
+          <Button onClick={handleView} label="View" className="bg-primary hover:bg-primaryHover text-white text-md py-1" />
         </div>
       </div>
 

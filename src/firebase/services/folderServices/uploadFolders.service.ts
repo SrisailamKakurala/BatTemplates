@@ -2,6 +2,7 @@ import { db } from "@/firebase/firebase.config";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { uploadFileToS3, uploadMultipleFilesToS3 } from "@/aws/services/uploadFilesToS3.service";
 import { Folder } from "@/constants/schema";
+import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity.service";
 
 /**
  * Uploads folder data to Firestore.
@@ -39,6 +40,8 @@ export const uploadFolderStructure = async (
       likes: [],
       discussions: [],
     });
+
+    await updateDailyActivity();
 
     return folderRef.id;
   } catch (error) {

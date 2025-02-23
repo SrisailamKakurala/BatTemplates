@@ -1,5 +1,6 @@
 import { db } from "@/firebase/firebase.config";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity.service";
 
 // Fetch bookmarks for a user
 export const fetchBookmarks = async (userId: string) => {
@@ -35,6 +36,8 @@ export const fetchBookmarks = async (userId: string) => {
   const bookmarkedStructures = structures.filter((folder) =>
     bookmarks.includes(folder.id)
   );
+
+  await updateDailyActivity();
 
   console.log("Filtered Bookmarked Templates:", bookmarkedTemplates); // Log filtered templates
   console.log("Filtered Bookmarked structures:", bookmarkedStructures); // Log filtered structures

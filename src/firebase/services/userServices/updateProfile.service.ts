@@ -1,5 +1,6 @@
 import { db } from "@/firebase/firebase.config";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity.service";
 
 interface UpdateProfileData {
   name: string;
@@ -28,6 +29,10 @@ export const updateProfile = async (userId: string, data: UpdateProfileData) => 
     }
 
     const updatedUser = updatedUserDoc.data();
+
+    // Log this action in daily activity
+    await updateDailyActivity();
+
     return updatedUser;
   } catch (error) {
     console.error("Error updating profile:", error);

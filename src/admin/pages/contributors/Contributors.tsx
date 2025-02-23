@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchContributors } from "@/firebase/services/contributorServices/contributorService";
+import { fetchContributors } from "@/firebase/services/contributorServices/contributor.service";
 import ContributorCard from "@/components/cards/ContributorCard";
 import Search from "@/components/search/Search";
 import SkeletonGrid from "@/components/skeletons/SkeletonGrid";

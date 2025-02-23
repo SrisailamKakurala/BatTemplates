@@ -1,6 +1,7 @@
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebase/firebase.config";
 import { User } from "@/store/userStore";
+import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity.service";
 
 // Create or update a user in Firestore
 export const createUserInFirestore = async (user: User) => {
@@ -23,6 +24,9 @@ export const createUserInFirestore = async (user: User) => {
         bookmarks: user.bookmarks || [], // Default to empty array
       });
       console.log("User created successfully in Firestore.");
+
+      // Log this action in daily activity
+      await updateDailyActivity();
     } else {
       console.log("User already exists in Firestore.");
     }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TemplateCard from "@/components/templates/TemplateCard";
-import { fetchTemplatesByIds } from "@/firebase/services/templateServices/fetchTemplates";
-import { fetchFoldersByIds } from "@/firebase/services/folderServices/fetchFolders";
+import { fetchTemplatesByIds } from "@/firebase/services/templateServices/fetchTemplates.service";
+import { fetchFoldersByIds } from "@/firebase/services/folderServices/fetchFolders.service";
 import StructureCard from "../folders/StructureCard";
 
 interface TabContentProps {

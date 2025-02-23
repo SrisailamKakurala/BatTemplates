@@ -4,7 +4,7 @@ import { Folder } from "@/constants/schema";
 import React, { useState, useEffect } from "react";
 import { FaFolderOpen, FaPlus } from "react-icons/fa";
 import useModalStore from "@/store/modalStore";
-import { fetchApprovedFolders } from "@/firebase/services/folderServices/fetchFolders";
+import { fetchApprovedFolders } from "@/firebase/services/folderServices/fetchFolders.service";
 import StructuresForm from "@/components/folders/StructuresForm";
 import SkeletonGrid from "@/components/skeletons/SkeletonGrid";
 import StructureCard from "@/components/folders/StructureCard";

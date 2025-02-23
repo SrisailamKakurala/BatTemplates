@@ -2,6 +2,7 @@ import { db } from "@/firebase/firebase.config";
 import { collection, addDoc, getDocs, getDoc, updateDoc, doc, deleteDoc, serverTimestamp, query, where, orderBy  } from "firebase/firestore";
 import { addLogToFirestore } from "@/firebase/services/adminServices/logService.service";
 import { getUser } from "@/utils/localStorageUtil";
+import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity.service";
 
 const FLAG_COLLECTION = "flaggedContent";
 
@@ -56,6 +57,8 @@ export const flagContent = async (
             `,
       });
     }
+
+    await updateDailyActivity();
 
     return true;
   } catch (error) {
@@ -120,6 +123,8 @@ export const updateFlagStatus = async (flagId: string, status: string) => {
         });
       }
     }
+
+    await updateDailyActivity();
     
     return true;
   } catch (error) {
