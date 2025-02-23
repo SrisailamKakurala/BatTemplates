@@ -1,2 +1,2 @@
-CONTRIBUTORS sort
-flags sort
+CONTRIBUTORS sort ✅
+flags sort ✅

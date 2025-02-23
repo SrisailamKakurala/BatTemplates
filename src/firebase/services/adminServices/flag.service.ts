@@ -1,5 +1,5 @@
 import { db } from "@/firebase/firebase.config";
-import { collection, addDoc, getDocs, getDoc, updateDoc, doc, deleteDoc, serverTimestamp, query, where } from "firebase/firestore";
+import { collection, addDoc, getDocs, getDoc, updateDoc, doc, deleteDoc, serverTimestamp, query, where, orderBy  } from "firebase/firestore";
 import { addLogToFirestore } from "@/firebase/services/adminServices/logService.service";
 import { getUser } from "@/utils/localStorageUtil";
 
@@ -65,13 +65,17 @@ export const flagContent = async (
 };
 
 /**
- * Get all flagged content (Admin Only)
+ * Get all flagged content (Admin Only), sorted by recent flags first.
  */
 export const getFlaggedContent = async () => {
   try {
-    // Create a query to get only content whose status is not 'resolved'
-    const q = query(collection(db, FLAG_COLLECTION), where("status", "!=", "resolved"));
-    
+    // Query flagged content, excluding "resolved" and ordering by flaggedAt (recent first)
+    const q = query(
+      collection(db, FLAG_COLLECTION),
+      where("status", "!=", "resolved"),
+      orderBy("flaggedAt", "desc") // Order by flaggedAt (most recent first)
+    );
+
     const snapshot = await getDocs(q);
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   } catch (error) {

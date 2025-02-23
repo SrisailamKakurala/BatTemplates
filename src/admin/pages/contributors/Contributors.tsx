@@ -57,8 +57,10 @@ const Contributors: React.FC = () => {
         <SkeletonGrid count={6} height="h-36" />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-          {filteredContributors.map((user) => (
-            <ContributorCard key={user} user={user} />
+          {filteredContributors
+          .sort((a, b) => (b.contributions?.length || 0) - (a.contributions?.length || 0)) // Sort contributors by highest contributions first
+          .map((user) => (
+            <ContributorCard key={user.id || user.email} user={user} />
           ))}
         </div>
       )}
