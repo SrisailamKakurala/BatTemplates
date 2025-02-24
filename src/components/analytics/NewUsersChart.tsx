@@ -32,8 +32,10 @@ const NewUsersChart: React.FC<NewUsersChartProps> = ({ newUsersPerDay }) => {
     maintainAspectRatio: false, // Allow full-width scaling
     scales: {
       x: {
+        reverse: true, // Reverse the x-labels
         ticks: {
-          maxRotation: 0, // Prevents rotation
+          maxRotation: 90, // Rotate labels to 90 degrees
+          minRotation: 45, // Minimum rotation angle
           autoSkip: false, // Ensures all labels show
           font: {
             size: 10, // Adjust font size to fit labels

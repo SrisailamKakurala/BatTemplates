@@ -17,7 +17,7 @@ const RolesPieChart: React.FC<RolesPieChartProps> = ({ rolesDistribution }) => {
     datasets: [
       {
         data: dataValues,
-        backgroundColor: ["#4CAF50", "#2196F3", "#FF0000"],
+        backgroundColor: ["#FF0000", "#2196F3", "#4CAF50"],
       },
     ],
   };
@@ -25,7 +25,7 @@ const RolesPieChart: React.FC<RolesPieChartProps> = ({ rolesDistribution }) => {
   return (
     <div className="p-4 border-4 border-primary rounded-lg shadow-lg">
       <h2 className="text-lg text-primary font-semibold mb-2">Role Distribution</h2>
-      <Pie options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "right" } } }} data={data} />
+      <Pie options={{ plugins: { legend: { position: "right" } } }} data={data} />
     </div>
   );
 };
