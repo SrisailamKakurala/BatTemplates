@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
         </p>
         <div className="flex space-x-4">
           <a
-            href="https://github.com/your-repo"
+            href="https://github.com/srisailamkakurala/battemplates"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-300 hover:text-primary duration-200"

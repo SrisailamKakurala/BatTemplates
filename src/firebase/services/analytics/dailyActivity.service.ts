@@ -26,7 +26,6 @@ export const updateDailyActivity = async () => {
 
         // Check if the global analytics document exists
         const docSnap = await getDoc(globalAnalyticsRef);
-
         if (!docSnap.exists()) {
             // If the document does not exist, create it with initial values
             await setDoc(globalAnalyticsRef, {
@@ -37,15 +36,33 @@ export const updateDailyActivity = async () => {
                 totalDownloads: 0,
                 dailyActivity: { [currentDate]: 1 }, // Initialize today's count
             });
-        } else {
-            // If the document exists, update counts and increment today's activity
-            await updateDoc(globalAnalyticsRef, {
-                totalUsers,
-                totalTemplates,
-                totalStructures,
-                [`dailyActivity.${currentDate}`]: increment(1),
-            });
+            return;
         }
+
+        // Get existing dailyActivity data
+        const analyticsData = docSnap.data();
+        let dailyActivity = analyticsData.dailyActivity || {};
+
+        // Keep only the last 30 days
+        const last30Days = new Date();
+        last30Days.setDate(last30Days.getDate() - 30);
+        Object.keys(dailyActivity).forEach((date) => {
+            if (new Date(date) < last30Days) {
+                delete dailyActivity[date]; // Remove older dates
+            }
+        });
+
+        // Increment today's activity
+        dailyActivity[currentDate] = (dailyActivity[currentDate] || 0) + 1;
+
+        // Update the document without touching other fields
+        await updateDoc(globalAnalyticsRef, {
+            totalUsers,
+            totalTemplates,
+            totalStructures,
+            [`dailyActivity.${currentDate}`]: increment(1), // Increment today's count
+            dailyActivity, // Keep only the latest 30 days
+        });
     } catch (error) {
         console.error("Failed to update daily activity:", error);
     }

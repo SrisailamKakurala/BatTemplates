@@ -7,4 +7,9 @@ const formatDate = (seconds: number) => {
   }).format(date);
 };
 
+export const formatDailyActivity = (timestamp: number) => {
+  return new Date(timestamp).toISOString().split("T")[0]; // "YYYY-MM-DD"
+};
+
+
 export default formatDate;

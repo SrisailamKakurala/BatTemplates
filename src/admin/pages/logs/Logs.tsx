@@ -11,7 +11,6 @@ const Logs: React.FC = () => {
     const fetchAndSetLogs = async () => {
       try {
         const logsData = await fetchLogsFromFirestore();
-        console.log(logsData)
         setLogs(logsData);
       } catch (error) {
         console.error("Error fetching logs:", error);

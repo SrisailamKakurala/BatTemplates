@@ -8,7 +8,6 @@ import { uploadFolderStructure } from "@/firebase/services/folderServices/upload
 import { getUser } from "@/utils/localStorageUtil";
 import { useToast } from "@/hooks/ui/useToast";
 
-
 interface FoldersFormProps {
   setFormVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -21,8 +20,6 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
   } = useForm<Partial<Folder>>();
 
   const { addToast } = useToast(); // Use the useToast hook
-  
-
   const [images, setImages] = useState<File[]>([]);
   const [file, setFile] = useState<File | null>(null);
 
@@ -52,21 +49,21 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
       console.error("User not authenticated");
       return;
     }
-  
+
     if (!file) {
       addToast("Script file is required!", "error");
       return;
     }
-  
+
     if (images.length === 0) {
       addToast("At least one image is required!", "error");
       return;
     }
-  
+
     console.log("Uploading folder structure...");
-  
+
     const folderId = await uploadFolderStructure(data, file, images, user.id, user.email);
-  
+
     if (folderId) {
       console.log("Folder uploaded successfully:", folderId);
       setFormVisible(false);
@@ -75,8 +72,6 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
       console.error("Failed to upload folder structure.");
     }
   };
-  
-  
 
   return (
     <div className="absolute inset-0 bg-black/50 flex items-center justify-center px-4 pb-4 md:pt-4 pt-24 overflow-y-scroll scroll-hide">
@@ -86,10 +81,10 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
           <div className="w-full flex flex-col md:flex-row gap-6">
             {/* LEFT SIDE: Input Fields */}
             <div className="md:w-3/5 w-full space-y-4">
+              {/* Standard Input Fields */}
               {[
                 { label: "Title", name: "title" },
                 { label: "Category", name: "category" },
-                { label: "Operating System", name: "os" },
                 { label: "Tech Stack", name: "techStack" },
               ].map(({ label, name }) => (
                 <label key={name} className="text-white block">
@@ -104,6 +99,22 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
                 </label>
               ))}
 
+              {/* OS Dropdown Field */}
+              <label className="text-white block">
+                Operating System
+                <select
+                  {...register("os", { required: "Operating System is required" })}
+                  className="w-full border border-gray-700 bg-gray-800 px-3 py-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="">Select OS</option>
+                  <option value="Windows">Windows</option>
+                  <option value="Linux/Unix">Linux/Unix</option>
+                  <option value="Mac">Mac</option>
+                </select>
+                {errors.os && <p className="text-red-500 text-sm mt-1">{errors.os.message}</p>}
+              </label>
+
+              {/* Textarea Fields */}
               {[
                 { label: "Description", name: "description" },
                 { label: "How to Use", name: "howToUse" },
@@ -121,29 +132,19 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
               ))}
             </div>
 
-            {/* RIGHT SIDE: Upload Sections (Unchanged) */}
+            {/* RIGHT SIDE: Upload Sections */}
             <div className="md:w-2/5 w-full flex flex-col gap-4">
-              {/* SCRIPT UPLOAD (Equal Height) */}
+              {/* SCRIPT UPLOAD */}
               <div className="bg-gray-800 p-4 rounded-lg flex flex-col items-center justify-center h-[45%] gap-3 mt-5">
                 <FaFileAlt className="text-gray-400 text-3xl" />
                 <p className="text-white">Upload Script (.sh or .bat)</p>
-                <input
-                  type="file"
-                  accept=".sh,.bat"
-                  className="hidden"
-                  onChange={handleFileUpload}
-                  id="fileUpload"
-                />
-                <label
-                  htmlFor="fileUpload"
-                  className="cursor-pointer px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md flex items-center gap-2"
-                >
+                <input type="file" accept=".sh,.bat" className="hidden" onChange={handleFileUpload} id="fileUpload" />
+                <label htmlFor="fileUpload" className="cursor-pointer px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md flex items-center gap-2">
                   <FaUpload /> Choose File
                 </label>
-                {!file && <p className="text-red-500 text-sm mt-1">Script file is required</p>}
                 {file && (
                   <div className="flex items-center gap-2 text-white mt-2">
-                    {file.name}{" "}
+                    {file.name}
                     <button onClick={removeFile} className="text-red-400 hover:text-red-500">
                       <FaTrash />
                     </button>
@@ -151,35 +152,23 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
                 )}
               </div>
 
-              {/* IMAGE UPLOAD (Equal Height) */}
+              {/* IMAGE UPLOAD */}
               <div className="bg-gray-800 p-4 rounded-lg flex flex-col items-center justify-center h-[48%] gap-3">
                 <FaImages className="text-gray-400 text-3xl" />
                 <p className="text-white">Upload Screenshots of Structure</p>
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  className="hidden"
-                  onChange={handleImageUpload}
-                  id="imageUpload"
-                />
-                <label
-                  htmlFor="imageUpload"
-                  className="cursor-pointer px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md flex items-center gap-2"
-                >
+                <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} id="imageUpload" />
+                <label htmlFor="imageUpload" className="cursor-pointer px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md flex items-center gap-2">
                   <FaUpload /> Upload Images
                 </label>
-                {images.length === 0 && <p className="text-red-500 text-sm mt-1">At least one image is required</p>}
+
+                {/* Preview Images with Remove Option */}
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {images.map((file, index) => (
+                  {images.map((img, index) => (
                     <div key={index} className="relative">
-                      <img
-                        src={URL.createObjectURL(file)}
-                        className="w-12 h-12 rounded-md border border-gray-700"
-                      />
+                      <img src={URL.createObjectURL(img)} alt="Preview" className="w-16 h-16 object-cover rounded-md" />
                       <button
                         onClick={() => removeImage(index)}
-                        className="absolute top-0 right-0 text-red-400 hover:text-red-500"
+                        className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
                       >
                         <FaTrash />
                       </button>
@@ -187,20 +176,14 @@ const StructuresForm: React.FC<FoldersFormProps> = ({ setFormVisible }) => {
                   ))}
                 </div>
               </div>
+
             </div>
           </div>
 
-          {/* BUTTONS: Centered and Styled */}
+          {/* BUTTONS */}
           <div className="flex justify-center gap-4">
-            <Button
-              label="Submit Structure"
-              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primaryHover transition"
-            />
-            <Button
-              label="Cancel"
-              onClick={() => setFormVisible(false)}
-              className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition"
-            />
+            <Button label="Submit Structure" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primaryHover transition" />
+            <Button label="Cancel" onClick={() => setFormVisible(false)} className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition" />
           </div>
         </form>
       </div>

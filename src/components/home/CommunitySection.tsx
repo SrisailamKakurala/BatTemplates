@@ -12,7 +12,7 @@ const CommunitySection: React.FC = () => {
       </p>
       <div className="flex justify-center space-x-6 mt-6">
         <a
-          href="https://github.com/your-repo"
+          href="https://github.com/srisailamkakurala/battemplates"
           target="_blank"
           rel="noopener noreferrer"
           className="text-gray-300 hover:text-secondary duration-200"

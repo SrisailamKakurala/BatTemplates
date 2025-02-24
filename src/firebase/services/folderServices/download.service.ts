@@ -5,14 +5,12 @@ import { updateDailyActivity } from "@/firebase/services/analytics/dailyActivity
 export const incrementDownloadCount = async (folderId: string) => {
     if (!folderId) return;
 
+    console.log(folderId)
+
     try {
         const folderRef = doc(db, "structures", folderId);
-        const globalAnalyticsRef = doc(db, "analytics", "global");
 
         await updateDoc(folderRef, { downloads: increment(1) });
-
-        // Also update the totalDownloads in global analytics
-        await updateDoc(globalAnalyticsRef, { totalDownloads: increment(1) });
 
         await updateDailyActivity();
 

@@ -4,9 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserLayout from "@/layouts/UserLayout";
 import AdminLayout from "@/admin/AdminLayout";
 
-console.log('Firebase API Key:', import.meta.env.VITE_FIREBASE_API_KEY);
-
-
 const App: React.FC = () => {
   return (
     <Router>

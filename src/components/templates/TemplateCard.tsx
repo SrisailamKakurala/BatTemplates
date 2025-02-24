@@ -35,6 +35,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   isLiked = false,
   authorId,
 }) => {
+  
   const { openModal } = useModalStore();
   const [localIsBookmarked, setLocalIsBookmarked] = useState(isBookmarked);
   const [localIsLiked, setLocalIsLiked] = useState(isLiked);
@@ -43,6 +44,8 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("auth-storage") || "{}")?.state?.user;
+
+  console.log("likes: ", likesCount);
 
   const bookMarkHandler = async () => {
     if (user) {
