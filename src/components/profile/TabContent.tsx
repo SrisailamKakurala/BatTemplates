@@ -49,7 +49,18 @@ const TabContent: React.FC<TabContentProps> = ({ title, items }) => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-lg bg-primary md:p-6 p-2">
           {templates.map((template) => (
-            <TemplateCard key={template.id} {...template} />
+            <TemplateCard
+                key={template.id}
+                id={template.id}
+                title={template.title}
+                description={template.description}
+                likesCount={template.likes?.length}
+                techStack={template.techStack}
+                tags={template.tags}
+                category={template.category}
+                githubLink={template.githubLink}
+                authorId={template.authorId}
+            />
           ))}
           {folders.map((folder) => (
             <StructureCard key={folder.id} folder={folder} />
