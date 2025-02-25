@@ -17,12 +17,12 @@ const HeroSection: React.FC = () => {
           <Button
             label="Sign In"
             onClick={() => openModal('signin')}
-            className="bg-secondaryButton hover:bg-secondaryButtonHover text-xl text-whiteText font-semibold text-opacity-90 duration-200"
+            className="bg-secondaryButton hover:bg-secondaryButtonHover z-100 text-xl text-whiteText font-semibold text-opacity-90 duration-200"
           />
           <Button
             label="Register"
             onClick={() => openModal('register')}
-            className="bg-primary hover:bg-primaryHover text-xl text-whiteText font-semibold text-opacity-90 duration-200"
+            className="bg-primary hover:bg-primaryHover text-xl z-100 text-whiteText font-semibold text-opacity-90 duration-200"
           />
         </div>
       )}

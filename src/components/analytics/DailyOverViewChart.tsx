@@ -13,7 +13,8 @@ const LineChartComponent: React.FC<LineChartProps> = ({ dailyActivity }) => {
 
   const data = Object.entries(dailyActivity)
     .map(([date, count]) => ({ date, count }))
-    .filter((entry) => new Date(entry.date) >= last30Days); // Keep only last 30 days
+    .filter((entry) => new Date(entry.date) >= last30Days) // Keep only last 30 days
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // Sort by date ascending
 
   return (
     <div className="flex flex-col">
