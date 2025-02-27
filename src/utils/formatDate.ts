@@ -1,11 +1,4 @@
 /**
- * Date formatting utility functions
- * 
- * This module provides functions for formatting dates in different formats
- * consistently across the application.
- */
-
-/**
  * Formats a Unix timestamp (in seconds) to MM/DD/YYYY format
  * 
  * @param seconds - Unix timestamp in seconds
@@ -17,17 +10,18 @@
  * formatDate(1709251955);
  */
 const formatDate = (seconds: number): string => {
-  if (!seconds || isNaN(seconds)) {
+  // Check if the input is a valid number and not null/undefined
+  if (typeof seconds !== 'number' || isNaN(seconds)) {
     return 'Invalid Date';
   }
-  
+
   const date = new Date(seconds * 1000); // Convert seconds to milliseconds
-  
-  // Check if date is valid
+
+  // Check if the date is valid
   if (isNaN(date.getTime())) {
     return 'Invalid Date';
   }
-  
+
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "2-digit",
@@ -47,17 +41,18 @@ const formatDate = (seconds: number): string => {
  * formatDailyActivity(1709251955000);
  */
 export const formatDailyActivity = (timestamp: number): string => {
-  if (!timestamp || isNaN(timestamp)) {
+  // Check if the input is a valid number and not null/undefined
+  if (typeof timestamp !== 'number' || isNaN(timestamp)) {
     return 'Invalid Date';
   }
-  
+
   const date = new Date(timestamp);
-  
-  // Check if date is valid
+
+  // Check if the date is valid
   if (isNaN(date.getTime())) {
     return 'Invalid Date';
   }
-  
+
   return date.toISOString().split("T")[0]; // "YYYY-MM-DD"
 };
 

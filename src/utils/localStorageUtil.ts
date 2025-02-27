@@ -1,5 +1,5 @@
 // @/utils/localStorageUtil.ts
-
+import { User } from "@/constants/schema";
 
 /**
  * Retrieves user data from auth-storage in localStorage
@@ -14,7 +14,7 @@
  *   console.log(currentUser.id);
  * }
  */
-export const getUser = () => {
+export const getUser = (): User | null => {
   try {
     // Check if localStorage is available (for SSR/environments without localStorage)
     if (typeof localStorage === 'undefined') {
