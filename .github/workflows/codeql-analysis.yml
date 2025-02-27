@@ -1,0 +1,36 @@
+name: "CodeQL Analysis"
+
+on:
+  push:
+    branches: [main, dev] # Runs on pushes to main & dev
+  pull_request:
+    branches: [main, dev] # Runs on PRs to main & dev
+  schedule:
+    - cron: '30 1 * * 1' # Runs every Monday at 1:30 AM UTC
+
+jobs:
+  analyze:
+    name: "CodeQL Analysis"
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [javascript, typescript] # Add more languages if needed
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3

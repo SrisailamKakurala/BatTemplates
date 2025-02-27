@@ -1,2 +1,11 @@
-CONTRIBUTORS sort ✅
-flags sort ✅
+✅
+form placeholders 
+readmes/guidelines 
+tests
+lint errors
+social links
+webpack config
+signed url for aws ops
+
+
+package
