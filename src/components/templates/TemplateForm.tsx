@@ -56,7 +56,7 @@ const TemplateForm: React.FC<TemplateFormProps> = ({ setFormVisible }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-      <div className="bg-secondary w-full max-w-lg rounded-lg shadow-lg p-6">
+      <div className="bg-secondary w-4/5 max-h-[85vh] overflow-y-auto md:w-full max-w-lg rounded-lg shadow-lg p-6">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-primary">Submit a Template</h2>
